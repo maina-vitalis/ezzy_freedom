@@ -16,11 +16,7 @@ export const stkPushQuery = async (
   data: MpesaResponse | null;
   error: Error | null;
 }> => {
-  const mpesaEnv = process.env.MPESA_ENVIRONMENT;
-  const MPESA_BASE_URL =
-    mpesaEnv === "live"
-      ? "https://api.safaricom.co.ke"
-      : "https://sandbox.safaricom.co.ke";
+  const MPESA_BASE_URL = process.env.MPESA_BASE_URL;
 
   try {
     //generate token

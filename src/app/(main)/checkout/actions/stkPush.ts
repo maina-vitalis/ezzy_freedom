@@ -22,10 +22,7 @@ interface StkPushResponse {
 export async function sendStkPush(
   body: CheckOutData
 ): Promise<StkPushResponse> {
-  const BASE_URL =
-    process.env.NODE_ENV === "production"
-      ? "https://api.safaricom.co.ke"
-      : "https://sandbox.safaricom.co.ke";
+  const MPESA_BASE_URL = process.env.MPESA_BASE_URL;
 
   const { phoneNumber, amount } = body;
 
@@ -37,7 +34,7 @@ export async function sendStkPush(
 
     //generate the token
     const resp = await axios.get(
-      `${BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
+      `${MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
       {
         headers: {
           Authorization: `Basic ${auth}`,
@@ -64,7 +61,7 @@ export async function sendStkPush(
     ).toString("base64");
 
     const response = await axios.post(
-      `${BASE_URL}/mpesa/stkpush/v1/processrequest`,
+      `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
       {
         BusinessShortCode: process.env.MPESA_SHORTCODE,
         Password: password,
