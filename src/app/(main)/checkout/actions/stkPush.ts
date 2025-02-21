@@ -22,7 +22,12 @@ interface StkPushResponse {
 export async function sendStkPush(
   body: CheckOutData
 ): Promise<StkPushResponse> {
-  const MPESA_BASE_URL = process.env.MPESA_BASE_URL;
+  const mpesaEnv = process.env.MPESA_ENVIRONMENT;
+  console.log(mpesaEnv);
+  const MPESA_BASE_URL =
+    mpesaEnv === "live"
+      ? "https://api.safaricom.co.ke"
+      : "https://sandbox.safaricom.co.ke";
 
   const { phoneNumber, amount } = body;
 
@@ -66,12 +71,12 @@ export async function sendStkPush(
         BusinessShortCode: process.env.MPESA_SHORTCODE,
         Password: password,
         Timestamp: timestamp,
-        TransactionType: "CustomerBuyGoodsOnline", //CustomerPayBillOnline - for paybill
+        TransactionType: "CustomerPayBillOnline",
         Amount: amount,
         PartyA: formattedPhone,
-        PartyB: 4972032,
+        PartyB: process.env.MPESA_SHORTCODE,
         PhoneNumber: formattedPhone,
-        CallBackURL: "",
+        CallBackURL: "https://3b48-105-163-158-226.ngrok-free.app/api/callback",
         AccountReference: phoneNumber,
         TransactionDesc: "payment",
       },
@@ -85,7 +90,7 @@ export async function sendStkPush(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log(error, "token generation");
+    console.log(error.response, "token generation");
     return { error: error.message || "something went wrong" };
   }
 }

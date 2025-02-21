@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    //data preparation
+    //data preparationc
 
     return NextResponse.json({
       success: true,
