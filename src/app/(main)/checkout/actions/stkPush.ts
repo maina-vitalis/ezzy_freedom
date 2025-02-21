@@ -66,14 +66,14 @@ export async function sendStkPush(
         BusinessShortCode: process.env.MPESA_SHORTCODE,
         Password: password,
         Timestamp: timestamp,
-        TransactionType: "CustomerPayBillOnline", //CustomerBuyGoodsOnline - for till
+        TransactionType: "CustomerBuyGoodsOnline", //CustomerPayBillOnline - for paybill
         Amount: amount,
         PartyA: formattedPhone,
-        PartyB: process.env.MPESA_SHORTCODE, //till number for tills
+        PartyB: 4972032,
         PhoneNumber: formattedPhone,
-        CallBackURL: "https://0600-105-163-157-6.ngrok-free.app/api/callback",
+        CallBackURL: "",
         AccountReference: phoneNumber,
-        TransactionDesc: "anything here",
+        TransactionDesc: "payment",
       },
       {
         headers: {
@@ -85,7 +85,7 @@ export async function sendStkPush(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log(error, "token generation");
+    console.log(error.data, "token generation");
     return { error: error.message || "something went wrong" };
   }
 }
