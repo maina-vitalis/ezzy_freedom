@@ -85,7 +85,7 @@ export async function sendStkPush(
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log(error.data, "token generation");
+    console.log(error, "token generation");
     return { error: error.message || "something went wrong" };
   }
 }
