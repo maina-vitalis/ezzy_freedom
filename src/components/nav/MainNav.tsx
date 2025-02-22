@@ -14,6 +14,7 @@ import {
   navigationMenuTriggerStyle,
 } from "../ui/navigation-menu";
 import { NavigationMenuLink } from "@radix-ui/react-navigation-menu";
+import { ThemeToggle } from "./ThemeToggle";
 
 async function MainNav() {
   const session = await auth.api.getSession({
@@ -21,8 +22,8 @@ async function MainNav() {
   });
 
   return (
-    <nav className="shadow-sm sticky top-0 z-50 bg-card">
-      <div className="mx-auto max-w-[1300px] flex items-center justify-between px-3">
+    <nav className="sticky top-0 z-50 bg-card shadow-sm">
+      <div className="mx-auto flex max-w-[1300px] items-center justify-between px-3">
         <div className="flex items-center gap-10 py-1">
           <Link href={"/"}>
             <Image
@@ -33,7 +34,7 @@ async function MainNav() {
             />
           </Link>
 
-          <NavigationMenu className="md:flex gap-5 hidden">
+          <NavigationMenu className="hidden gap-5 md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/about-us" legacyBehavior passHref>
@@ -53,12 +54,15 @@ async function MainNav() {
           </NavigationMenu>
         </div>
         <>
-          <div className="flex gap-2 items-center justify-center">
-            {session?.session ? (
+          <div className="flex items-center justify-center gap-2">
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+            {session?.user ? (
               <UserButton className="w-8 md:w-11" />
             ) : (
               <Button
-                className="rounded-full hover:shadow-lg transition-all duration-200 ease-out"
+                className="rounded-full transition-all duration-200 ease-out hover:shadow-lg"
                 asChild
               >
                 <Link href={"/sign-in"}>Login</Link>

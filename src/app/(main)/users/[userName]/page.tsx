@@ -1,5 +1,7 @@
-import PasswordUpdate from "@/components/forms/PasswordUpdate";
+import { ChangePassword } from "@/components/changePassword";
 import UserDetailsForm from "@/components/forms/UserDetailsForm";
+import SignOut from "@/components/SignOut";
+import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import UserAvatar from "@/components/UserAvatar";
 import { auth } from "@/lib/auth";
@@ -26,7 +28,7 @@ async function page(props: { params: ProfileProps }) {
   };
 
   return (
-    <section className="flex flex-col justify-center items-center w-full space-y-2">
+    <Card className="flex w-full flex-col items-center justify-center space-y-2 p-5">
       <div className="flex items-center gap-2">
         <UserAvatar className="size-16" />
         <p className="capitalize">{session?.user.name}</p>
@@ -36,8 +38,11 @@ async function page(props: { params: ProfileProps }) {
         <UserDetailsForm user={user} />
       </div>
       <Separator />
-      <PasswordUpdate />
-    </section>
+      <div className="flex w-full justify-between">
+        <ChangePassword />
+        <SignOut />
+      </div>
+    </Card>
   );
 }
 

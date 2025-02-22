@@ -7,26 +7,26 @@ import Link from "next/link";
 
 function Hero() {
   return (
-    <div className="h-[80vh] relative before:content-[''] before:absolute before:top-0 before: left-0 before:w-full before:h-full before:z-10 md:before:bg-gradient-to-r from-primary  to-transparent before:rounded-lg md:before:opacity-90 before:bg-primary/50  md:before:bg-transparent">
+    <div className="before: relative left-0 h-[80vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
       <Image
         src={image}
         alt="ezzy hero image"
-        className="object-cover rounded-lg"
+        className="rounded-lg object-cover"
         fill
       />
-      <div className="absolute top-[30%] left-0 lg:w-[60%] h-full rounded-lg z-20 p-1 md:p-10 space-y-7 flex flex-col items-center md:items-start">
-        <p className=" text-white lg:text-4xl md:text-4xl text-2xl text-center md:text-start font-semibold capitalize">
+      <div className="absolute left-[50%] top-[30%] z-20 flex h-full w-full -translate-x-[50%] flex-col items-center space-y-7 rounded-lg p-1 md:left-0 md:translate-x-0 md:items-start md:p-10 lg:w-[60%]">
+        <p className="text-center text-2xl font-semibold capitalize text-white md:text-start md:text-4xl">
           Breaking the chains of self, Finding purpose
         </p>
-        <p className="text-white text-sm text-center md:text-start">
+        <p className="text-center text-sm text-white md:text-start">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, ipsum.
         </p>
         <Button
           asChild
           variant={"link"}
-          className="rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-white flex items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-md"
+          className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md"
         >
-          <Link href={"/about-us"} className="text-white w-fit">
+          <Link href={"/about-us"} className="w-fit text-white">
             Learn More
             <ArrowRight className="text-white" />
           </Link>

@@ -109,8 +109,10 @@ function SignupForm() {
           )}
         />
 
+        <div></div>
+
         <LoadingButton loading={loading} type="submit" className="w-full">
-          Create account
+          Register
         </LoadingButton>
       </form>
     </Form>

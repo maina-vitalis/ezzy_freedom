@@ -18,6 +18,8 @@ import { useForm } from "react-hook-form";
 import { signIn } from "@/lib/auth-client";
 import { toast } from "sonner";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
+import Link from "next/link";
 
 function LoginForm() {
   const [error, setError] = useState<string>();
@@ -32,6 +34,7 @@ function LoginForm() {
     defaultValues: {
       password: "",
       email: "",
+      rememberMe: false,
     },
   });
 
@@ -40,7 +43,9 @@ function LoginForm() {
     await signIn.email({
       email: values.email,
       password: values.password,
+      rememberMe: values.rememberMe,
       callbackURL: decodeURIComponent(callbackUrl),
+
       fetchOptions: {
         onResponse: () => {
           setIsLoading(false);
@@ -94,6 +99,28 @@ function LoginForm() {
             </FormItem>
           )}
         />
+
+        <div className="flex items-center justify-between pt-3">
+          <FormField
+            control={form.control}
+            name="rememberMe"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-2 space-y-0.5">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel>Remember me</FormLabel>
+              </FormItem>
+            )}
+          />
+
+          <Link href={"/forget-password"} className="text-sm hover:underline">
+            Forgot password?
+          </Link>
+        </div>
 
         <LoadingButton loading={loading} className="w-full">
           Login

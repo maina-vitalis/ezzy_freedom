@@ -9,6 +9,7 @@ import {
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "../ui/separator";
+import { ThemeToggle } from "./ThemeToggle";
 
 function Mobile() {
   return (
@@ -40,6 +41,8 @@ function Mobile() {
               Contact
             </Link>
           </SheetClose>
+          <Separator />
+          <ThemeToggle />
         </div>
       </SheetContent>
     </Sheet>
