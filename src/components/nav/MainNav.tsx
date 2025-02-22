@@ -23,7 +23,7 @@ async function MainNav() {
   return (
     <nav className="shadow-sm sticky top-0 z-50 bg-card">
       <div className="mx-auto max-w-[1300px] flex items-center justify-between px-3">
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-10 py-1">
           <Link href={"/"}>
             <Image
               src={logo}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 function Appointment() {
   return (
@@ -8,7 +9,7 @@ function Appointment() {
         <p className="md:text-5xl text-3xl font-semibold">
           Your Path <br className="hidden md:block" /> to Hope
         </p>
-        <p className="text-sm font-semibold text-secondaryColor">
+        <p className="text-sm font-semibold text-primary">
           Explore your inner world and gain insights
         </p>
       </div>
@@ -21,10 +22,11 @@ function Appointment() {
         </p>
 
         <Button
+          asChild
           variant={"outline"}
           className="rounded-full w-fit bg-card text-foreground hover:scale-105 transition-all duration-300 ease-in-out"
         >
-          Book Appointment
+          <Link href="/contact">Book Appointment</Link>
         </Button>
       </div>
     </div>

@@ -11,7 +11,7 @@ function Sessions() {
     {
       badge2: "Group or private sessions",
       className: "bg-secondaryColor/10",
-      title: "Understanding The Concept of Addiction",
+      title: "Understanding Addiction",
       text: "Learn the fundamentals of addiction, its causes, and how it affects mental and physical health.",
     },
     {
@@ -35,7 +35,7 @@ function Sessions() {
   ];
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5 h-fit">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5">
       {sessionData.map((item, index) => (
         <SessionComponent key={index} item={item} />
       ))}
