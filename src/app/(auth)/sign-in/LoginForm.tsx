@@ -59,7 +59,7 @@ function LoginForm() {
         },
 
         onSuccess: () => {
-          router.push("/");
+          router.push(callbackUrl);
         },
       },
     });

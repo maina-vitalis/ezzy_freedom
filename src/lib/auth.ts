@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@prisma/client";
-import { resend } from "./email/resend";
-import { reactResetPasswordEmail } from "./email/rest-password";
+import { resend } from "../components/Email/resend";
+import { ezzyResetPasswordEmail } from "@/components/Email/rest-password";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,7 @@ export const auth = betterAuth({
         from: "TumainiFitnessCentre<no-reply@tumainifitness.co.ke>",
         to: user.email,
         subject: "Reset your password",
-        react: reactResetPasswordEmail({
+        react: ezzyResetPasswordEmail({
           username: user.email,
           resetLink: url,
         }),

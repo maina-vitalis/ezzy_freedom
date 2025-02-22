@@ -29,14 +29,12 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   });
 
   //callback url
-  const callbackUrl = encodeURIComponent(
-    (await headers()).get("referer") || "/"
-  );
+  const callbackUrl = encodeURIComponent(`/details/${slug}` || "/");
 
   if (!book) {
     return (
       <div className="mt-5 flex flex-col items-center gap-5">
-        <p className=" text-red-500 font-semibold text-center">No book found</p>
+        <p className="text-center font-semibold text-red-500">No book found</p>
         <Button className="rounded-full" asChild>
           <Link href={"/"}>Go Back Home</Link>
         </Button>
@@ -46,28 +44,28 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col md:gap-10  gap-5 md:flex-row relative">
+      <div className="relative flex flex-col gap-5 md:flex-row md:gap-10">
         <div className="space-y-1">
-          <div className="relative h-56 md:w-56 w-full">
+          <div className="relative h-56 w-full md:w-56">
             <Image
               src={book.coverImage}
               alt=""
-              className="object-cover rounded-lg"
+              className="rounded-lg object-cover"
               fill
             />
           </div>
-          <Button variant={"outline"} className="rounded-full w-full">
+          <Button variant={"outline"} className="w-full rounded-full">
             {book.price} kes
           </Button>
           {session?.session ? (
-            <Button className="rounded-full w-full hover:shadow-md" asChild>
+            <Button className="w-full rounded-full hover:shadow-md" asChild>
               <Link href={`/checkout/${book.slug}`}>
                 CheckOut
                 <ArrowRight />
               </Link>
             </Button>
           ) : (
-            <Button className="rounded-full w-full hover:shadow-md" asChild>
+            <Button className="w-full rounded-full hover:shadow-md" asChild>
               <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
                 Login to checkout
               </Link>
