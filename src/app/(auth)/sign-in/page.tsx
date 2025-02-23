@@ -12,13 +12,12 @@ export const metadata: Metadata = {
   title: "login",
 };
 
-const session = await auth.api.getSession({
-  headers: await headers(),
-});
+async function page() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-if (session?.session) redirect("/");
-
-function page() {
+  if (session?.session) redirect("/");
   return (
     <main className="flex h-fit items-center justify-center p-2">
       <div className="flex h-full max-h-[40rem] w-full max-w-[64rem] overflow-hidden rounded-2xl bg-card">
