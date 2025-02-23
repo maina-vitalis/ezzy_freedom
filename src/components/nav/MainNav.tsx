@@ -55,9 +55,6 @@ async function MainNav() {
         </div>
         <>
           <div className="flex items-center justify-center gap-2">
-            <div className="hidden md:block">
-              <ThemeToggle />
-            </div>
             {session?.user ? (
               <UserButton className="w-8 md:w-11" />
             ) : (
@@ -68,6 +65,10 @@ async function MainNav() {
                 <Link href={"/sign-in"}>Login</Link>
               </Button>
             )}
+
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
             <div className="md:hidden">
               <Mobile />
             </div>

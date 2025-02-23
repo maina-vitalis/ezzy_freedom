@@ -30,7 +30,10 @@ async function page(props: { params: ProfileProps }) {
   return (
     <Card className="flex w-full flex-col items-center justify-center space-y-2 p-5">
       <div className="flex items-center gap-2">
-        <UserAvatar className="size-16" />
+        <UserAvatar
+          className="size-16"
+          imageUrl={session.user.image ?? undefined}
+        />
         <p className="capitalize">{session?.user.name}</p>
       </div>
       <Separator />

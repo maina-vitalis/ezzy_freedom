@@ -1,5 +1,5 @@
 //app sidebar
-import { Calendar, User } from "lucide-react";
+import { Calendar, PlusCircle, User } from "lucide-react";
 
 import {
   Sidebar,
@@ -17,7 +17,7 @@ import { headers } from "next/headers";
 
 // Menu items.
 
-export async function AppSidebar() {
+export async function AdminSidebar() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -28,22 +28,28 @@ export async function AppSidebar() {
 
   const items = [
     {
-      title: "Profile",
-      url: `/users/${user?.name}`,
+      title: "Dashboard",
+      url: `/admin`,
       icon: User,
     },
 
     {
       title: "Appointments",
-      url: `/users/${user?.name}/appointments`,
+      url: `/admin/appointments`,
       icon: Calendar,
+    },
+
+    {
+      title: "Add book",
+      url: `/admin/create-books`,
+      icon: PlusCircle,
     },
   ];
   return (
     <Sidebar className="mt-16" variant="inset">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="space-x-1 text-base font-semibold capitalize text-primary">
+          <SidebarGroupLabel className="text-base font-semibold capitalize text-primary">
             @{user?.name}
             <span className="ml-1 text-xs lowercase"> ({user.role})</span>
           </SidebarGroupLabel>
@@ -52,7 +58,7 @@ export async function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className="hover:bg-card">
+                  <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>

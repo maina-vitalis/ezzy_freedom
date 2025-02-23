@@ -20,6 +20,7 @@ function SignOut() {
             fetchOptions: {
               onSuccess() {
                 router.push("/");
+                router.refresh();
               },
             },
           });

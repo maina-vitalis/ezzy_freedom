@@ -79,7 +79,7 @@ function AddBookForm() {
       console.log(error);
       toast.error(
         error.response.data.message ||
-          "something went wrong when creating the book"
+          "something went wrong when creating the book",
       );
     },
   });
@@ -93,7 +93,7 @@ function AddBookForm() {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex flex-col md:flex-row gap-5">
+          <div className="flex flex-col gap-5 md:flex-row">
             <FormField
               control={form.control}
               name="title"
@@ -197,7 +197,7 @@ function AddBookForm() {
             )}
           />
 
-          <div className="flex gap-5 flex-col md:flex-row">
+          <div className="flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <Label>Book Upload</Label>
               {bookName ? (
@@ -208,7 +208,7 @@ function AddBookForm() {
 
                   <i className="text-sm">
                     to upload a new book click on the{" "}
-                    <span className="text-primary font-bold">
+                    <span className="font-bold text-primary">
                       reset form button
                     </span>
                   </i>
@@ -232,7 +232,7 @@ function AddBookForm() {
                     src={coverImage}
                     alt="cover image"
                     fill
-                    className="object-cover mt-2 w-full"
+                    className="mt-2 w-full object-cover"
                   />
                 </div>
               ) : (
@@ -247,11 +247,11 @@ function AddBookForm() {
             </div>
           </div>
 
-          <div className="flex gap-5 flex-col md:flex-row">
+          <div className="flex flex-col gap-5 md:flex-row">
             <LoadingButton
               loading={isPending}
               type="submit"
-              className="rounded-full w-full"
+              className="w-full rounded-full"
             >
               Submit book
             </LoadingButton>
@@ -259,7 +259,7 @@ function AddBookForm() {
             <Button
               type="button"
               variant={"outline"}
-              className="rounded-full w-full"
+              className="w-full rounded-full"
               onClick={handleReset}
             >
               Reset form

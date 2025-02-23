@@ -45,8 +45,6 @@ export async function POST(req: Request) {
       fileKey,
     };
 
-    console.log(parsedBookData);
-
     // Create the book in the database
     const createdBookData = await prisma.books.create({
       data: parsedBookData,
@@ -61,7 +59,7 @@ export async function POST(req: Request) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
