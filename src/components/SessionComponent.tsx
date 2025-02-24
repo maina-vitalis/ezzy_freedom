@@ -7,48 +7,45 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { Service } from "@prisma/client";
 
 interface SessionComponentProps {
-  item: {
-    badge2: string;
-    className?: string;
-    title: string;
-    text: string;
-  };
+  item: Service;
 }
 
 function SessionComponent({ item }: SessionComponentProps) {
   return (
-    <Card className={cn(" w-full bg-opacity-40 h-fit", item.className)}>
-      <CardHeader className="space-y-4 z-10">
+    <Card className={cn("w-full bg-opacity-40")}>
+      <CardHeader className="z-10 space-y-4">
         <div className="flex gap-3">
-          <Badge className="rounded-full bg-background text-foreground hover:white ">
-            {item.badge2}
+          <Badge className="rounded-full bg-primary text-white">
+            {item.bannerText}
           </Badge>
         </div>
 
         <div className="space-y-2">
-          <h2 className="md:text-2xl text-xl font-semibold text-start">
-            {item.title}
+          <h2 className="text-start text-lg font-semibold md:line-clamp-1">
+            {item.name}
           </h2>
-          <p className="text-xs">{item.text}</p>
+          <p className="line-clamp-3 text-xs">{item.overview}</p>
         </div>
       </CardHeader>
-      <div className="relative h-52">
+      <div className="relative min-h-52">
         <Image
           src={image}
           alt="couple session"
           fill
-          className="object-cover rounded-lg"
+          className="rounded-lg object-cover"
         />
         <Button
-          variant={"link"}
-          className="absolute bottom-2 left-4 rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-white flex items-center gap-2 hover:scale-105 transition-all duration-300 ease-in-out hover:shadow-md"
+          asChild
+          variant={"ghost"}
+          className="absolute bottom-2 left-4 flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-inherit hover:text-white hover:shadow-md"
         >
-          <Link href={"/"} className="text-white">
+          <Link href={`/service-details/${item.slug}`} className="text-white">
             Learn More
+            <ArrowRight className="text-white" />
           </Link>
-          <ArrowRight className="text-white" />
         </Button>
       </div>
     </Card>

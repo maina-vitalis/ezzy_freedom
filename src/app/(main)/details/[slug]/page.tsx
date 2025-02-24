@@ -73,19 +73,20 @@ async function ProductDetails(props: { params: ProductPageProps }) {
           )}
         </div>
 
-        <div className="space-y-4">
+        <div className="w-full space-y-4">
           <div className="flex-1 space-y-5">
             <h2 className="text-3xl font-semibold capitalize">{book.title}</h2>
 
-            <p className="text-sm">{book.bookOverview}</p>
+            <p
+              className="text-sm"
+              dangerouslySetInnerHTML={{ __html: book.highlights }}
+            ></p>
           </div>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger>Highlights</AccordionTrigger>
+              <AccordionTrigger>Book Overview</AccordionTrigger>
               <AccordionContent className="text-sm">
-                <div
-                  dangerouslySetInnerHTML={{ __html: book.highlights }}
-                ></div>
+                {book.bookOverview}
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
@@ -97,7 +98,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
             <AccordionItem value="item-3">
               <AccordionTrigger>Target audience</AccordionTrigger>
               <AccordionContent className="text-sm">
-                {book.additionalInfo}
+                {book.targetAudience}
               </AccordionContent>
             </AccordionItem>
           </Accordion>

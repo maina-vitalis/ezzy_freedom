@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { addBookSchema, AddBookTypes } from "@/util/validation";
+import { BookSchema, BookTypes } from "@/util/validation";
 import prisma from "@/lib/prisma";
 import slugify from "slugify";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
+//create book
 export async function POST(req: Request) {
   try {
     const session = await auth.api.getSession({
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
     }
 
     // Parse and validate incoming book data with Zod schema
-    const bookData: AddBookTypes = await req.json();
+    const bookData: BookTypes = await req.json();
     const {
       additionalInfo,
       bookOverview,
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
       targetAudience,
       title,
       fileKey,
-    } = addBookSchema.parse(bookData);
+    } = BookSchema.parse(bookData);
 
     const parsedBookData = {
       additionalInfo,
@@ -65,3 +66,21 @@ export async function POST(req: Request) {
 }
 
 //get the books
+export async function GET() {
+  try {
+    const data = await prisma.books.findMany();
+    return NextResponse.json(data, {
+      status: 200,
+    });
+  } catch (error: any) {
+    console.log(error, "getting tours");
+    return NextResponse.json(
+      {
+        error: error.message || "Something went wrong",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}

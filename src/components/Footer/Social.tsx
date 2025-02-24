@@ -6,13 +6,13 @@ const Social = () => {
   return (
     <div className="">
       <div className="flex flex-col justify-center gap-3">
-        <h3 className="text-primary mb-3 text-base font-bold underline">
+        <h3 className="mb-3 text-base font-bold text-primary underline">
           Connect With Us
         </h3>
         <div className="flex flex-col gap-3">
           <span className="flex items-center gap-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <Phone className="text-background h-5 w-5" />
+              <Phone className="h-5 w-5 text-background" />
             </div>
             <div>
               <p className="text-sm font-normal">Drop a Line</p>
@@ -21,7 +21,7 @@ const Social = () => {
           </span>
           <span className="flex items-center gap-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <Mail className="text-background h-5 w-5" />
+              <Mail className="h-5 w-5 text-background" />
             </div>
             <div>
               <p className="text-sm font-normal">Email Address</p>
@@ -30,7 +30,7 @@ const Social = () => {
           </span>
           <span className="flex items-center gap-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-              <MapPin className="text-background h-5 w-5" />
+              <MapPin className="h-5 w-5 text-background" />
             </div>
             <div>
               <p className="text-sm font-normal">Visit the office</p>
@@ -43,7 +43,7 @@ const Social = () => {
               <FaFacebook className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
             <a
-              href="https://www.instagram.com/rithord_travels/"
+              href="https://www.instagram.com//"
               target="_blank"
               rel="noopener"
             >
@@ -52,11 +52,7 @@ const Social = () => {
             <a href="#" target="_blank" rel="noopener">
               <FaXTwitter className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
-            <a
-              href="https://wa.me/+254717024655"
-              target="_blank"
-              rel="noopener"
-            >
+            <a href="https://wa.me/254712345678" target="_blank" rel="noopener">
               <FaWhatsapp className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
           </div>

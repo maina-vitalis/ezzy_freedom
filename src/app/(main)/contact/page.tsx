@@ -22,6 +22,7 @@ import LoadingButton from "@/components/LoadingButton";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { FaWhatsapp } from "react-icons/fa";
 
 const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -61,21 +62,21 @@ export default function ContactForm() {
 
   return (
     <div className="mt-3 space-y-8">
-      <div className="h-[30vh] relative before:content-[''] before:absolute before:top-0 before: left-0 before:w-full before:h-full before:z-10 md:before:bg-gradient-to-r from-primary  to-transparent before:rounded-lg md:before:opacity-90 before:bg-primary/50  md:before:bg-transparent">
+      <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
         <Image
           src={image}
           alt="Contact Us"
           fill
           className="rounded-lg object-cover"
         />
-        <h1 className="absolute left-[50%] top-[30%] -translate-x-[50%] text-center text-3xl font-bold text-white z-10">
+        <h1 className="absolute left-[50%] top-[30%] z-10 -translate-x-[50%] text-center text-3xl font-bold text-white">
           Contact Us
         </h1>
       </div>
 
-      <div className="mt-5 flex flex-col justify-between gap-10 md:flex-row">
+      <div className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
         {/* Phone Card */}
-        <Card className="flex min-w-[300px] flex-col items-center p-3 text-center">
+        <Card className="flex flex-col items-center p-3 text-center">
           <Phone size={50} className="text-primary" />
           <p className="text-lg font-bold">Phone</p>
           <p className="text-sm">For any assistance, call us directly:</p>
@@ -90,7 +91,7 @@ export default function ContactForm() {
         {/* Email Card */}
 
         <a href="mailto:info@tumainifitness.co.ke" className="">
-          <Card className="flex min-w-[300px] flex-col items-center p-3 text-center">
+          <Card className="flex flex-col items-center p-3 text-center">
             <Mail size={50} className="text-primary" />
             <p className="text-lg font-bold">Email</p>
             <p className="text-sm">Reach out via email for inquiries:</p>
@@ -101,25 +102,62 @@ export default function ContactForm() {
         </a>
 
         {/* Location Card */}
-        <Card className="flex min-w-[300px] flex-col items-center p-3 text-center">
+        <Card className="flex flex-col items-center p-3 text-center">
           <MapPin size={50} className="text-primary" />
           <p className="text-lg font-bold">Visit Us</p>
           <p className="text-sm">Find us at our main office:</p>
-          <p className="text-sm font-medium text-secondary_orange">Westlands</p>
+          <p className="text-secondary_orange text-sm font-medium">Westlands</p>
+        </Card>
+
+        <Card className="flex flex-col items-center p-3 text-center">
+          <FaWhatsapp size={50} className="text-primary" />
+          <p className="text-lg font-bold">WhatsApp</p>
+          <p className="text-sm">Contact us via WhatsApp</p>
+          <a
+            href={`https://wa.me/254712345678?text=${encodeURIComponent(
+              "Hello, I would like to learn more about Ezzy Foundation services. Please assist me. Thank you!",
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-blue-500 underline"
+          >
+            Click Here
+          </a>{" "}
         </Card>
       </div>
 
-      <div className="flex flex-col gap-5 md:flex-row bg-muted p-5 rounded-lg">
+      <div className="flex flex-col gap-5 rounded-lg bg-muted p-5 md:flex-row">
         <div className="basis-1/2 space-y-3">
-          <h1 className="font-bold text-secondary_orange">Get in Touch</h1>
-          <h2 className="text-lg font-semibold md:text-3xl">
+          <h1 className="font-bold text-primary">Get in Touch</h1>
+          <h2 className="text-lg font-semibold md:text-xl">
             Feel Free to Reach Out to Us
           </h2>
-          <p className="text-sm md:text-base">
+          <p className="text-sm font-light">
             For any inquiries or assistance, please feel free to reach out to
             us. We are here to help and are committed to providing you with the
             best possible support.
           </p>
+
+          <div className="flex flex-col gap-3 md:pt-5">
+            <span className="flex items-center gap-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
+                <Phone className="h-5 w-5 text-background" />
+              </div>
+              <div>
+                <p className="text-sm font-normal">Drop a Line</p>
+                <h4 className="text-sm font-bold">+254 791 672 961</h4>
+              </div>
+            </span>
+            <span className="flex items-center gap-6">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
+                <Mail className="h-5 w-5 text-background" />
+              </div>
+              <div>
+                <p className="text-sm font-normal">Email Address</p>
+                <h4 className="text-sm font-bold">info@ezzyfoundation.co.ke</h4>
+              </div>
+            </span>
+          </div>
         </div>
         <div className="basis-1/2">
           <Form {...form}>

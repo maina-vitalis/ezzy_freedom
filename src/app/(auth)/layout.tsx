@@ -8,7 +8,7 @@ async function layout({ children }: LayoutProps) {
   return (
     <>
       <MainNav />
-      <main className="mx-auto max-w-[1300px] p-3">{children}</main>
+      <main className="mx-auto max-w-[1300px] px-3">{children}</main>
     </>
   );
 }

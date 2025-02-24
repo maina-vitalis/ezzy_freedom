@@ -5,26 +5,24 @@ import Link from "next/link";
 function Appointment() {
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="flex-1 flex-col gap-5 flex justify-between">
-        <p className="md:text-5xl text-3xl font-semibold">
-          Your Path <br className="hidden md:block" /> to Hope
-        </p>
+      <div className="flex flex-1 flex-col justify-between gap-5">
+        <p className="text-xl font-semibold md:text-5xl">Your Path to Hope</p>
         <p className="text-sm font-semibold text-primary">
-          Explore your inner world and gain insights
+          Begin your journey toward healing, clarity, and inner peace.
         </p>
       </div>
-      <div className="flex-1 flex flex-col justify-between gap-3">
-        <p className="text-sm  lg:w-[70%]">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum
-          temporibus est blanditiis vero nemo cumque, deserunt possimus tempore
-          consectetur rerum quas doloremque. Omnis voluptate aperiam eaque nam
-          quam provident dignissimos
+      <div className="flex flex-1 flex-col justify-between gap-3">
+        <p className="text-sm lg:w-[70%]">
+          Life&apos;s challenges can feel overwhelming, but you don&apos;t have
+          to face them alone. Take a step toward self-discovery, resilience, and
+          emotional well-being. Our sessions provide a safe space to explore
+          your thoughts, heal from within, and rediscover your purpose.
         </p>
 
         <Button
           asChild
           variant={"outline"}
-          className="rounded-full w-fit bg-card text-foreground hover:scale-105 transition-all duration-300 ease-in-out"
+          className="w-fit rounded-full bg-card text-foreground transition-all duration-300 ease-in-out hover:scale-105"
         >
           <Link href="/contact">Book Appointment</Link>
         </Button>

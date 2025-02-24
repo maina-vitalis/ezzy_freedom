@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { addBookSchema, AddBookTypes } from "@/util/validation";
+import { BookSchema, BookTypes } from "@/util/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import TinyMCE from "../TinyMCE";
@@ -24,24 +24,30 @@ import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
+import { Books } from "@prisma/client";
 
-function AddBookForm() {
-  const [coverImage, setCoverImage] = useState();
-  const [bookName, setBookName] = useState();
+interface AddBookFormProps {
+  book?: Books;
+  method: string;
+}
+
+function BookForm({ book, method }: AddBookFormProps) {
+  const [coverImage, setCoverImage] = useState(book?.coverImage || undefined);
+  const [bookName, setBookName] = useState(`${book?.title} pdf` || undefined);
   // const [isPending, startTransition] = useTransition();
 
-  const form = useForm<AddBookTypes>({
-    resolver: zodResolver(addBookSchema),
+  const form = useForm<BookTypes>({
+    resolver: zodResolver(BookSchema),
     defaultValues: {
-      additionalInfo: "",
-      coverImage: "",
-      downloadUrl: "",
-      highlights: "",
-      bookOverview: "",
-      price: 0,
-      targetAudience: "",
-      title: "",
-      fileKey: "",
+      additionalInfo: book?.additionalInfo || "",
+      coverImage: book?.coverImage || "",
+      downloadUrl: book?.downLoadUrl || "",
+      highlights: book?.highlights || "",
+      bookOverview: book?.bookOverview || "",
+      price: book?.price || 0,
+      targetAudience: book?.targetAudience || "",
+      title: book?.title || "",
+      fileKey: book?.fileKey || "",
     },
   });
 
@@ -53,39 +59,42 @@ function AddBookForm() {
   }
 
   async function handleUploadPdf(files: any) {
-    console.log("maina vitalis", files[0]);
     form.setValue("downloadUrl", files[0].url);
     form.setValue("fileKey", files[0].key);
     setBookName(files[0].name);
   }
 
   async function handleUploadImage(files: any) {
-    console.log("maina vitalis", files[0].url);
     form.setValue("coverImage", files[0].url);
     setCoverImage(files[0].url);
   }
 
   //mutation
   const { mutate, isPending } = useMutation({
-    mutationFn: async (bookData: AddBookTypes) => {
-      const data = await axios.post("/api/books", bookData);
-      return data;
+    mutationFn: async (bookData: BookTypes) => {
+      if (method === "create") {
+        return await axios.post("/api/books", bookData);
+      }
+
+      if (method === "update") {
+        return await axios.put(`/api/books/${book?.id}`, bookData);
+      }
     },
     onSuccess: () => {
-      toast.success("Book created successfully");
+      toast.success("success");
       handleReset();
     },
     onError: (error: any) => {
       console.log(error);
       toast.error(
-        error.response.data.message ||
-          "something went wrong when creating the book",
+        error.response?.data?.message ||
+          "Something went wrong when updating the book",
       );
     },
   });
 
   //submit function
-  function onSubmit(data: AddBookTypes) {
+  function onSubmit(data: BookTypes) {
     mutate(data);
   }
 
@@ -271,4 +280,4 @@ function AddBookForm() {
   );
 }
 
-export default AddBookForm;
+export default BookForm;

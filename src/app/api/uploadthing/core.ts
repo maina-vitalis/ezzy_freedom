@@ -19,7 +19,8 @@ export const ourFileRouter = {
         headers: await headers(),
       });
 
-      if (!session?.session) throw new UploadThingError("Unauthorized");
+      if (!session?.session || session.user.role === "user")
+        throw new UploadThingError("Unauthorized");
       const user = session.user;
       return { user };
     })
@@ -40,7 +41,28 @@ export const ourFileRouter = {
         headers: await headers(),
       });
 
-      if (!session?.session) throw new UploadThingError("Unauthorized");
+      if (!session?.session || session.user.role === "user")
+        throw new UploadThingError("Unauthorized");
+      const user = session.user;
+      return { user };
+    })
+    .onUploadComplete(async ({ metadata }) => {
+      return { uploadedBy: metadata.user.id };
+    }),
+
+  serviceImage: f({
+    image: {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+
+      if (!session?.session || session.user.role === "user")
+        throw new UploadThingError("Unauthorized");
       const user = session.user;
       return { user };
     })

@@ -18,13 +18,13 @@ import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 
 function SignupForm() {
   const router = useRouter();
 
   const [error, setError] = useState<string>();
   const [loading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState(false);
 
   const form = useForm<signUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -69,7 +69,9 @@ function SignupForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>User name</FormLabel>
+              <FormLabel>
+                User name <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input {...field} placeholder="username" />
               </FormControl>
@@ -83,7 +85,9 @@ function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>
+                Email <span className="text-destructive">*</span>
+              </FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -114,14 +118,32 @@ function SignupForm() {
           Register
         </LoadingButton>
 
-        <Button
+        <LoadingButton
+          loading={socialLoading}
           type="button"
           variant="outline"
           className="w-full gap-2"
+          disabled={socialLoading}
           onClick={async () => {
             await signIn.social({
               provider: "google",
               callbackURL: "/",
+              fetchOptions: {
+                onResponse: () => {
+                  setSocialLoading(false);
+                },
+                onRequest: () => {
+                  setSocialLoading(true);
+                },
+
+                onError: (context) => {
+                  toast.error(context.error.message);
+                },
+
+                onSuccess: () => {
+                  router.push("/");
+                },
+              },
             });
           }}
         >
@@ -149,7 +171,7 @@ function SignupForm() {
               d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
             />
           </svg>
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

@@ -19,7 +19,9 @@ function Hero() {
           Breaking the chains of self, Finding purpose
         </p>
         <p className="text-center text-sm text-white md:text-start">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, ipsum.
+          True freedom begins when we break free from self-doubt, fear, and
+          limitations. Embracing growth, resilience, and purpose leads to a life
+          of fulfillment and impact.{" "}
         </p>
         <Button
           asChild

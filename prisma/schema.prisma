@@ -92,6 +92,16 @@ model Books {
   fileKey        String
 }
 
+model Service {
+  id          String @id @default(uuid())
+  name        String @unique
+  bannerText  String
+  overview    String
+  description String
+  image       String
+  slug        String
+}
+
 enum Role {
   USER
   ADMIN

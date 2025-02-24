@@ -1,10 +1,10 @@
-import AddBookForm from "@/components/forms/AddBookForm";
+import BookForm from "@/components/forms/BookForm";
 import React from "react";
 
 function Create() {
   return (
     <div>
-      <AddBookForm />
+      <BookForm method="create" />
     </div>
   );
 }

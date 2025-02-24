@@ -20,11 +20,11 @@ import { toast } from "sonner";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 function LoginForm() {
-  const [error, setError] = useState<string>();
   const [loading, setIsLoading] = useState<boolean>(false);
+  const [socialLoading, setSocialLoading] = useState<boolean>(false);
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -40,7 +40,6 @@ function LoginForm() {
   });
 
   async function onSubmit(values: loginValues) {
-    setError(undefined);
     await signIn.email({
       email: values.email,
       password: values.password,
@@ -69,8 +68,6 @@ function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-1">
-        {error && <p className="text-center text-destructive">{error}</p>}
-
         <FormField
           control={form.control}
           name="email"
@@ -127,14 +124,32 @@ function LoginForm() {
           Login
         </LoadingButton>
         <div>
-          <Button
+          <LoadingButton
+            loading={socialLoading}
             type="button"
             variant="outline"
             className="mt-5 w-full"
+            disabled={socialLoading}
             onClick={async () => {
               await signIn.social({
                 provider: "google",
                 callbackURL: callbackUrl,
+                fetchOptions: {
+                  onResponse: () => {
+                    setSocialLoading(false);
+                  },
+                  onRequest: () => {
+                    setSocialLoading(true);
+                  },
+
+                  onError: (context) => {
+                    toast.error(context.error.message);
+                  },
+
+                  onSuccess: () => {
+                    router.push(callbackUrl);
+                  },
+                },
               });
             }}
           >
@@ -162,7 +177,7 @@ function LoginForm() {
                 d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
               />
             </svg>
-          </Button>
+          </LoadingButton>
         </div>
       </form>
     </Form>

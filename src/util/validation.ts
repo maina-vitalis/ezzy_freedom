@@ -35,7 +35,7 @@ export const checkOutSchema = z.object({
 export type CheckOutTypes = z.infer<typeof checkOutSchema>;
 
 //add book form validation
-export const addBookSchema = z.object({
+export const BookSchema = z.object({
   coverImage: requiredString,
   price: z.coerce.number({
     required_error: "A tour price is required",
@@ -50,4 +50,15 @@ export const addBookSchema = z.object({
   fileKey: z.string(),
 });
 
-export type AddBookTypes = z.infer<typeof addBookSchema>;
+export type BookTypes = z.infer<typeof BookSchema>;
+
+//service form validation
+export const ServiceSchema = z.object({
+  name: requiredString,
+  bannerText: requiredString,
+  overview: requiredString,
+  description: requiredString,
+  image: requiredString,
+});
+
+export type ServiceTypes = z.infer<typeof ServiceSchema>;

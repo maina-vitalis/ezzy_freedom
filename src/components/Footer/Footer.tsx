@@ -7,9 +7,9 @@ const Footer = () => {
   return (
     <footer className="mt-4 w-full bg-muted">
       <div className="mx-auto max-w-full px-3 md:max-w-[95%] lg:max-w-[1140px]">
-        <div className="flex flex-col justify-between gap-9 md:flex-row py-10">
+        <div className="flex flex-col justify-between gap-9 py-10 md:flex-row">
           <div className="min-w-[200px] self-start">
-            <div className="h-60 relative flex-1">
+            <div className="relative h-60 flex-1">
               <Image
                 className="h-auto object-contain"
                 src={logo}
@@ -22,7 +22,7 @@ const Footer = () => {
             <Social />
           </div>
           <div>
-            <h2 className="text-base font-bold underline text-primary">
+            <h2 className="text-base font-bold text-primary underline">
               Links
             </h2>
 
@@ -35,14 +35,6 @@ const Footer = () => {
                   AboutUs
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  className="text-sm font-normal hover:underline"
-                  href={"/services"}
-                >
-                  Services
-                </Link>
-              </li> */}
 
               <li>
                 <Link
