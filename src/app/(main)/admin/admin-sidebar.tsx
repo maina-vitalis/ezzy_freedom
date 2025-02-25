@@ -55,7 +55,7 @@ export async function AdminSidebar() {
     <Sidebar className="mt-16" variant="inset">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-base font-semibold capitalize text-primary">
+          <SidebarGroupLabel className="line-clamp-1 text-base font-semibold capitalize text-primary">
             @{user?.name}
             <span className="ml-1 text-xs lowercase"> ({user.role})</span>
           </SidebarGroupLabel>

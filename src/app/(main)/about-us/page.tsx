@@ -7,8 +7,7 @@ import CountUp from "react-countup";
 import image from "./../../../assets/login-image.jpg";
 import ezra from "./../../../assets/ezzy.png";
 import ReachOut from "@/components/forms/ReachOut";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
 import { Check } from "lucide-react";
 
 function AboutUs() {
@@ -25,26 +24,26 @@ function AboutUs() {
 
   return (
     <div className="space-y-8">
-      <div className="h-[30vh] relative before:content-[''] before:absolute before:top-0 before: left-0 before:w-full before:h-full before:z-10 md:before:bg-gradient-to-r from-primary  to-transparent before:rounded-lg md:before:opacity-90 before:bg-primary/50  md:before:bg-transparent">
+      <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
         <Image
           src={image}
           alt="Contact Us"
           fill
           className="rounded-lg object-cover"
         />
-        <h1 className="absolute left-[50%] top-[30%] -translate-x-[50%] text-center text-3xl font-bold text-white z-10">
+        <h1 className="absolute left-[50%] top-[30%] z-10 -translate-x-[50%] text-center text-3xl font-bold text-white">
           About Us
         </h1>
       </div>
 
-      <div className="flex gap-5 flex-col md:flex-row">
+      <div className="flex flex-col gap-5 md:flex-row">
         <div className="flex-1 space-y-2">
-          <h3 className="text-primary font-semibold">Ezz freedom and hope</h3>
+          <h3 className="font-semibold text-primary">Ezz freedom and hope</h3>
           <h4 className="text-2xl font-bold">
             Empowering Lives, Restoring Hope
           </h4>
 
-          <p className="text-sm mt-2">
+          <p className="mt-2 text-sm">
             <span className="font-bold text-primary">
               EZZ Freedom and Hope Foundation
             </span>{" "}
@@ -66,78 +65,72 @@ function AboutUs() {
             </span>{" "}
             to bridge the gap in awareness and advocacy.
           </p>
-          <Button
-            className="hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
-            asChild
-          >
-            <Link href={"/contact-us"}>Get started</Link>
-          </Button>
         </div>
 
         <div className="relative min-h-52 flex-1">
           <Image
             src={image}
             alt="ezz foundation image"
-            className="object-cover rounded-lg"
+            className="rounded-lg object-cover"
             fill
           />
         </div>
       </div>
       <div
         ref={ref}
-        className="flex gap-5  justify-between items-center flex-wrap bg-primary/40 p-3 rounded-lg"
+        className="flex flex-wrap items-center justify-between gap-5 rounded-lg bg-primary/40 p-3"
       >
         {hasScrolled && (
           <>
-            <div className="sm:w-48 text-center w-full px-3 py-6 border">
-              <p className="font-bold text-4xl">
+            <div className="w-full border px-3 py-6 text-center sm:w-48">
+              <p className="text-4xl font-bold">
                 <CountUp end={20} duration={4} />+
               </p>
-              <p className="Font font-semibold text-sm">Years Experience</p>
+              <p className="Font text-sm font-semibold">Years Experience</p>
             </div>
 
-            <div className="sm:w-48 w-full text-center px-3 py-6 border">
-              <p className="font-bold text-4xl">
+            <div className="w-full border px-3 py-6 text-center sm:w-48">
+              <p className="text-4xl font-bold">
                 <CountUp end={100} duration={4} />+
               </p>{" "}
-              <p className="Font font-semibold text-sm">
+              <p className="Font text-sm font-semibold">
                 Workshops and Seminars
               </p>
             </div>
 
-            <div className="sm:w-48 w-full text-center px-3 py-6 border">
-              <p className="font-bold text-4xl">
+            <div className="w-full border px-3 py-6 text-center sm:w-48">
+              <p className="text-4xl font-bold">
                 <CountUp end={500} duration={4} />+
               </p>{" "}
-              <p className="Font font-semibold text-sm">
+              <p className="Font text-sm font-semibold">
                 Supported individuals
               </p>
             </div>
 
-            <div className="sm:w-48 w-full text-center px-3 py-6 border">
-              <p className="font-bold text-4xl">
+            <div className="w-full border px-3 py-6 text-center sm:w-48">
+              <p className="text-4xl font-bold">
                 <CountUp end={10} duration={4} />+
               </p>{" "}
-              <p className="Font font-semibold text-sm">
+              <p className="Font text-sm font-semibold">
                 community outreach programs
               </p>
             </div>
           </>
         )}
       </div>
-      <div className="flex gap-10 flex-col md:flex-row">
+      <div className="flex flex-col gap-10 md:flex-row">
         <div className="relative min-h-60 flex-1">
           <Image
             src={ezra}
             alt="ezz foundation image"
-            className="object-contain rounded-lg"
+            className="rounded-lg object-contain"
             fill
           />
         </div>
         <div className="flex-1 space-y-2">
-          <h3 className="text-primary font-semibold">About the Founder</h3>
-          <h4 className="text-2xl font-bold">Dr. Ezra Karanja</h4>
-          <p className="text-sm mb-5">
+          <h3 className="font-semibold text-primary">About the Founder</h3>
+          <h4 className="text-2xl font-bold">Clr. Ezra Karanja</h4>
+          <p className="mb-5 text-sm">
             The founder of EZZ Freedom and Hope Foundation is a recovering
             addict, mental health expert, and registered counselor. Their
             personal journey through addiction and recovery fuels their
@@ -150,63 +143,63 @@ function AboutUs() {
           </p>
 
           <ul className="space-y-2">
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Overcame addiction and now helps others in their recovery
                 journey.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Licensed counselor and mental health expert specializing in
                 addiction therapy.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Committed to providing long-term support, education, and
                 awareness.
               </p>
             </li>
 
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Advocates for breaking the stigma surrounding addiction and
                 mental health.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Believes recovery is a victory that should be celebrated and
                 supported.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
+              <p className="text-sm font-semibold">
                 Encourages seeking help, embracing recovery, and rebuilding a
                 healthy future.
               </p>
@@ -215,10 +208,10 @@ function AboutUs() {
         </div>
       </div>
 
-      <div className="flex gap-10 flex-col md:flex-row">
+      <div className="flex flex-col gap-10 md:flex-row">
         <div className="flex-1 space-y-5">
           <div>
-            <h3 className="bg-primary/50 inline-block p-1 font-semibold rounded-lg text-sm">
+            <h3 className="inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
               Our mission
             </h3>
             <p className="text-sm">
@@ -251,10 +244,10 @@ function AboutUs() {
           </div>
 
           <div>
-            <h3 className="bg-primary/50 inline-block p-1 font-semibold rounded-lg text-sm">
+            <h3 className="inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
               Our vision
             </h3>
-            <p className="text-sm mt-1">
+            <p className="mt-1 text-sm">
               We envision a future where{" "}
               <span className="font-bold text-primary">
                 recovery support groups
@@ -269,10 +262,10 @@ function AboutUs() {
         </div>
 
         <div className="flex-1">
-          <h3 className="bg-primary/50 inline-block p-1 font-semibold rounded-lg text-sm mt-4">
+          <h3 className="mt-4 inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
             Our Core Values
           </h3>
-          <p className="text-sm mt-2">
+          <p className="mt-2 text-sm">
             At the heart of our mission, we uphold values that guide our efforts
             in{" "}
             <span className="font-bold text-primary">
@@ -290,46 +283,46 @@ function AboutUs() {
             .
           </p>
 
-          <ul className="space-y-2 mt-3">
-            <li className="flex gap-1 items-center">
+          <ul className="mt-3 space-y-2">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
-                <span className="text-primary font-bold">Passion</span> –
+              <p className="text-sm font-semibold">
+                <span className="font-bold text-primary">Passion</span> –
                 Commitment to making a lasting impact on mental health and
                 recovery.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
-                <span className="text-primary font-bold">Inspiration</span> –
+              <p className="text-sm font-semibold">
+                <span className="font-bold text-primary">Inspiration</span> –
                 Motivating individuals to seek help and embrace change.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
-                <span className="text-primary font-bold">Purpose</span> –
+              <p className="text-sm font-semibold">
+                <span className="font-bold text-primary">Purpose</span> –
                 Providing direction and meaningful solutions for mental health
                 challenges.
               </p>
             </li>
-            <li className="flex gap-1 items-center">
+            <li className="flex items-center gap-1">
               <Check
-                className="text-white bg-primary p-0.5 rounded-full"
+                className="rounded-full bg-primary p-0.5 text-white"
                 size={17}
               />
-              <p className="font-semibold text-sm">
-                <span className="text-primary font-bold">Hope</span> – Restoring
+              <p className="text-sm font-semibold">
+                <span className="font-bold text-primary">Hope</span> – Restoring
                 faith in recovery, healing, and personal growth.
               </p>
             </li>
