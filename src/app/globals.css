@@ -61,3 +61,11 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.dark .custom-html-content {
+  color: white !important;
+}
+
+.custom-html-content * {
+  color: inherit !important;
+}

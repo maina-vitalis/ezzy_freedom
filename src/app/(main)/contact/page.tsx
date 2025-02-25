@@ -114,7 +114,7 @@ export default function ContactForm() {
           <p className="text-lg font-bold">WhatsApp</p>
           <p className="text-sm">Contact us via WhatsApp</p>
           <a
-            href={`https://wa.me/254712345678?text=${encodeURIComponent(
+            href={`https://wa.me/254791672961?text=${encodeURIComponent(
               "Hello, I would like to learn more about Ezzy Foundation services. Please assist me. Thank you!",
             )}`}
             target="_blank"

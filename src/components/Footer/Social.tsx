@@ -52,7 +52,7 @@ const Social = () => {
             <a href="#" target="_blank" rel="noopener">
               <FaXTwitter className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
-            <a href="https://wa.me/254712345678" target="_blank" rel="noopener">
+            <a href="https://wa.me/254791672961" target="_blank" rel="noopener">
               <FaWhatsapp className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
           </div>

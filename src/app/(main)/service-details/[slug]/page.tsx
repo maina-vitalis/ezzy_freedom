@@ -32,14 +32,14 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
         </h1>
       </div>
 
-      <div className="mx-auto w-full space-y-2 bg-card md:max-w-[900px]">
+      <div className="mx-auto w-full space-y-2 md:max-w-[900px]">
         <h2 className="text-center font-semibold sm:text-base md:text-xl">
           Description
         </h2>
         <p
           dangerouslySetInnerHTML={{ __html: service.description }}
-          className="text-sm"
-        ></p>
+          className="prose custom-html-content dark:prose-invert text-sm backdrop:blur-md"
+        />
       </div>
     </div>
   );

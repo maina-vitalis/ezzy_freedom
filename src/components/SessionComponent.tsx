@@ -2,7 +2,6 @@ import React from "react";
 import { Badge } from "./ui/badge";
 import { Card, CardHeader } from "./ui/card";
 import Image from "next/image";
-import image from "./../assets/signup-image.jpg";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -15,7 +14,7 @@ interface SessionComponentProps {
 
 function SessionComponent({ item }: SessionComponentProps) {
   return (
-    <Card className={cn("w-full bg-opacity-40")}>
+    <Card className={cn("w-full bg-opacity-40 shadow-md")}>
       <CardHeader className="z-10 space-y-4">
         <div className="flex gap-3">
           <Badge className="rounded-full bg-primary text-white">
@@ -32,7 +31,7 @@ function SessionComponent({ item }: SessionComponentProps) {
       </CardHeader>
       <div className="relative min-h-52">
         <Image
-          src={image}
+          src={item.image}
           alt="couple session"
           fill
           className="rounded-lg object-cover"
