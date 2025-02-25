@@ -39,7 +39,11 @@ const Social = () => {
             </div>
           </span>
           <div className="ml-16 mt-2 flex gap-3">
-            <a href="#" target="_blank" rel="noopener">
+            <a
+              href="https://www.facebook.com/share/1Ri3WtqLzu/"
+              target="_blank"
+              rel="noopener"
+            >
               <FaFacebook className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
             </a>
             <a
@@ -47,7 +51,7 @@ const Social = () => {
               target="_blank"
               rel="noopener"
             >
-              <FaInstagram className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
+              <FaInstagram className="text-xl text-foreground duration-200 ease-out" />
             </a>
             <a href="#" target="_blank" rel="noopener">
               <FaXTwitter className="hover:text-greenPrimary text-xl text-foreground duration-200 ease-out" />
