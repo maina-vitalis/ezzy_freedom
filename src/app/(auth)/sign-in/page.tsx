@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import React, { Suspense } from "react";
 import LoginForm from "./LoginForm";
 import Link from "next/link";
-import loginImage from "../../../assets/login-image.jpg";
 import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -46,11 +45,16 @@ async function page() {
             </div>
           </Suspense>
         </div>
-        <Image
-          src={loginImage}
-          alt=""
-          className="hidden w-1/2 object-cover md:block"
-        />
+        <div className="relative hidden w-1/2 md:block">
+          <Image
+            src={
+              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOyvJu2CgPgaHNsX8ndiLbx3SGVKj9Cyo5J0u1"
+            }
+            alt=""
+            className="hidden w-1/2 object-cover md:block"
+            fill
+          />
+        </div>
       </div>
     </main>
   );

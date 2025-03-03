@@ -152,22 +152,23 @@ function ServiceForm({ method, service }: ServiceFormProps) {
 
         <div className="mb-5 flex-1">
           <Label>Cover image</Label>
-          {coverImage ? (
-            <div className="relative min-h-36 flex-1">
+
+          <div className="relative min-h-36 flex-1">
+            {coverImage && (
               <Image
                 src={coverImage}
                 alt="cover image"
                 fill
                 className="mt-2 w-full object-cover"
               />
-            </div>
-          ) : (
-            <UploadDropzone
-              endpoint={"serviceImage"}
-              onClientUploadComplete={handleUploadImage}
-              onUploadError={(error) => console.error("Upload failed:", error)}
-            />
-          )}
+            )}
+          </div>
+
+          <UploadDropzone
+            endpoint={"serviceImage"}
+            onClientUploadComplete={handleUploadImage}
+            onUploadError={(error) => console.error("Upload failed:", error)}
+          />
         </div>
 
         <div className="flex flex-col gap-5 md:flex-row">

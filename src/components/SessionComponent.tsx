@@ -39,7 +39,7 @@ function SessionComponent({ item }: SessionComponentProps) {
         <Button
           asChild
           variant={"ghost"}
-          className="absolute bottom-2 left-4 flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-inherit hover:text-white hover:shadow-md"
+          className="absolute bottom-2 left-4 flex items-center gap-2 rounded-full border border-primary bg-primary/50 px-4 py-2 text-white backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 hover:bg-inherit hover:text-white hover:shadow-md"
         >
           <Link href={`/service-details/${item.slug}`} className="text-white">
             Learn More

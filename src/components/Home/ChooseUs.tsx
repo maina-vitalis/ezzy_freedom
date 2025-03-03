@@ -1,5 +1,4 @@
 import React from "react";
-import image from "./../../assets/login-image.jpg";
 import Image from "next/image";
 
 function ChooseUs() {
@@ -64,8 +63,10 @@ function ChooseUs() {
 
         <div className="relative min-h-52 flex-1">
           <Image
-            src={image}
-            alt="photo"
+            src={
+              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOO4ycmiQrgXbHyN3ps8SaUkdjB2w5AGZLJK46"
+            }
+            alt="why choose us image"
             className="rounded-lg object-cover"
             fill
           />

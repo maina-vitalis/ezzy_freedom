@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React from "react";
-import image from "./../../assets/login-image.jpg";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -9,7 +8,9 @@ function Hero() {
   return (
     <div className="before: relative left-0 h-[80vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
       <Image
-        src={image}
+        src={
+          "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO9rwjjnXlKG4t5u3xDPbjmCwOpR8QUX7yFhgN"
+        }
         alt="ezzy hero image"
         className="rounded-lg object-cover"
         fill

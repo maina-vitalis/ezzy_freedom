@@ -209,7 +209,7 @@ function BookForm({ book, method }: AddBookFormProps) {
           <div className="flex flex-col gap-5 md:flex-row">
             <div className="flex-1">
               <Label>Book Upload</Label>
-              {bookName ? (
+              {bookName && (
                 <div>
                   <p className="text-sm font-semibold">
                     You have already uploaded the: {bookName}
@@ -222,20 +222,20 @@ function BookForm({ book, method }: AddBookFormProps) {
                     </span>
                   </i>
                 </div>
-              ) : (
-                <UploadDropzone
-                  endpoint={"bookUpload"}
-                  onClientUploadComplete={handleUploadPdf}
-                  onUploadError={(error) =>
-                    console.error("Upload failed:", error)
-                  }
-                />
               )}
+
+              <UploadDropzone
+                endpoint={"bookUpload"}
+                onClientUploadComplete={handleUploadPdf}
+                onUploadError={(error) =>
+                  console.error("Upload failed:", error)
+                }
+              />
             </div>
 
             <div className="flex-1">
               <Label>Cover image</Label>
-              {coverImage ? (
+              {coverImage && (
                 <div className="relative min-h-36 flex-1">
                   <Image
                     src={coverImage}
@@ -244,15 +244,15 @@ function BookForm({ book, method }: AddBookFormProps) {
                     className="mt-2 w-full object-cover"
                   />
                 </div>
-              ) : (
-                <UploadDropzone
-                  endpoint={"coverImage"}
-                  onClientUploadComplete={handleUploadImage}
-                  onUploadError={(error) =>
-                    console.error("Upload failed:", error)
-                  }
-                />
               )}
+
+              <UploadDropzone
+                endpoint={"coverImage"}
+                onClientUploadComplete={handleUploadImage}
+                onUploadError={(error) =>
+                  console.error("Upload failed:", error)
+                }
+              />
             </div>
           </div>
 

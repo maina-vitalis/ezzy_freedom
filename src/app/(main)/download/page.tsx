@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import image from "./../../../assets/login-image.jpg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
@@ -13,10 +12,10 @@ async function Download() {
   if (!session?.session) redirect("/sign-in");
 
   return (
-    <div className="flex flex-col-reverse gap-8 md:flex-row items-center p-8 bg-gray-50 rounded-lg shadow-lg">
+    <div className="flex flex-col-reverse items-center gap-8 rounded-lg p-8 shadow-lg md:flex-row">
       <div className="flex-1 space-y-6 text-center md:text-left">
         <h1 className="text-4xl font-bold text-primary">Thank You! 🎉</h1>
-        <p className="text-xl text-gray-700">
+        <p className="text-xl">
           Your book has been sent to your email. <br />
           <span className="font-semibold text-primary">
             Please check your inbox.
@@ -43,12 +42,14 @@ async function Download() {
         </Button>
       </div>
 
-      <div className="flex-1 relative min-h-60 md:min-h-80">
+      <div className="relative min-h-60 flex-1 md:min-h-80">
         <Image
-          src={image}
+          src={
+            "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoODAVdXwaldt9LT13GxhcZ8POMubvmrUNeKB4H"
+          }
           alt="Book image"
           fill
-          className="object-cover rounded-lg shadow-md"
+          className="rounded-lg object-cover shadow-md"
         />
       </div>
     </div>

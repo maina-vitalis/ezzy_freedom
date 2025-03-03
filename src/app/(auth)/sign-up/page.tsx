@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import signupImage from "./../../../assets/signup-image.jpg";
 import Image from "next/image";
 import Link from "next/link";
 import SignupForm from "./SignupForm";
@@ -40,12 +39,17 @@ async function page() {
             </Link>
           </div>
         </div>
-        <Image
-          src={signupImage}
-          alt=""
-          className="hidden w-1/2 object-cover md:block"
-          objectFit="cover"
-        />
+        <div className="relative hidden w-1/2 md:block">
+          <Image
+            src={
+              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOm1xexpsflUwRcCtPH6VeMBY798zS0u3dhWsv"
+            }
+            alt=""
+            className="hidden w-1/2 object-cover md:block"
+            objectFit="cover"
+            fill
+          />
+        </div>
       </div>
     </main>
   );

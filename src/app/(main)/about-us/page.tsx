@@ -4,7 +4,6 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import CountUp from "react-countup";
-import image from "./../../../assets/login-image.jpg";
 import ezra from "./../../../assets/ezzy.png";
 import ReachOut from "@/components/forms/ReachOut";
 
@@ -26,7 +25,9 @@ function AboutUs() {
     <div className="space-y-8">
       <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
         <Image
-          src={image}
+          src={
+            "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO9G1xO3rXlKG4t5u3xDPbjmCwOpR8QUX7yFhg"
+          }
           alt="Contact Us"
           fill
           className="rounded-lg object-cover"
@@ -69,7 +70,9 @@ function AboutUs() {
 
         <div className="relative min-h-52 flex-1">
           <Image
-            src={image}
+            src={
+              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOUw56pPydJaCcu6rFeWZRAOYGo8y4nEz7iIfK"
+            }
             alt="ezz foundation image"
             className="rounded-lg object-cover"
             fill
