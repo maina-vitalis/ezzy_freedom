@@ -10,7 +10,7 @@ async function Products() {
         Therapeutic Reads: Transform Your Mind
       </h2>
 
-      <div className="flex flex-col md:flex-row gap-5 justify-between">
+      <div className="flex flex-col justify-between gap-5 md:flex-row">
         {books.map((book, index) => (
           <ProductCard key={index} book={book} />
         ))}
