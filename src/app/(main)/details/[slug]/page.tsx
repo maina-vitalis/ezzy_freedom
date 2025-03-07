@@ -12,8 +12,23 @@ import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 
 type ProductPageProps = Promise<{ slug: string }>;
+
+export async function generateMetadata(props: { params: ProductPageProps }) {
+  const { slug } = await props.params;
+  const book = await prisma.books.findFirst({
+    where: {
+      slug,
+    },
+  });
+  if (!book) redirect(notFound());
+
+  return {
+    title: `${book.title}`,
+  };
+}
 
 async function ProductDetails(props: { params: ProductPageProps }) {
   const { slug } = await props.params;

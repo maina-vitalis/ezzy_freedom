@@ -1,9 +1,27 @@
 import prisma from "@/lib/prisma";
 import Image from "next/image";
+import { notFound, redirect } from "next/navigation";
 
 type ServiceDetailsProps = Promise<{
   slug: string;
 }>;
+
+export async function generateMetadata(props: { params: ServiceDetailsProps }) {
+  const { slug } = await props.params;
+  const service = await prisma.service.findFirst({
+    where: {
+      slug,
+    },
+  });
+
+  if (!service) {
+    redirect(notFound());
+  }
+
+  return {
+    title: `${service.name}`,
+  };
+}
 async function ServiceDetails(props: { params: ServiceDetailsProps }) {
   const { slug } = await props.params;
 
