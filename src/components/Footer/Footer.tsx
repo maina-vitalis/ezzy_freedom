@@ -49,7 +49,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="h-[50px] w-full items-center bg-card text-center text-sm md:text-base">
-        © {new Date().getFullYear()} Ezzy foundation. All Rights Reserved
+        © {new Date().getFullYear()} Ezz freedom and hope. All Rights Reserved
       </div>
     </footer>
   );

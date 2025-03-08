@@ -4,7 +4,7 @@ import Image from "next/image";
 function ChooseUs() {
   return (
     <div className="space-y-10">
-      <h2 className="text-xl font-bold md:text-3xl">Why Choose us?</h2>
+      <h2 className="text-lg font-semibold md:text-2xl">Why Choose us?</h2>
       <div className="flex flex-col gap-5 md:flex-row">
         <div className="flex-1 space-y-8">
           <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-2">

@@ -7,9 +7,9 @@ async function Services() {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold">Our services </h2>
+      <h2 className="text-lg font-semibold md:text-2xl">Our services </h2>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5">
+      <div className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-5">
         {services.map((item) => (
           <SessionComponent key={item.id} item={item} />
         ))}

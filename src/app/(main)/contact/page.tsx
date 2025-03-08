@@ -91,13 +91,13 @@ export default function ContactForm() {
 
         {/* Email Card */}
 
-        <a href="mailto:info@tumainifitness.co.ke" className="">
+        <a href="info@ezzyfreedomandhope.or.ke" className="">
           <Card className="flex flex-col items-center p-3 text-center">
             <Mail size={50} className="text-primary" />
             <p className="text-lg font-bold">Email</p>
             <p className="text-sm">Reach out via email for inquiries:</p>
             <p className="text-sm font-semibold text-blue-500 underline">
-              info@ezzyfreedomandhope.co.ke
+              info@ezzyfreedomandhope.or.ke
             </p>
           </Card>
         </a>
@@ -107,7 +107,9 @@ export default function ContactForm() {
           <MapPin size={50} className="text-primary" />
           <p className="text-lg font-bold">Visit Us</p>
           <p className="text-sm">Find us at our main office:</p>
-          <p className="text-secondary_orange text-sm font-medium">Westlands</p>
+          <p className="text-secondary_orange text-sm font-medium">
+            NextGen Mall, Mombasa Rd
+          </p>
         </Card>
 
         <Card className="flex flex-col items-center p-3 text-center">
@@ -155,7 +157,9 @@ export default function ContactForm() {
               </div>
               <div>
                 <p className="text-sm font-normal">Email Address</p>
-                <h4 className="text-sm font-bold">info@ezzyfoundation.co.ke</h4>
+                <h4 className="text-sm font-bold">
+                  info@ezzyfreedomandhope.or.ke
+                </h4>
               </div>
             </span>
           </div>
@@ -230,7 +234,7 @@ export default function ContactForm() {
       <div>
         <iframe
           className="w-full rounded-lg"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4882.655900125021!2d36.9008908482592!3d-1.2134983040112104!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3fa5b7241e9d%3A0xd7f4237ab5bd50a8!2sKastemil%20Business%20Centre!5e0!3m2!1sen!2ske!4v1732720702779!5m2!1sen!2ske"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7534802458285!2d36.84146037363157!3d-1.3237711986636689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11be560b5283%3A0x9dacf93424a76a51!2sThe%20Nextgen%20Mall!5e0!3m2!1sen!2ske!4v1741416464759!5m2!1sen!2ske"
           height="450"
           style={{ border: 0 }}
           allowFullScreen={true}

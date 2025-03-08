@@ -1,16 +1,24 @@
 import React from "react";
 import ProductCard from "../ProductCard";
 import prisma from "@/lib/prisma";
+import Image from "next/image";
+import empty from "./../../assets/empty.png";
 
 async function Products() {
   const books = await prisma.books.findMany();
 
   if (!books || books.length === 0) {
-    <div className="h-36 w-full">
-      <p className="text-center text-lg font-semibold">
-        No Books at the moment come back later
-      </p>
-    </div>;
+    return (
+      <div className="h-36 w-full">
+        <h2 className="text-lg font-semibold md:text-2xl">
+          Therapeutic Reads: Transform Your Mind
+        </h2>
+        <div className="mt-5 flex flex-col items-center">
+          <Image src={empty} alt="empty image" height={70} width={70} />
+          <p className="mt-5 text-lg">No Books at the moment come back later</p>
+        </div>
+      </div>
+    );
   }
 
   return (
