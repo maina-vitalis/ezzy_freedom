@@ -45,7 +45,7 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
           fill
           className="rounded-lg object-cover"
         />
-        <h1 className="absolute left-[50%] top-[40%] z-10 -translate-x-[50%] text-center text-2xl font-bold text-white">
+        <h1 className="absolute left-[50%] top-[40%] z-10 -translate-x-[50%] text-center text-lg font-semibold text-white md:text-2xl">
           {service.name}
         </h1>
       </div>
