@@ -78,9 +78,9 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
             <p className="text-sm">{book.bookOverview}</p>
           </div>
-          <div className="flex flex-col gap-5 md:flex-row">
+          <div className="flex flex-col gap-2 md:flex-row md:gap-5">
             <Button variant={"outline"} className="w-full rounded-full">
-              {book.price} kes
+              {book.price} Kes
             </Button>
             {session?.session ? (
               <Button className="w-full rounded-full hover:shadow-md" asChild>

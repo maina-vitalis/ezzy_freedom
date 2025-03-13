@@ -70,12 +70,12 @@ function CheckOutForm({ user, book }: User) {
         if (error) {
           clearInterval(queryTimerRef.current!);
           setStkLoading(false);
-          // setSuccess(false);
+
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           if ((error as any).response?.data?.errorCode !== "500.001.1001") {
             toast.error(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (error as any).response?.data?.errorMessage || "Payment failed."
+              (error as any).response?.data?.errorMessage || "Payment failed.",
             );
           }
           return;
@@ -116,7 +116,7 @@ function CheckOutForm({ user, book }: User) {
     (data: CheckOutTypes) => {
       sendPayment(data);
     },
-    [sendPayment]
+    [sendPayment],
   );
 
   return (

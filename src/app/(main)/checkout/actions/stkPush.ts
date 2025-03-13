@@ -20,10 +20,9 @@ interface StkPushResponse {
 }
 
 export async function sendStkPush(
-  body: CheckOutData
+  body: CheckOutData,
 ): Promise<StkPushResponse> {
   const mpesaEnv = process.env.MPESA_ENVIRONMENT;
-  console.log(mpesaEnv);
   const MPESA_BASE_URL =
     mpesaEnv === "live"
       ? "https://api.safaricom.co.ke"
@@ -34,7 +33,7 @@ export async function sendStkPush(
   try {
     //create an encoded token
     const auth = Buffer.from(
-      `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
+      `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`,
     ).toString("base64");
 
     //generate the token
@@ -44,7 +43,7 @@ export async function sendStkPush(
         headers: {
           Authorization: `Basic ${auth}`,
         },
-      }
+      },
     );
 
     const token = resp.data.access_token;
@@ -62,7 +61,7 @@ export async function sendStkPush(
       ("0" + date.getSeconds()).slice(-2);
 
     const password: string = Buffer.from(
-      process.env.MPESA_SHORTCODE! + process.env.MPESA_PASSKEY + timestamp
+      process.env.MPESA_SHORTCODE! + process.env.MPESA_PASSKEY + timestamp,
     ).toString("base64");
 
     const response = await axios.post(
@@ -84,7 +83,7 @@ export async function sendStkPush(
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
     return { data: response.data };
 
