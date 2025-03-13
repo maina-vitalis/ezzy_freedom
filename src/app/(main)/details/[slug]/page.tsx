@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionContent } from "@radix-ui/react-accordion";
-// import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -58,10 +57,10 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 md:px-28">
       <div className="relative flex flex-col gap-5 md:flex-row md:gap-10">
-        <div className="space-y-1">
-          <div className="relative h-56 w-full md:w-56">
+        <div>
+          <div className="relative h-56 w-full md:h-full md:w-72">
             <Image
               src={book.coverImage}
               alt=""
@@ -69,66 +68,63 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               fill
             />
           </div>
-          <Button variant={"outline"} className="w-full rounded-full">
-            {book.price} kes
-          </Button>
-          {session?.session ? (
-            <Button className="w-full rounded-full hover:shadow-md" asChild>
-              <Link href={`/checkout/${book.slug}`}>
-                CheckOut
-                <ArrowRight />
-              </Link>
-            </Button>
-          ) : (
-            <Button className="w-full rounded-full hover:shadow-md" asChild>
-              <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
-                Login to checkout
-              </Link>
-            </Button>
-          )}
         </div>
 
         <div className="w-full space-y-4">
           <div className="flex-1 space-y-5">
-            <h2 className="text-3xl font-semibold capitalize">{book.title}</h2>
+            <h2 className="text-lg font-semibold capitalize md:text-2xl">
+              {book.title}
+            </h2>
 
-            <p
-              className="text-sm"
-              dangerouslySetInnerHTML={{ __html: book.highlights }}
-            ></p>
+            <p className="text-sm">{book.bookOverview}</p>
           </div>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>Book Overview</AccordionTrigger>
-              <AccordionContent className="text-sm">
-                {book.bookOverview}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2">
-              <AccordionTrigger>Additional information</AccordionTrigger>
-              <AccordionContent className="text-sm">
-                {book.additionalInfo}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-3">
-              <AccordionTrigger>Target audience</AccordionTrigger>
-              <AccordionContent className="text-sm">
-                {book.targetAudience}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <div className="flex flex-col gap-5 md:flex-row">
+            <Button variant={"outline"} className="w-full rounded-full">
+              {book.price} kes
+            </Button>
+            {session?.session ? (
+              <Button className="w-full rounded-full hover:shadow-md" asChild>
+                <Link href={`/checkout/${book.slug}`}>
+                  CheckOut
+                  <ArrowRight />
+                </Link>
+              </Button>
+            ) : (
+              <Button className="w-full rounded-full hover:shadow-md" asChild>
+                <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
+                  Login to checkout
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* <div className="space-y-3">
-        <h2 className="text-2xl font-semibold">Related books</h2>
-
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <ProductCard key={index} />
-          ))}
-        </div>
-      </div> */}
+      <div>
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Book Overview</AccordionTrigger>
+            <AccordionContent className="text-sm">
+              <p
+                className="text-sm"
+                dangerouslySetInnerHTML={{ __html: book.highlights }}
+              ></p>
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Additional information</AccordionTrigger>
+            <AccordionContent className="text-sm">
+              {book.additionalInfo}
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Target audience</AccordionTrigger>
+            <AccordionContent className="text-sm">
+              {book.targetAudience}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </div>
   );
 }
