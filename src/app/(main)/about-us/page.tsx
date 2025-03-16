@@ -130,83 +130,41 @@ function AboutUs() {
             fill
           />
         </div>
+
         <div className="flex-1 space-y-2">
           <h3 className="font-semibold text-primary">About the Founder</h3>
           <h4 className="text-2xl font-bold">Clr. Ezra Karanja</h4>
           <p className="mb-5 text-sm">
-            The founder of EZZ Freedom and Hope Foundation is a recovering
-            addict, mental health expert, and registered counselor. Their
-            personal journey through addiction and recovery fuels their
-            commitment to long-term support, education, and advocacy.
-            Recognizing the risk of relapse without aftercare, they champion
-            continuous mental health education, workplace programs, and
-            relationship counseling. The foundation stands as a testament to
-            their dedication to breaking stigma, supporting recovery, and
-            inspiring others to seek help and reclaim their lives.
+            Clr. Ezra Karanja, the founder of EZZ Freedom and Hope Foundation,
+            is a recovering addict, licensed addictions counselor, and mental
+            health advocate. His personal journey through addiction and recovery
+            fuels his commitment to long-term support, education, and advocacy.
+            After nearly 12 years of battling addiction, he took the bold step
+            of enrolling in an in-patient rehabilitation program, where he found
+            his true calling in counseling. Today, he specializes in addiction
+            recovery and is dedicated to breaking the stigma surrounding mental
+            health. Through EZZ Freedom and Hope Foundation, he creates
+            platforms for awareness, recovery support, and inspiring others to
+            reclaim their lives.
           </p>
 
           <ul className="space-y-2">
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Overcame addiction and now helps others in their recovery
-                journey.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Licensed counselor and mental health expert specializing in
-                addiction therapy.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Committed to providing long-term support, education, and
-                awareness.
-              </p>
-            </li>
-
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Advocates for breaking the stigma surrounding addiction and
-                mental health.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Believes recovery is a victory that should be celebrated and
-                supported.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                Encourages seeking help, embracing recovery, and rebuilding a
-                healthy future.
-              </p>
-            </li>
+            {[
+              "Overcame addiction and now helps others in their recovery journey.",
+              "Licensed counselor and mental health expert specializing in addiction therapy.",
+              "Committed to providing long-term support, education, and awareness.",
+              "Advocates for breaking the stigma surrounding addiction and mental health.",
+              "Believes recovery is a victory that should be celebrated and supported.",
+              "Encourages seeking help, embracing recovery, and rebuilding a healthy future.",
+            ].map((text, index) => (
+              <li key={index} className="flex items-center gap-1">
+                <Check
+                  className="rounded-full bg-primary p-0.5 text-white"
+                  size={17}
+                />
+                <p className="text-sm font-semibold">{text}</p>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
