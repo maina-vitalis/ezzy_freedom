@@ -42,7 +42,7 @@ async function page() {
         <div className="relative hidden w-1/2 md:block">
           <Image
             src={
-              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOm1xexpsflUwRcCtPH6VeMBY798zS0u3dhWsv"
+              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO425CIsbu6d782j3VivTpUlkYgXCZfcuL1INx"
             }
             alt=""
             className="hidden w-1/2 object-cover md:block"
