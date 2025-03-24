@@ -66,5 +66,18 @@ export const ServiceSchema = z.object({
   description: requiredString,
   image: requiredString,
 });
-
 export type ServiceTypes = z.infer<typeof ServiceSchema>;
+
+//create article schema
+export const ArticleSchema = z.object({
+  title: z.string().min(1, "An article name is required"),
+  coverImage: requiredString,
+  downloadUrl: requiredString,
+  publishMonth: requiredString,
+  description: requiredString,
+  price: z.coerce.number({
+    required_error: "A tour price is required",
+    invalid_type_error: "Must be a valid number",
+  }),
+});
+export type ArticleType = z.infer<typeof ArticleSchema>;

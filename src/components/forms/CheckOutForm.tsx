@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useRef, useCallback, useState } from "react";
@@ -19,20 +20,23 @@ import { sendStkPush } from "@/app/(main)/checkout/actions/stkPush";
 import { stkPushQuery } from "@/app/(main)/checkout/actions/stkPushQuery";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Books } from "@prisma/client";
 import { sendBook } from "@/app/(main)/checkout/actions/sendBook";
+import { sendArticle } from "@/app/(main)/checkout/actions/sendArticle"; // New action for articles
 
-interface User {
+interface CheckOutFormProps {
   user: {
     email: string;
     name: string;
   };
-
-  book: Books;
+  item: {
+    id: string;
+    price: number;
+    title?: string;
+  };
+  type: "article" | "book";
 }
 
-function CheckOutForm({ user, book }: User) {
-  // const [success, setSuccess] = useState<boolean>(false);
+function CheckOutForm({ user, item, type }: CheckOutFormProps) {
   const [stkLoading, setStkLoading] = useState<boolean>(false);
   const router = useRouter();
 
@@ -42,63 +46,69 @@ function CheckOutForm({ user, book }: User) {
   const form = useForm<CheckOutTypes>({
     resolver: zodResolver(checkOutSchema),
     defaultValues: {
-      amount: book.price,
+      amount: item.price,
       email: user.email,
       name: user.name,
       phoneNumber: "",
     },
   });
 
-  const handleStkPushQuery = useCallback((CheckoutRequestID: string) => {
-    requestCountRef.current = 0;
-    setStkLoading(true);
+  const handleStkPushQuery = useCallback(
+    (CheckoutRequestID: string) => {
+      requestCountRef.current = 0;
+      setStkLoading(true);
 
-    queryTimerRef.current = setInterval(async () => {
-      requestCountRef.current += 1;
+      queryTimerRef.current = setInterval(async () => {
+        requestCountRef.current += 1;
 
-      if (requestCountRef.current >= 10) {
-        clearInterval(queryTimerRef.current!);
-        setStkLoading(false);
-        // setSuccess(false);
-        toast.info("You took too long to pay.");
-        return;
-      }
-
-      try {
-        const { data, error } = await stkPushQuery(CheckoutRequestID);
-
-        if (error) {
+        if (requestCountRef.current >= 10) {
           clearInterval(queryTimerRef.current!);
           setStkLoading(false);
-
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          if ((error as any).response?.data?.errorCode !== "500.001.1001") {
-            toast.error(
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              (error as any).response?.data?.errorMessage || "Payment failed.",
-            );
-          }
+          toast.info("You took too long to pay.");
           return;
         }
 
-        if (data?.ResultCode === "0") {
-          setStkLoading(false);
-          clearInterval(queryTimerRef.current!);
-          toast.success("payment successful");
+        try {
+          const { data, error } = await stkPushQuery(CheckoutRequestID);
 
-          await sendBook(book.id);
-          router.replace(`/download`);
-        } else {
-          clearInterval(queryTimerRef.current!);
-          setStkLoading(false);
-          toast.info(data?.ResultDesc || "Payment failed.");
+          if (error) {
+            clearInterval(queryTimerRef.current!);
+            setStkLoading(false);
+
+            if ((error as any).response?.data?.errorCode !== "500.001.1001") {
+              toast.error(
+                (error as any).response?.data?.errorMessage ||
+                  "Payment failed.",
+              );
+            }
+            return;
+          }
+
+          if (data?.ResultCode === "0") {
+            setStkLoading(false);
+            clearInterval(queryTimerRef.current!);
+            toast.success("Payment successful");
+
+            // Handle post-payment action based on type
+            if (type === "article") {
+              await sendArticle(item.id);
+              router.replace(`/articles/download/${item.id}`); // Adjust redirect as needed
+            } else {
+              await sendBook(item.id);
+              router.replace(`/download`);
+            }
+          } else {
+            clearInterval(queryTimerRef.current!);
+            setStkLoading(false);
+            toast.info(data?.ResultDesc || "Payment failed.");
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error1) {
-        console.log(error1);
-      }
-    }, 3000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      }, 3000);
+    },
+    [type, item.id, router],
+  );
 
   const { mutate: sendPayment, isPending } = useMutation({
     mutationFn: sendStkPush,

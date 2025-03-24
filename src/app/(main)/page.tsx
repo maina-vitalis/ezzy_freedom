@@ -1,4 +1,5 @@
 import Appointment from "@/components/Home/Appointment";
+import Articles from "@/components/Home/Articles";
 import ChooseUs from "@/components/Home/ChooseUs";
 import Hero from "@/components/Home/Hero";
 import Products from "@/components/Home/Products";
@@ -10,6 +11,7 @@ function Home() {
     <div className="space-y-20">
       <Hero />
       <Products />
+      <Articles />
       <Appointment />
       <Services />
       <ChooseUs />

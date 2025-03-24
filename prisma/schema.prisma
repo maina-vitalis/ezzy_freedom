@@ -102,6 +102,17 @@ model Service {
   slug        String
 }
 
+model Article {
+  id           String @id @default(uuid())
+  title        String @unique
+  coverImage   String
+  downloadUrl  String
+  publishMonth String
+  description  String
+  slug         String
+  price        Int
+}
+
 enum Role {
   USER
   ADMIN

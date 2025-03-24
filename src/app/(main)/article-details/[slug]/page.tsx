@@ -13,42 +13,44 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
-type ProductPageProps = Promise<{ slug: string }>;
+type ArticlePageProps = Promise<{ slug: string }>;
 
-export async function generateMetadata(props: { params: ProductPageProps }) {
+export async function generateMetadata(props: { params: ArticlePageProps }) {
   const { slug } = await props.params;
-  const book = await prisma.books.findFirst({
+  const article = await prisma.article.findFirst({
     where: {
       slug,
     },
   });
-  if (!book) redirect(notFound());
+  if (!article) redirect(notFound());
 
   return {
-    title: `${book.title}`,
+    title: `${article.title}`,
   };
 }
 
-async function ProductDetails(props: { params: ProductPageProps }) {
+async function ArticleDetails(props: { params: ArticlePageProps }) {
   const { slug } = await props.params;
 
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const book = await prisma.books.findFirst({
+  const article = await prisma.article.findFirst({
     where: {
       slug: slug,
     },
   });
 
-  //callback url
-  const callbackUrl = encodeURIComponent(`/details/${slug}` || "/");
+  // Callback URL
+  const callbackUrl = encodeURIComponent(`/articles/${slug}` || "/");
 
-  if (!book) {
+  if (!article) {
     return (
       <div className="mt-5 flex flex-col items-center gap-5">
-        <p className="text-center font-semibold text-red-500">No book found</p>
+        <p className="text-center font-semibold text-red-500">
+          No article found
+        </p>
         <Button className="rounded-full" asChild>
           <Link href={"/"}>Go Back Home</Link>
         </Button>
@@ -62,7 +64,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
         <div>
           <div className="relative h-56 w-full md:h-full md:w-72">
             <Image
-              src={book.coverImage}
+              src={article.coverImage}
               alt=""
               className="rounded-lg object-cover"
               fill
@@ -72,27 +74,35 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
         <div className="w-full space-y-4">
           <div className="flex-1 space-y-5">
-            <h2 className="text-lg font-semibold capitalize md:text-2xl">
-              {book.title}
+            <h2 className="text-lg font-semibold capitalize md:text-xl">
+              {article.title}
             </h2>
-
-            <p className="text-sm">{book.bookOverview}</p>
+            <p
+              className="text-sm"
+              dangerouslySetInnerHTML={{ __html: article.description }}
+            ></p>
           </div>
           <div className="flex flex-col gap-2 md:flex-row md:gap-5">
             <Button variant={"outline"} className="w-full rounded-full">
-              {book.price} Kes
+              {article.price === 0 ? "Free" : `${article.price} Kes`}
             </Button>
             {session?.session ? (
               <Button className="w-full rounded-full hover:shadow-md" asChild>
-                <Link href={`/checkout/${book.slug}?type=book`}>
-                  CheckOut
+                <Link
+                  href={
+                    article.price === 0
+                      ? article.downloadUrl
+                      : `/checkout/${article.slug}?type=article`
+                  }
+                >
+                  {article.price === 0 ? "Download" : "Checkout"}
                   <ArrowRight />
                 </Link>
               </Button>
             ) : (
               <Button className="w-full rounded-full hover:shadow-md" asChild>
                 <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
-                  Login to checkout
+                  Login to {article.price === 0 ? "download" : "checkout"}
                 </Link>
               </Button>
             )}
@@ -102,25 +112,18 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
       <div>
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Book Overview</AccordionTrigger>
-            <AccordionContent className="text-sm">
-              <p
-                className="text-sm"
-                dangerouslySetInnerHTML={{ __html: book.highlights }}
-              ></p>
-            </AccordionContent>
-          </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger>Additional information</AccordionTrigger>
+            <AccordionTrigger>Publish Month</AccordionTrigger>
             <AccordionContent className="text-sm">
-              {book.additionalInfo}
+              {article.publishMonth}
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-3">
-            <AccordionTrigger>Target audience</AccordionTrigger>
+            <AccordionTrigger>Download Information</AccordionTrigger>
             <AccordionContent className="text-sm">
-              {book.targetAudience}
+              {article.price === 0
+                ? "This article is free to download upon login."
+                : "Purchase required to access the download link."}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -129,4 +132,4 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   );
 }
 
-export default ProductDetails;
+export default ArticleDetails;

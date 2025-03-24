@@ -1,5 +1,11 @@
 //app sidebar
-import { Calendar, ClipboardPlus, PlusCircle, User } from "lucide-react";
+import {
+  Calendar,
+  ClipboardPlus,
+  NotebookPen,
+  PlusCircle,
+  User,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -43,6 +49,11 @@ export async function AdminSidebar() {
       title: "Add book",
       url: `/admin/create-books`,
       icon: PlusCircle,
+    },
+    {
+      title: "Add article",
+      url: `/admin/create-article`,
+      icon: NotebookPen,
     },
 
     {

@@ -17,6 +17,7 @@ import { PasswordInput } from "@/components/PasswordInput";
 import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/auth-client";
+
 import { toast } from "sonner";
 
 function SignupForm() {
@@ -132,6 +133,7 @@ function SignupForm() {
                 onResponse: () => {
                   setSocialLoading(false);
                 },
+
                 onRequest: () => {
                   setSocialLoading(true);
                 },

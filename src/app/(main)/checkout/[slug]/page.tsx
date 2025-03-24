@@ -14,14 +14,14 @@ async function CheckOut(props: { params: CheckOutProps }) {
     headers: await headers(),
   });
 
-  //get the current path
+  // Get the current path with query parameters
   const currentPath = encodeURIComponent(
-    (await headers()).get("referer") || "/"
+    (await headers()).get("referer") || "/",
   );
 
   if (!session?.user) redirect(`/sign-in?callbackUrl=${currentPath}`);
 
-  //user prop data
+  // User prop data
   const user = {
     email: session?.user.email,
     name: session?.user.name,
@@ -29,16 +29,31 @@ async function CheckOut(props: { params: CheckOutProps }) {
 
   const { slug } = await props.params;
 
-  const book = await prisma.books.findFirst({
-    where: {
-      slug: slug,
-    },
-  });
+  // Get query parameter 'type' from the URL
+  const headerList = await headers();
+  const referer = headerList.get("referer") || "";
+  const url = new URL(referer, "http://localhost:3000"); // Base URL for local dev
+  const type = (url.searchParams.get("type") || "book") as "book" | "article"; // Default to "book" if type is missing
 
-  if (!book) {
+  // Fetch item based on type
+  let item;
+  if (type === "article") {
+    item = await prisma.article.findFirst({
+      where: { slug },
+    });
+  } else {
+    // Default to book
+    item = await prisma.books.findFirst({
+      where: { slug },
+    });
+  }
+
+  if (!item) {
     return (
       <div className="mt-5 flex flex-col items-center gap-5">
-        <p className=" text-red-500 font-semibold text-center">No book found</p>
+        <p className="text-center font-semibold text-red-500">
+          No {type === "article" ? "article" : "book"} found
+        </p>
         <Button className="rounded-full" asChild>
           <Link href={"/"}>Go Back Home</Link>
         </Button>
@@ -48,21 +63,21 @@ async function CheckOut(props: { params: CheckOutProps }) {
 
   return (
     <div className="space-y-5">
-      <h2 className="md:text-2xl text-lg font-semibold text-center">
+      <h2 className="text-center text-lg font-semibold md:text-2xl">
         Proceed to Checkout
       </h2>
       <div className="flex flex-col gap-5 md:flex-row">
-        <div className="flex-1 relative rounded-lg min-h-52">
+        <div className="relative min-h-52 flex-1 rounded-lg">
           <Image
-            src={book.coverImage}
-            alt="book-name"
+            src={item.coverImage}
+            alt={item.title}
             fill
-            className="object-cover rounded-lg"
+            className="rounded-lg object-cover"
           />
         </div>
 
         <div className="flex-1">
-          <CheckOutForm user={user} book={book} />
+          <CheckOutForm user={user} item={item} type={type} />
         </div>
       </div>
     </div>

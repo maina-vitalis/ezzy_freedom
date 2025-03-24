@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Body,
   Button,
@@ -23,7 +25,6 @@ export const ResetPasswordEmail = ({
   resetLink,
 }: EzzyResetPasswordEmailProps) => {
   const previewText = `Reset your Ezzy Freedom & Hope password`;
-
   return (
     <Html>
       <Head />
