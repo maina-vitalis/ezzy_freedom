@@ -16,12 +16,12 @@ import { Input } from "../ui/input";
 import LoadingButton from "../LoadingButton";
 import { checkOutSchema, CheckOutTypes } from "@/util/validation";
 import { useMutation } from "@tanstack/react-query";
-import { sendStkPush } from "@/app/(main)/checkout/actions/stkPush";
-import { stkPushQuery } from "@/app/(main)/checkout/actions/stkPushQuery";
+import { sendStkPush } from "@/util/mpesaActions/stkPush";
+import { stkPushQuery } from "@/util/mpesaActions/stkPushQuery";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { sendBook } from "@/app/(main)/checkout/actions/sendBook";
-import { sendArticle } from "@/app/(main)/checkout/actions/sendArticle"; // New action for articles
+import { sendBook } from "@/app/(main)/book-checkout/actions/sendBook";
+import { sendArticle } from "../../app/(main)/article-checkout/actions/sendArticle"; // New action for articles
 
 interface CheckOutFormProps {
   user: {
@@ -92,7 +92,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
             // Handle post-payment action based on type
             if (type === "article") {
               await sendArticle(item.id);
-              router.replace(`/articles/download/${item.id}`); // Adjust redirect as needed
+              router.replace(`/download`);
             } else {
               await sendBook(item.id);
               router.replace(`/download`);

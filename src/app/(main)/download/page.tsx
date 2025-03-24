@@ -16,7 +16,7 @@ async function Download() {
       <div className="flex-1 space-y-6 text-center md:text-left">
         <h1 className="text-4xl font-bold text-primary">Thank You! 🎉</h1>
         <p className="text-xl">
-          Your book has been sent to your email. <br />
+          Your book/article has been sent to your email. <br />
           <span className="font-semibold text-primary">
             Please check your inbox.
           </span>

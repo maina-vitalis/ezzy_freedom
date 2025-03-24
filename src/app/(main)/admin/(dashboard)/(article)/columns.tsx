@@ -3,7 +3,7 @@ import { ActionsDropdown } from "./rowActions";
 
 type Article = {
   id: string;
-  name: string;
+  title: string;
   publishMonth: string;
   price: string;
 };
@@ -11,7 +11,7 @@ type Article = {
 const columnHelper = createColumnHelper<Article>();
 
 export const articleColumns = [
-  columnHelper.accessor("name", {
+  columnHelper.accessor("title", {
     id: "name",
     header: "Article Name",
   }),

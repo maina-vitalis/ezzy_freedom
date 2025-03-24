@@ -29,31 +29,14 @@ async function CheckOut(props: { params: CheckOutProps }) {
 
   const { slug } = await props.params;
 
-  // Get query parameter 'type' from the URL
-  const headerList = await headers();
-  const referer = headerList.get("referer") || "";
-  const url = new URL(referer, "http://localhost:3000"); // Base URL for local dev
-  const type = (url.searchParams.get("type") || "book") as "book" | "article"; // Default to "book" if type is missing
+  const book = await prisma.books.findFirst({
+    where: { slug },
+  });
 
-  // Fetch item based on type
-  let item;
-  if (type === "article") {
-    item = await prisma.article.findFirst({
-      where: { slug },
-    });
-  } else {
-    // Default to book
-    item = await prisma.books.findFirst({
-      where: { slug },
-    });
-  }
-
-  if (!item) {
+  if (!book) {
     return (
       <div className="mt-5 flex flex-col items-center gap-5">
-        <p className="text-center font-semibold text-red-500">
-          No {type === "article" ? "article" : "book"} found
-        </p>
+        <p className="text-center font-semibold text-red-500">No book found</p>
         <Button className="rounded-full" asChild>
           <Link href={"/"}>Go Back Home</Link>
         </Button>
@@ -69,15 +52,23 @@ async function CheckOut(props: { params: CheckOutProps }) {
       <div className="flex flex-col gap-5 md:flex-row">
         <div className="relative min-h-52 flex-1 rounded-lg">
           <Image
-            src={item.coverImage}
-            alt={item.title}
+            src={book.coverImage}
+            alt={book.title}
             fill
             className="rounded-lg object-cover"
           />
         </div>
 
         <div className="flex-1">
-          <CheckOutForm user={user} item={item} type={type} />
+          <CheckOutForm
+            user={user}
+            item={{
+              id: book.id,
+              price: book.price,
+              title: book.title,
+            }}
+            type={"book"}
+          />
         </div>
       </div>
     </div>

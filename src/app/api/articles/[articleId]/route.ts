@@ -95,7 +95,7 @@ export async function PUT(req: Request, props: { params: Params }) {
       ArticleSchema.parse(data);
 
     const parsedData = {
-      name,
+      title,
       coverImage,
       downloadUrl,
       publishMonth,

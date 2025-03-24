@@ -43,7 +43,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   });
 
   //callback url
-  const callbackUrl = encodeURIComponent(`/details/${slug}` || "/");
+  const callbackUrl = encodeURIComponent(`/book-details/${slug}` || "/");
 
   if (!book) {
     return (
@@ -84,7 +84,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
             </Button>
             {session?.session ? (
               <Button className="w-full rounded-full hover:shadow-md" asChild>
-                <Link href={`/checkout/${book.slug}?type=book`}>
+                <Link href={`/book-checkout/${book.slug}`}>
                   CheckOut
                   <ArrowRight />
                 </Link>

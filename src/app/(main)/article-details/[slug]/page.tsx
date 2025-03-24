@@ -43,7 +43,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
   });
 
   // Callback URL
-  const callbackUrl = encodeURIComponent(`/articles/${slug}` || "/");
+  const callbackUrl = encodeURIComponent(`/article-details/${slug}` || "/");
 
   if (!article) {
     return (
@@ -92,7 +92,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                   href={
                     article.price === 0
                       ? article.downloadUrl
-                      : `/checkout/${article.slug}?type=article`
+                      : `/article-checkout/${article.slug}`
                   }
                 >
                   {article.price === 0 ? "Download" : "Checkout"}
