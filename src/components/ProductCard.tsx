@@ -25,7 +25,7 @@ function ProductCard({ book }: ProductCardProps) {
 
       <div className="flex flex-col gap-2 p-3">
         <div className="flex flex-col justify-between gap-1">
-          <p className="line-clamp-1 md:text-lg  font-semibold capitalize">
+          <p className="line-clamp-1 font-semibold capitalize md:text-lg">
             {book.title}
           </p>
           <p className="line-clamp-3 text-sm">{book.bookOverview}</p>
@@ -33,7 +33,7 @@ function ProductCard({ book }: ProductCardProps) {
         <div className="text- flex gap-3">
           <Badge className="rounded-full bg-primary">{book.price} KES</Badge>
 
-          <Link href={`/details/${book.slug}`} className="flex-1">
+          <Link href={`/book-details/${book.slug}`} className="flex-1">
             <Button
               variant={"outline"}
               className="w-full rounded-full bg-muted text-base font-semibold"
