@@ -22,6 +22,7 @@ export async function generateMetadata(props: { params: ServiceDetailsProps }) {
     title: `${service.name}`,
   };
 }
+
 async function ServiceDetails(props: { params: ServiceDetailsProps }) {
   const { slug } = await props.params;
 
