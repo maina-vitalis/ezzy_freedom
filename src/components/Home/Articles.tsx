@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import image from "./../../assets/signup-image.jpg";
+import image from "./../../assets/hopeful-despite.jpeg";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
