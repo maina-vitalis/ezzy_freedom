@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@prisma/client";
 import { resend } from "../components/Email/resend";
-import { ezzyResetPasswordEmail } from "@/components/Email/rest-password";
+import { ezzyResetPasswordEmail } from "@/components/Email/reset-password";
 
 const prisma = new PrismaClient();
 
