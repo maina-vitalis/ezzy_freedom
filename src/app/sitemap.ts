@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Create dynamic entries for books
     const bookEntries: MetadataRoute.Sitemap = books.map(({ slug }) => ({
-      url: `${baseURL}/details/${slug}`,
+      url: `${baseURL}/book-details/${slug}`,
       lastModified: new Date().toISOString(),
     }));
 
