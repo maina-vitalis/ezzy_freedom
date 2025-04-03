@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useRef, useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
   Form,
   FormControl,
@@ -21,27 +21,20 @@ import { stkPushQuery } from "@/util/mpesaActions/stkPushQuery";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { sendBook } from "@/app/(main)/book-checkout/actions/sendBook";
-import { sendArticle } from "../../app/(main)/article-checkout/actions/sendArticle"; // New action for articles
+import { sendArticle } from "@/app/(main)/article-checkout/actions/sendArticle";
 
 interface CheckOutFormProps {
-  user: {
-    email: string;
-    name: string;
-  };
-  item: {
-    id: string;
-    price: number;
-    title?: string;
-  };
+  user: { email: string; name: string };
+  item: { id: string; price: number; title?: string };
   type: "article" | "book";
 }
 
 function CheckOutForm({ user, item, type }: CheckOutFormProps) {
   const [stkLoading, setStkLoading] = useState<boolean>(false);
+  const [checkoutRequestID, setCheckoutRequestID] = useState<string | null>(
+    null,
+  );
   const router = useRouter();
-
-  const requestCountRef = useRef(0);
-  const queryTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const form = useForm<CheckOutTypes>({
     resolver: zodResolver(checkOutSchema),
@@ -53,85 +46,81 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
     },
   });
 
-  const handleStkPushQuery = useCallback(
-    (CheckoutRequestID: string) => {
-      requestCountRef.current = 0;
-      setStkLoading(true);
-
-      queryTimerRef.current = setInterval(async () => {
-        requestCountRef.current += 1;
-
-        if (requestCountRef.current >= 10) {
-          clearInterval(queryTimerRef.current!);
-          setStkLoading(false);
-          toast.info("You took too long to pay.");
-          return;
-        }
-
-        try {
-          const { data, error } = await stkPushQuery(CheckoutRequestID);
-
-          if (error) {
-            clearInterval(queryTimerRef.current!);
-            setStkLoading(false);
-
-            if ((error as any).response?.data?.errorCode !== "500.001.1001") {
-              toast.error(
-                (error as any).response?.data?.errorMessage ||
-                  "Payment failed.",
-              );
-            }
-            return;
-          }
-
-          if (data?.ResultCode === "0") {
-            setStkLoading(false);
-            clearInterval(queryTimerRef.current!);
-            toast.success("Payment successful");
-
-            // Handle post-payment action based on type
-            if (type === "article") {
-              await sendArticle(item.id);
-              router.replace(`/download`);
-            } else {
-              await sendBook(item.id);
-              router.replace(`/download`);
-            }
-          } else {
-            clearInterval(queryTimerRef.current!);
-            setStkLoading(false);
-            toast.info(data?.ResultDesc || "Payment failed.");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }, 3000);
-    },
-    [type, item.id, router],
-  );
-
-  const { mutate: sendPayment, isPending } = useMutation({
+  // sends the stk push notification
+  const { mutate: sendPayment, isPending: isPaymentPending } = useMutation({
     mutationFn: sendStkPush,
     onSuccess: (data) => {
       const requestID = data?.data?.CheckoutRequestID;
       if (requestID) {
-        handleStkPushQuery(requestID);
+        setCheckoutRequestID(requestID);
+        toast.success(
+          "Payment request sent. Please check your phone and confirm payment.",
+        );
       } else {
-        toast.error("Payment request failed. Try again.");
+        toast.error("Payment request failed. Please try again.");
       }
+    },
+    onError: (error) => {
+      toast.error("Failed to initiate payment. Please try again.");
+      console.error(error);
     },
   });
 
-  const onSubmit = useCallback(
-    (data: CheckOutTypes) => {
-      sendPayment(data);
+  const { mutate: confirmPayment, isPending: isConfirmPending } = useMutation({
+    mutationFn: async () => {
+      if (!checkoutRequestID) {
+        throw new Error(
+          "No payment request found. Please initiate payment first.",
+        );
+      }
+
+      const { data, error } = await stkPushQuery(checkoutRequestID);
+
+      if (error) {
+        throw new Error(
+          (error as any).response?.data?.errorMessage ||
+            "Payment verification failed",
+        );
+      }
+
+      if (data?.ResultCode !== "0") {
+        setCheckoutRequestID(null);
+        throw new Error(data?.ResultDesc || "Payment was not successful");
+      }
+
+      return data;
     },
-    [sendPayment],
-  );
+
+    onSuccess: async () => {
+      setStkLoading(false);
+      toast.success("Payment confirmed successfully");
+
+      if (type === "article") {
+        await sendArticle(item.id);
+        router.replace(`/download`);
+      } else {
+        await sendBook(item.id);
+        router.replace(`/download`);
+      }
+    },
+    onError: (error) => {
+      setStkLoading(false);
+      toast.error(error.message);
+    },
+  });
+
+  const onSubmit = (data: CheckOutTypes) => {
+    setStkLoading(true);
+    sendPayment(data);
+  };
+
+  const handleConfirmPayment = () => {
+    confirmPayment();
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -139,7 +128,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input type="text" {...field} className="py-0" />
+                <Input type="text" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -153,7 +142,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" {...field} className="py-0" />
+                <Input type="email" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -167,7 +156,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
             <FormItem>
               <FormLabel>Mpesa Phone Number</FormLabel>
               <FormControl>
-                <Input {...field} className="py-0" />
+                <Input placeholder="2547XXXXXXXX" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -179,21 +168,42 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>Amount (KES)</FormLabel>
               <FormControl>
-                <Input {...field} disabled className="py-0" />
+                <Input {...field} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <LoadingButton
-          loading={isPending || stkLoading}
-          className="mt-5 w-full"
-        >
-          Check out
-        </LoadingButton>
+        <div className="flex flex-col gap-2 md:flex-row">
+          <LoadingButton
+            type="submit"
+            loading={isPaymentPending || stkLoading}
+            className="w-full"
+            disabled={!!checkoutRequestID}
+          >
+            Send Payment Request
+          </LoadingButton>
+
+          <LoadingButton
+            loading={isConfirmPending}
+            className="w-full"
+            onClick={handleConfirmPayment}
+            type={"button"}
+            disabled={!checkoutRequestID}
+          >
+            Confirm Payment
+          </LoadingButton>
+        </div>
+
+        {checkoutRequestID && (
+          <p className="text-center text-sm text-muted-foreground">
+            Please complete the payment on your phone and then click
+            &#34;Confirm Payment&#34;
+          </p>
+        )}
       </form>
     </Form>
   );
