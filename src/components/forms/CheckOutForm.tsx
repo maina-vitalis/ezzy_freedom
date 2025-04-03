@@ -30,7 +30,7 @@ interface CheckOutFormProps {
 }
 
 function CheckOutForm({ user, item, type }: CheckOutFormProps) {
-  const [stkLoading, setStkLoading] = useState<boolean>(false);
+  // const [stkLoading, setStkLoading] = useState<boolean>(false);
   const [checkoutRequestID, setCheckoutRequestID] = useState<string | null>(
     null,
   );
@@ -92,7 +92,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
     },
 
     onSuccess: async () => {
-      setStkLoading(false);
+      // setStkLoading(false);
       toast.success("Payment confirmed successfully");
 
       if (type === "article") {
@@ -104,13 +104,13 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
       }
     },
     onError: (error) => {
-      setStkLoading(false);
+      // setStkLoading(false);
       toast.error(error.message);
     },
   });
 
   const onSubmit = (data: CheckOutTypes) => {
-    setStkLoading(true);
+    // setStkLoading(true);
     sendPayment(data);
   };
 
@@ -180,7 +180,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
         <div className="flex flex-col gap-2 md:flex-row">
           <LoadingButton
             type="submit"
-            loading={isPaymentPending || stkLoading}
+            loading={isPaymentPending}
             className="w-full"
             disabled={!!checkoutRequestID}
           >
