@@ -12,7 +12,7 @@ interface ProductCardProps {
 function ProductCard({ book }: ProductCardProps) {
   return (
     <div className="relative w-full overflow-hidden rounded-xl border-2 p-2 transition-all duration-300 hover:border-primary">
-      <Link href={`/details/${book.slug}`}>
+      <Link href={`/book-details/${book.slug}`}>
         <AspectRatio ratio={16 / 8} className="relative">
           <Image
             src={book.coverImage}
