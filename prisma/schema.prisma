@@ -70,10 +70,18 @@ model Verification {
 }
 
 model Appointment {
-  id     String   @id
-  userId String
-  date   DateTime
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String            @id @default(cuid())
+  userId      String
+  title       String
+  description String?
+  date        DateTime
+  timeSlot    String // e.g., "09:00-10:00", "14:00-15:00"
+  status      AppointmentStatus @default(PENDING)
+  type        AppointmentType   @default(CONSULTATION)
+  notes       String? // Admin notes
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("appointments")
 }
@@ -103,17 +111,37 @@ model Service {
 }
 
 model Article {
-  id           String @id @default(uuid())
-  title        String @unique
-  coverImage   String
-  downloadUrl  String
-  publishMonth String
-  description  String
-  slug         String
-  price        Int
+  id          String   @id @default(uuid())
+  title       String   @unique
+  coverImage  String
+  downloadUrl String
+  publishDate DateTime @default(now())
+  description String
+  slug        String
+  price       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum AppointmentType {
+  CONSULTATION
+  THERAPY
+  FOLLOW_UP
+  COUNSELING
+  ADDICTION_SUPPORT
+  COUPLES_THERAPY
+  TEENAGE_SESSION
 }

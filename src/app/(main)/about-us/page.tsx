@@ -1,297 +1,416 @@
-"use client";
-
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import CountUp from "react-countup";
-import ezra from "./../../../assets/ezzy.png";
 import ReachOut from "@/components/forms/ReachOut";
+import StatsCounter from "@/components/StatsCounter";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Award,
+  Check,
+  Globe,
+  Heart,
+  Shield,
+  Target,
+  Users,
+} from "lucide-react";
+import { Metadata } from "next";
+import Image from "next/image";
+import ezra from "./../../../assets/ezzy.png";
 
-import { Check } from "lucide-react";
+export const metadata: Metadata = {
+  title:
+    "About EZZ Freedom and Hope - Mental Health & Addiction Recovery Foundation",
+  description:
+    "Learn about EZZ Freedom and Hope Foundation, our mission to provide mental health awareness, addiction recovery support, and hope to individuals and communities. Founded by Clr. Ezra Karanja, a licensed addiction counselor and recovery advocate.",
+  keywords:
+    "mental health foundation, addiction recovery, addiction counseling, mental health awareness, Kenya, Ezra Karanja, substance abuse recovery, therapy services, counseling services",
+  openGraph: {
+    title: "About EZZ Freedom and Hope Foundation",
+    description:
+      "Empowering lives through mental health awareness and addiction recovery support. Learn about our founder's journey and mission.",
+    url: "https://ezzfreedomandhope.or.ke/about-us",
+    type: "website",
+    images: [
+      {
+        url: "https://ezzfreedomandhope.or.ke/assets/about-hero.jpg",
+        width: 1200,
+        height: 630,
+        alt: "EZZ Freedom and Hope Foundation - About Us",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About EZZ Freedom and Hope Foundation",
+    description:
+      "Empowering lives through mental health awareness and addiction recovery support.",
+    images: ["https://ezzfreedomandhope.or.ke/assets/about-hero.jpg"],
+  },
+  alternates: {
+    canonical: "https://ezzfreedomandhope.or.ke/about-us",
+  },
+};
+
+const stats = [
+  { number: 20, label: "Years Experience", suffix: "+" },
+  { number: 100, label: "Workshops & Seminars", suffix: "+" },
+  { number: 500, label: "Lives Transformed", suffix: "+" },
+  { number: 10, label: "Community Programs", suffix: "+" },
+];
+
+const coreValues = [
+  {
+    icon: Heart,
+    title: "Compassion",
+    description:
+      "We approach every individual with empathy and understanding, recognizing that healing begins with compassionate care.",
+  },
+  {
+    icon: Shield,
+    title: "Trust & Safety",
+    description:
+      "Creating safe spaces where individuals feel secure to share their struggles and begin their recovery journey.",
+  },
+  {
+    icon: Users,
+    title: "Community",
+    description:
+      "Building strong support networks that foster connection, belonging, and mutual encouragement in recovery.",
+  },
+  {
+    icon: Target,
+    title: "Purpose-Driven",
+    description:
+      "Every action we take is guided by our commitment to meaningful impact in mental health and addiction recovery.",
+  },
+  {
+    icon: Award,
+    title: "Excellence",
+    description:
+      "We strive for the highest standards in our services, ensuring quality care and evidence-based practices.",
+  },
+  {
+    icon: Globe,
+    title: "Accessibility",
+    description:
+      "Making mental health support accessible to all, regardless of economic status or geographical location.",
+  },
+];
+
+const achievements = [
+  "Licensed addiction counselor with specialized training in substance abuse recovery",
+  "Over 20 years of experience in mental health advocacy and community support",
+  "Established recovery support groups across multiple communities",
+  "Conducted 100+ workshops on mental health awareness and addiction prevention",
+  "Mentored hundreds of individuals through their recovery journey",
+  "Recognized advocate for breaking mental health stigma in Kenya",
+];
 
 function AboutUs() {
-  const [hasScrolled, setHasScrolled] = useState(false);
-  const { ref, inView } = useInView({
-    triggerOnce: true, // Ensures the animation happens only once
-  });
-
-  useEffect(() => {
-    if (inView) {
-      setHasScrolled(true);
-    }
-  }, [inView]);
-
   return (
-    <div className="space-y-8">
-      <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
-        <Image
-          src={
-            "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO9G1xO3rXlKG4t5u3xDPbjmCwOpR8QUX7yFhg"
-          }
-          alt="Contact Us"
-          fill
-          className="rounded-lg object-cover"
-        />
-        <h1 className="absolute left-[50%] top-[30%] z-10 -translate-x-[50%] text-center text-3xl font-bold text-white">
-          About Us
-        </h1>
-      </div>
+    <>
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "EZZ Freedom and Hope Foundation",
+            description:
+              "Mental health awareness initiative and addiction recovery support foundation",
+            url: "https://ezzfreedomandhope.or.ke",
+            logo: "https://ezzfreedomandhope.or.ke/assets/logo.png",
+            founder: {
+              "@type": "Person",
+              name: "Ezra Karanja",
+              jobTitle: "Licensed Addiction Counselor",
+              description:
+                "Founder of EZZ Freedom and Hope Foundation, recovering addict, and mental health advocate",
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "Kenya",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "Customer Service",
+              url: "https://ezzfreedomandhope.or.ke/contact",
+            },
+            sameAs: ["https://chat.whatsapp.com/LguO5OsS1FiGZ7K2iYV6gs"],
+          }),
+        }}
+      />
 
-      <div className="flex flex-col gap-5 md:flex-row">
-        <div className="flex-1 space-y-2">
-          <h3 className="font-semibold text-primary">Ezz freedom and hope</h3>
-          <h4 className="text-2xl font-bold">
-            Empowering Lives, Restoring Hope
-          </h4>
+      <div className="space-y-16">
+        {/* Hero Section */}
+        <section className="relative">
+          <div className="relative left-0 h-[40vh] overflow-hidden rounded-xl md:h-[50vh]">
+            <div className="absolute inset-0 z-10 bg-gradient-to-r from-primary/80 via-primary/60 to-transparent" />
+            <Image
+              src="https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO9G1xO3rXlKG4t5u3xDPbjmCwOpR8QUX7yFhg"
+              alt="EZZ Freedom and Hope Foundation - Mental Health Support"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 z-20 flex items-center justify-center text-white">
+              <div className="mx-auto max-w-4xl px-4 text-center">
+                <h1 className="mb-4 text-4xl font-bold md:text-6xl">
+                  Empowering Lives,{" "}
+                  <span className="text-yellow-300">Restoring Hope</span>
+                </h1>
+                <p className="mx-auto max-w-2xl text-xl font-medium md:text-2xl">
+                  Breaking barriers in mental health through compassionate care
+                  and community support
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <p className="mt-2 text-sm">
-            <span className="font-bold text-primary">
-              EZZ Freedom and Hope Foundation
-            </span>{" "}
-            is a dedicated
-            <span className="font-bold text-primary">
-              {" "}
-              mental health awareness initiative
+        {/* Foundation Overview */}
+        <section className="grid items-center gap-12 md:grid-cols-2">
+          <div className="space-y-6">
+            <div>
+              <span className="text-sm font-semibold uppercase tracking-wide text-primary">
+                Who We Are
+              </span>
+              <h2 className="mb-4 mt-2 text-3xl font-bold md:text-4xl">
+                EZZ Freedom and Hope Foundation
+              </h2>
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                A dedicated{" "}
+                <strong className="text-primary">
+                  mental health awareness initiative
+                </strong>{" "}
+                addressing critical challenges in mental well-being, addiction
+                recovery, and social issues.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-muted-foreground">
+                Recognizing that{" "}
+                <strong className="text-primary">
+                  ignorance and assumptions
+                </strong>{" "}
+                about mental health can be harmful, we strive to equip
+                individuals with the right{" "}
+                <strong className="text-primary">
+                  information, support, and interventions
+                </strong>{" "}
+                to bridge the gap in awareness and advocacy.
+              </p>
+
+              <p className="text-muted-foreground">
+                Our approach combines{" "}
+                <strong className="text-primary">
+                  evidence-based practices
+                </strong>{" "}
+                with compassionate care, ensuring that everyone who seeks help
+                finds the support they need to heal and thrive.
+              </p>
+            </div>
+          </div>
+
+          <div className="relative h-[400px] overflow-hidden rounded-xl shadow-2xl">
+            <Image
+              src="https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOUw56pPydJaCcu6rFeWZRAOYGo8y4nEz7iIfK"
+              alt="Mental health support and community care"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-8">
+          <div className="mb-8 text-center">
+            <h2 className="mb-4 text-3xl font-bold">Our Impact in Numbers</h2>
+            <p className="mx-auto max-w-2xl text-muted-foreground">
+              Over two decades of dedicated service to mental health awareness
+              and addiction recovery
+            </p>
+          </div>
+          <StatsCounter stats={stats} />
+        </section>
+
+        {/* Founder Section */}
+        <section className="grid items-start gap-12 md:grid-cols-2">
+          <div className="relative h-[500px] overflow-hidden rounded-xl shadow-2xl">
+            <Image
+              src={ezra}
+              alt="Clr. Ezra Karanja - Founder of EZZ Freedom and Hope Foundation"
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <span className="text-sm font-semibold uppercase tracking-wide text-primary">
+                Our Founder
+              </span>
+              <h2 className="mb-4 mt-2 text-3xl font-bold md:text-4xl">
+                Clr. Ezra Karanja
+              </h2>
+              <p className="mb-6 text-lg text-muted-foreground">
+                Licensed Addiction Counselor & Mental Health Advocate
+              </p>
+            </div>
+
+            <div className="prose prose-gray max-w-none">
+              <p className="leading-relaxed text-muted-foreground">
+                Clr. Ezra Karanja, the visionary founder of EZZ Freedom and Hope
+                Foundation, brings a unique perspective shaped by personal
+                experience and professional expertise. As a{" "}
+                <strong className="text-primary">
+                  recovering addict turned licensed addiction counselor
+                </strong>
+                , his journey from struggle to strength embodies the very hope
+                he offers to others.
+              </p>
+
+              <p className="leading-relaxed text-muted-foreground">
+                After{" "}
+                <strong className="text-primary">
+                  nearly 12 years battling addiction
+                </strong>
+                , Ezra made the courageous decision to seek help through an
+                in-patient rehabilitation program. This transformative
+                experience not only saved his life but revealed his calling in
+                counseling and advocacy.
+              </p>
+
+              <p className="leading-relaxed text-muted-foreground">
+                Today, with over{" "}
+                <strong className="text-primary">
+                  20 years of dedicated service
+                </strong>
+                , he specializes in addiction recovery and mental health
+                advocacy, creating platforms for awareness, support, and
+                inspiring others to reclaim their lives.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="mb-4 text-xl font-semibold">Key Achievements</h3>
+              {achievements.map((achievement, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <Check
+                    className="mt-0.5 flex-shrink-0 text-primary"
+                    size={18}
+                  />
+                  <p className="text-sm text-muted-foreground">{achievement}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Mission & Vision */}
+        <section className="grid gap-8 md:grid-cols-2">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-8">
+            <CardContent className="space-y-4 p-0">
+              <div className="mb-4 flex items-center gap-3">
+                <Target className="text-primary" size={28} />
+                <h3 className="text-2xl font-bold">Our Mission</h3>
+              </div>
+              <p className="leading-relaxed text-muted-foreground">
+                To bring{" "}
+                <strong className="text-primary">
+                  mental health awareness
+                </strong>{" "}
+                to as many doorsteps as possible through accessible and
+                affordable means. We strive to{" "}
+                <strong className="text-primary">
+                  break the cycle of substance dependence
+                </strong>{" "}
+                across all ages and social classes, ensuring that recovery is a
+                recognized and celebrated journey.
+              </p>
+              <p className="leading-relaxed text-muted-foreground">
+                By reaching individuals{" "}
+                <strong className="text-primary">
+                  before addiction takes hold
+                </strong>
+                , we aim to dispel false narratives and foster informed choices
+                while sensitizing communities on the crucial link between{" "}
+                <strong className="text-primary">
+                  mental wellness, productivity, and safety
+                </strong>
+                .
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-blue-500/10 p-8">
+            <CardContent className="space-y-4 p-0">
+              <div className="mb-4 flex items-center gap-3">
+                <Globe className="text-blue-600" size={28} />
+                <h3 className="text-2xl font-bold">Our Vision</h3>
+              </div>
+              <p className="leading-relaxed text-muted-foreground">
+                We envision a future where{" "}
+                <strong className="text-blue-600">
+                  recovery support groups
+                </strong>{" "}
+                are established in all sub-counties, providing accessible and
+                localized help for those in need.
+              </p>
+              <p className="leading-relaxed text-muted-foreground">
+                Additionally, we aim to create a comprehensive{" "}
+                <strong className="text-blue-600">digital platform</strong> that
+                offers round-the-clock access to mental health support services,
+                ensuring help is always within reach for every Kenyan.
+              </p>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Core Values */}
+        <section>
+          <div className="mb-12 text-center">
+            <span className="text-sm font-semibold uppercase tracking-wide text-primary">
+              Our Foundation
             </span>
-            , addressing critical challenges in mental well-being, addiction
-            recovery, and social issues. Recognizing that{" "}
-            <span className="font-bold text-primary">
-              ignorance and assumptions
-            </span>{" "}
-            about mental health can be harmful, we strive to equip individuals
-            with the right
-            <span className="font-bold text-primary">
-              {" "}
-              information, support, and interventions
-            </span>{" "}
-            to bridge the gap in awareness and advocacy.
-          </p>
-        </div>
+            <h2 className="mb-4 mt-2 text-3xl font-bold md:text-4xl">
+              Core Values
+            </h2>
+            <p className="mx-auto max-w-3xl text-muted-foreground">
+              These principles guide our efforts in mental health advocacy and
+              addiction recovery, shaping our commitment to creating a
+              supportive environment where individuals can heal, grow, and
+              reclaim their lives.
+            </p>
+          </div>
 
-        <div className="relative min-h-52 flex-1">
-          <Image
-            src={
-              "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOUw56pPydJaCcu6rFeWZRAOYGo8y4nEz7iIfK"
-            }
-            alt="ezz foundation image"
-            className="rounded-lg object-cover"
-            fill
-          />
-        </div>
-      </div>
-      <div
-        ref={ref}
-        className="flex flex-wrap items-center justify-between gap-5 rounded-lg bg-primary/40 p-3"
-      >
-        {hasScrolled && (
-          <>
-            <div className="w-full border px-3 py-6 text-center sm:w-48">
-              <p className="text-4xl font-bold">
-                <CountUp end={20} duration={4} />+
-              </p>
-              <p className="Font text-sm font-semibold">Years Experience</p>
-            </div>
-
-            <div className="w-full border px-3 py-6 text-center sm:w-48">
-              <p className="text-4xl font-bold">
-                <CountUp end={100} duration={4} />+
-              </p>{" "}
-              <p className="Font text-sm font-semibold">
-                Workshops and Seminars
-              </p>
-            </div>
-
-            <div className="w-full border px-3 py-6 text-center sm:w-48">
-              <p className="text-4xl font-bold">
-                <CountUp end={500} duration={4} />+
-              </p>{" "}
-              <p className="Font text-sm font-semibold">
-                Supported individuals
-              </p>
-            </div>
-
-            <div className="w-full border px-3 py-6 text-center sm:w-48">
-              <p className="text-4xl font-bold">
-                <CountUp end={10} duration={4} />+
-              </p>{" "}
-              <p className="Font text-sm font-semibold">
-                community outreach programs
-              </p>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="flex flex-col gap-10 md:flex-row">
-        <div className="relative min-h-60 flex-1">
-          <Image
-            src={ezra}
-            alt="ezz foundation image"
-            className="rounded-lg object-contain"
-            fill
-          />
-        </div>
-
-        <div className="flex-1 space-y-2">
-          <h3 className="font-semibold text-primary">About the Founder</h3>
-          <h4 className="text-2xl font-bold">Clr. Ezra Karanja</h4>
-          <p className="mb-5 text-sm">
-            Clr. Ezra Karanja, the founder of EZZ Freedom and Hope Foundation,
-            is a recovering addict, licensed addictions counselor, and mental
-            health advocate. His personal journey through addiction and recovery
-            fuels his commitment to long-term support, education, and advocacy.
-            After nearly 12 years of battling addiction, he took the bold step
-            of enrolling in an in-patient rehabilitation program, where he found
-            his true calling in counseling. Today, he specializes in addiction
-            recovery and is dedicated to breaking the stigma surrounding mental
-            health. Through EZZ Freedom and Hope Foundation, he creates
-            platforms for awareness, recovery support, and inspiring others to
-            reclaim their lives.
-          </p>
-
-          <ul className="space-y-2">
-            {[
-              "Overcame addiction and now helps others in their recovery journey.",
-              "Licensed counselor and mental health expert specializing in addiction therapy.",
-              "Committed to providing long-term support, education, and awareness.",
-              "Advocates for breaking the stigma surrounding addiction and mental health.",
-              "Believes recovery is a victory that should be celebrated and supported.",
-              "Encourages seeking help, embracing recovery, and rebuilding a healthy future.",
-            ].map((text, index) => (
-              <li key={index} className="flex items-center gap-1">
-                <Check
-                  className="rounded-full bg-primary p-0.5 text-white"
-                  size={17}
-                />
-                <p className="text-sm font-semibold">{text}</p>
-              </li>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {coreValues.map((value, index) => (
+              <Card
+                key={index}
+                className="p-6 transition-shadow hover:shadow-lg"
+              >
+                <CardContent className="space-y-4 p-0">
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-lg bg-primary/10 p-2">
+                      <value.icon className="text-primary" size={24} />
+                    </div>
+                    <h3 className="text-lg font-semibold">{value.title}</h3>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {value.description}
+                  </p>
+                </CardContent>
+              </Card>
             ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-10 md:flex-row">
-        <div className="flex-1 space-y-5">
-          <div>
-            <h3 className="inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
-              Our mission
-            </h3>
-            <p className="text-sm">
-              Our mission is to bring
-              <span className="font-bold text-primary">
-                mental health awareness
-              </span>
-              to as many doorsteps as possible through accessible and affordable
-              means. We strive to
-              <span className="font-bold text-primary">
-                break the cycle of substance dependence
-              </span>
-              across all ages and social classes, ensuring that recovery is a
-              recognized and celebrated journey. By reaching individuals
-              <span className="font-bold text-primary">
-                before addiction takes hold
-              </span>
-              , we aim to dispel false narratives and foster informed choices.
-              Additionally, we work to
-              <span className="font-bold text-primary">
-                sensitize informal workers
-              </span>
-              , particularly in the transport sector, on the crucial link
-              between
-              <span className="font-bold text-primary">
-                mental wellness, productivity, and safety
-              </span>
-              .
-            </p>
           </div>
+        </section>
 
-          <div>
-            <h3 className="inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
-              Our vision
-            </h3>
-            <p className="mt-1 text-sm">
-              We envision a future where{" "}
-              <span className="font-bold text-primary">
-                recovery support groups
-              </span>{" "}
-              are established in all sub-counties, providing accessible and
-              localized help for those in need. Additionally, we aim to create
-              an <span className="font-bold text-primary">online platform</span>{" "}
-              that offers round-the-clock access to mental health support
-              services, ensuring help is always within reach.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex-1">
-          <h3 className="mt-4 inline-block rounded-lg bg-primary/50 p-1 text-sm font-semibold">
-            Our Core Values
-          </h3>
-          <p className="mt-2 text-sm">
-            At the heart of our mission, we uphold values that guide our efforts
-            in{" "}
-            <span className="font-bold text-primary">
-              mental health advocacy
-            </span>{" "}
-            and{" "}
-            <span className="font-bold text-primary">addiction recovery</span>.
-            These principles shape our commitment to creating a supportive
-            environment where individuals can heal, grow, and reclaim their
-            lives. Through our dedication, we inspire lasting change and work
-            towards a society that embraces recovery with{" "}
-            <span className="font-bold text-primary">
-              compassion and understanding
-            </span>
-            .
-          </p>
-
-          <ul className="mt-3 space-y-2">
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                <span className="font-bold text-primary">Passion</span> –
-                Commitment to making a lasting impact on mental health and
-                recovery.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                <span className="font-bold text-primary">Inspiration</span> –
-                Motivating individuals to seek help and embrace change.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                <span className="font-bold text-primary">Purpose</span> –
-                Providing direction and meaningful solutions for mental health
-                challenges.
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Check
-                className="rounded-full bg-primary p-0.5 text-white"
-                size={17}
-              />
-              <p className="text-sm font-semibold">
-                <span className="font-bold text-primary">Hope</span> – Restoring
-                faith in recovery, healing, and personal growth.
-              </p>
-            </li>
-          </ul>
-        </div>
+        {/* Call to Action */}
+        <section>
+          <ReachOut />
+        </section>
       </div>
-      <ReachOut />
-    </div>
+    </>
   );
 }
 

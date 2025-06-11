@@ -73,7 +73,10 @@ export const ArticleSchema = z.object({
   title: z.string().min(1, "An article name is required"),
   coverImage: requiredString,
   downloadUrl: requiredString,
-  publishMonth: requiredString,
+  publishDate: z.coerce.date({
+    required_error: "Publish date is required",
+    invalid_type_error: "Must be a valid date",
+  }),
   description: requiredString,
   price: z.coerce.number({
     required_error: "A tour price is required",
@@ -81,3 +84,47 @@ export const ArticleSchema = z.object({
   }),
 });
 export type ArticleType = z.infer<typeof ArticleSchema>;
+
+// Appointment validation schemas
+export const AppointmentBookingSchema = z.object({
+  title: z.string().min(1, "Title is required").max(100, "Title too long"),
+  description: z.string().optional(),
+  date: z.string().min(1, "Date is required"),
+  timeSlot: z.string().min(1, "Time slot is required"),
+  type: z.enum([
+    "CONSULTATION",
+    "THERAPY",
+    "FOLLOW_UP",
+    "COUNSELING",
+    "ADDICTION_SUPPORT",
+    "COUPLES_THERAPY",
+    "TEENAGE_SESSION",
+  ]),
+});
+
+export const AppointmentUpdateSchema = z.object({
+  status: z.enum(["PENDING", "APPROVED", "REJECTED", "CANCELLED", "COMPLETED"]),
+  notes: z.string().optional(),
+});
+
+export type AppointmentBookingType = z.infer<typeof AppointmentBookingSchema>;
+export type AppointmentUpdateType = z.infer<typeof AppointmentUpdateSchema>;
+
+export const appointmentTypes = [
+  { value: "CONSULTATION", label: "General Consultation" },
+  { value: "THERAPY", label: "Therapy Session" },
+  { value: "FOLLOW_UP", label: "Follow-up Session" },
+  { value: "COUNSELING", label: "Counseling" },
+  { value: "ADDICTION_SUPPORT", label: "Addiction Support" },
+  { value: "COUPLES_THERAPY", label: "Couples Therapy" },
+  { value: "TEENAGE_SESSION", label: "Teenage Session" },
+];
+
+export const timeSlots = [
+  "09:00-10:00",
+  "10:00-11:00",
+  "11:00-12:00",
+  "14:00-15:00",
+  "15:00-16:00",
+  "16:00-17:00",
+];

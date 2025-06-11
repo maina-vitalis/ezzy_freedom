@@ -1,7 +1,10 @@
+import { format } from "date-fns";
+import { ArrowRight, Calendar, Star, Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar } from "lucide-react"; // Icons relevant to articles
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter } from "./ui/card";
 
 interface ArticleComponentProps {
   article: {
@@ -9,7 +12,7 @@ interface ArticleComponentProps {
     title: string;
     coverImage: string;
     downloadUrl: string;
-    publishMonth: string;
+    publishDate: Date;
     description: string;
     slug: string;
     price: number;
@@ -18,62 +21,122 @@ interface ArticleComponentProps {
 
 function ArticleComponent({ article }: ArticleComponentProps) {
   return (
-    <div>
-      <Link
-        href={`/article-details/${article.slug}`} // Using slug for URL
-        className="border-greenPrimary group grid h-[30%] gap-5 rounded-xl border-[1px] p-3 md:grid-cols-[2fr_3fr]"
-      >
-        {/* Left Side: Image */}
-        <div className="sm:min-h-auto relative min-h-44">
-          <Image
-            src={article.coverImage}
-            alt={`${article.title} cover image`}
-            className="rounded-xl object-cover"
-            fill
-          />
+    <Card className="group overflow-hidden border-0 bg-primary/10 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+      <div className="grid gap-0 md:grid-cols-[300px,1fr]">
+        {/* Image Section */}
+        <div className="relative h-64 overflow-hidden md:h-auto">
+          <Link href={`/article-details/${article.slug}`}>
+            <Image
+              src={article.coverImage}
+              alt={`${article.title} - Mental Health Article`}
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              fill
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+            {/* Price Badge */}
+            <div className="absolute right-3 top-3">
+              <Badge
+                className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-sm`}
+              >
+                {article.price === 0 ? "Free" : `KES ${article.price}`}
+              </Badge>
+            </div>
+
+            {/* Category Badge */}
+            <div className="absolute left-3 top-3">
+              <Badge
+                variant="secondary"
+                className="rounded-full bg-white/90 text-primary backdrop-blur-sm"
+              >
+                <Tag size={12} className="mr-1" />
+                Article
+              </Badge>
+            </div>
+          </Link>
         </div>
 
-        {/* Right Side: Text and Button */}
-        <div className="flex flex-col items-stretch justify-center gap-1">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-col justify-between gap-1 sm:gap-0 md:flex-row">
-              <div className="basis-[80%] space-y-2">
-                {/* Article Name */}
-                <h3 className="place-content-end place-self-start text-sm font-semibold capitalize text-primary md:text-lg">
+        {/* Content Section */}
+        <CardContent className="flex flex-col justify-between space-y-4 p-6">
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="space-y-3">
+              <Link href={`/article-details/${article.slug}`}>
+                <h3 className="line-clamp-2 text-xl font-bold leading-tight text-foreground transition-colors duration-300 group-hover:text-primary md:text-2xl">
                   {article.title}
                 </h3>
+              </Link>
 
-                {/* Publish Month */}
-                <span className="mt-2 flex gap-1">
-                  <Calendar size={15} />
-                  <p className="text-xs font-semibold capitalize text-primary">
-                    Published: {article.publishMonth}
-                  </p>
+              {/* Metadata */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Calendar size={14} />
+                  <span>
+                    Published{" "}
+                    {format(new Date(article.publishDate), "MMM yyyy")}
+                  </span>
+                </div>
+              </div>
+
+              {/* Rating */}
+              <div className="flex items-center gap-1 text-yellow-500">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={14} className="fill-current" />
+                ))}
+                <span className="ml-1 text-sm text-muted-foreground">
+                  (4.7)
                 </span>
-
-                {/* Price */}
-                <span className="mt-2 flex gap-1">
-                  <p className="text-sm font-semibold capitalize">
-                    {article.price === 0 ? "Free" : `Ksh ${article.price}`}
-                  </p>
-                </span>
-
-                {/* Description */}
-                <p
-                  className="mb-2 line-clamp-3 text-xs capitalize"
-                  dangerouslySetInnerHTML={{ __html: article.description }}
-                ></p>
               </div>
             </div>
 
-            {/* Button */}
-            <Button variant={"outline"} className="w-full bg-muted">
-              More Details
-            </Button>
+            {/* Description */}
+            <div
+              className="line-clamp-3 text-sm leading-relaxed text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: article.description }}
+            />
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2">
+              <Badge
+                variant="outline"
+                className="border-primary/30 text-xs text-primary"
+              >
+                Mental Health
+              </Badge>
+              <Badge
+                variant="outline"
+                className="border-blue-600/30 text-xs text-blue-600"
+              >
+                Wellness
+              </Badge>
+              <Badge
+                variant="outline"
+                className="border-green-600/30 text-xs text-green-600"
+              >
+                Recovery
+              </Badge>
+            </div>
           </div>
-        </div>
-      </Link>
-    </div>
+
+          {/* Footer */}
+          <CardFooter className="p-0 pt-4">
+            <Button
+              asChild
+              className="w-full rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+            >
+              <Link
+                href={`/article-details/${article.slug}`}
+                className="flex items-center justify-center gap-2"
+              >
+                <span className="font-medium">Read Full Article</span>
+                <ArrowRight size={16} />
+              </Link>
+            </Button>
+          </CardFooter>
+        </CardContent>
+      </div>
+    </Card>
   );
 }
 

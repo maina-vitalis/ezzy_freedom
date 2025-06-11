@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
-import axios from "axios";
-import Image from "next/image";
+import LoadingButton from "@/components/LoadingButton";
+import TinyMCE from "@/components/TinyMCE";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -17,15 +14,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { UploadDropzone } from "@/util/uploadthing";
-import TinyMCE from "@/components/TinyMCE";
-import LoadingButton from "@/components/LoadingButton";
-import { Label } from "../ui/label";
 import { ArticleSchema, ArticleType } from "@/util/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Label } from "../ui/label";
 
 interface ArticleFormProps {
-  article?: ArticleType & { id?: string }; // Extend with id for updates
+  article?: (ArticleType & { id?: string }) | null;
   method: "create" | "update";
 }
 
@@ -39,7 +48,7 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
       title: article?.title || "",
       coverImage: article?.coverImage || "",
       downloadUrl: article?.downloadUrl || "",
-      publishMonth: article?.publishMonth || "",
+      publishDate: article?.publishDate || new Date(),
       description: article?.description || "",
       price: article?.price || 0,
     },
@@ -118,22 +127,46 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
             )}
           />
 
-          {/* Published Month */}
+          {/* Publish Date */}
           <FormField
             control={form.control}
-            name="publishMonth"
+            name="publishDate"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col">
                 <FormLabel>
-                  Published Month <span className="text-destructive">*</span>
+                  Publish Date <span className="text-destructive">*</span>
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="e.g., March 2025"
-                    className="w-full"
-                  />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
@@ -219,7 +252,7 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
                 </div>
               )}
               <UploadDropzone
-                endpoint="articleCoverImage" // Reuse or create a new endpoint in UploadThing
+                endpoint="articleCoverImage"
                 onClientUploadComplete={handleUploadImage}
                 onUploadError={(error) => {
                   toast.error(`Upload failed: ${error.message}`);

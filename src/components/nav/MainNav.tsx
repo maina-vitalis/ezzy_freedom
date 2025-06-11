@@ -1,11 +1,8 @@
-import Image from "next/image";
-import React from "react";
-import logo from "./../../assets/logo.png";
-import Link from "next/link";
-import UserButton from "../UserButton";
-import Mobile from "./Mobile";
 import { auth } from "@/lib/auth";
+import { NavigationMenuLink } from "@radix-ui/react-navigation-menu";
 import { headers } from "next/headers";
+import Image from "next/image";
+import Link from "next/link";
 import { Button } from "../ui/button";
 import {
   NavigationMenu,
@@ -13,7 +10,9 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "../ui/navigation-menu";
-import { NavigationMenuLink } from "@radix-ui/react-navigation-menu";
+import UserButton from "../UserButton";
+import logo from "./../../assets/logo.png";
+import Mobile from "./Mobile";
 import { ThemeToggle } from "./ThemeToggle";
 
 async function MainNav() {
@@ -40,6 +39,27 @@ async function MainNav() {
                 <Link href="/about-us" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     About us
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/books" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Books
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/articles" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Articles
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/services" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Services
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>

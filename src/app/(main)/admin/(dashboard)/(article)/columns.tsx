@@ -1,36 +1,37 @@
-import { createColumnHelper } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import { ActionsDropdown } from "./rowActions";
+import { format } from "date-fns";
 
 type Article = {
   id: string;
   title: string;
-  publishMonth: string;
-  price: string;
+  publishDate: Date;
+  price: number;
 };
 
-const columnHelper = createColumnHelper<Article>();
-
-export const articleColumns = [
-  columnHelper.accessor("title", {
-    id: "name",
+export const articleColumns: ColumnDef<Article>[] = [
+  {
+    accessorKey: "title",
     header: "Article Name",
-  }),
-
-  columnHelper.accessor("publishMonth", {
-    id: "publishMonth",
-    header: "Published Month",
-  }),
-
-  columnHelper.accessor("price", {
-    id: "price",
-    header: "price",
-  }),
-
+  },
+  {
+    accessorKey: "publishDate",
+    header: "Published Date",
+    cell: ({ row }) => {
+      return format(new Date(row.original.publishDate), "MMM dd, yyyy");
+    },
+  },
+  {
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => {
+      return `KES ${row.original.price}`;
+    },
+  },
   {
     id: "actions",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    cell: (props: any) => {
-      return <ActionsDropdown id={props.row.original.id} />;
+    cell: ({ row }) => {
+      return <ActionsDropdown id={row.original.id} />;
     },
   },
 ];

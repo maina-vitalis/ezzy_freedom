@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ArticleSchema, ArticleType } from "@/util/validation"; // Updated schema import
-import prisma from "@/lib/prisma";
-import slugify from "slugify";
-import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { ArticleSchema, ArticleType } from "@/util/validation"; // Updated schema import
 import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+import slugify from "slugify";
 
 // Create article
 export async function POST(req: Request) {
@@ -18,14 +18,14 @@ export async function POST(req: Request) {
 
     // Parse and validate incoming article data with Zod schema
     const articleData: ArticleType = await req.json();
-    const { title, coverImage, downloadUrl, publishMonth, description, price } =
+    const { title, coverImage, downloadUrl, publishDate, description, price } =
       ArticleSchema.parse(articleData);
 
     const parsedArticleData = {
       title,
       coverImage,
       downloadUrl,
-      publishMonth,
+      publishDate,
       description,
       price,
       slug: slugify(title, {
@@ -53,10 +53,14 @@ export async function POST(req: Request) {
   }
 }
 
-// Get all articles
+// Get all articles ordered by most recent
 export async function GET() {
   try {
-    const data = await prisma.article.findMany();
+    const data = await prisma.article.findMany({
+      orderBy: {
+        publishDate: "desc", // Most recent articles first
+      },
+    });
     return NextResponse.json(data, {
       status: 200,
     });

@@ -1,8 +1,5 @@
 "use client";
 
-import z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -11,14 +8,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
 
-import { Mail, MapPin, Phone } from "lucide-react";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
 import LoadingButton from "../LoadingButton";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 function ReachOut() {
   const formSchema = z.object({
@@ -56,7 +56,7 @@ function ReachOut() {
     mutate(data);
   };
   return (
-    <div className="rounded-lg p-5 border">
+    <div className="rounded-lg border p-5">
       <h1 className="mb-5 text-2xl font-bold md:text-4xl">Get in Touch</h1>
       <div className="flex flex-col gap-10 md:flex-row">
         <div className="basis-2/3">
@@ -72,8 +72,7 @@ function ReachOut() {
                       <FormControl>
                         <Input
                           type="text"
-                          className="bg-white"
-                          placeholder="john doe"
+                          placeholder="john maina"
                           {...field}
                         />
                       </FormControl>
@@ -90,8 +89,7 @@ function ReachOut() {
                       <FormControl>
                         <Input
                           type="text"
-                          className="bg-white"
-                          placeholder="johndoe@email.com"
+                          placeholder="johnmaina@email.com"
                           {...field}
                         />
                       </FormControl>
@@ -108,11 +106,7 @@ function ReachOut() {
                   <FormItem>
                     <FormLabel>Message</FormLabel>
                     <FormControl>
-                      <Textarea
-                        className="bg-white"
-                        placeholder="Message"
-                        {...field}
-                      />
+                      <Textarea placeholder="Message" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -153,7 +147,7 @@ function ReachOut() {
               <div>
                 <p className="text-sm font-normal">Visit the office</p>
                 <p className="text-sm font-normal">business centre</p>
-                <h4 className="text-sm font-bold">Nairobi, Westlands</h4>
+                <h4 className="text-sm font-bold">Nairobi, Nextgen Mall</h4>
               </div>
             </span>
           </div>
