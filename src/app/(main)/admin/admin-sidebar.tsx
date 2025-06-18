@@ -2,11 +2,13 @@
 import {
   Calendar,
   ClipboardPlus,
+  CreditCard,
   NotebookPen,
   PlusCircle,
   User,
 } from "lucide-react";
 
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -17,7 +19,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -43,6 +44,12 @@ export async function AdminSidebar() {
       title: "Appointments",
       url: `/admin/appointments`,
       icon: Calendar,
+    },
+
+    {
+      title: "Transactions",
+      url: `/admin/transactions`,
+      icon: CreditCard,
     },
 
     {

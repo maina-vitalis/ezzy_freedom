@@ -1,4 +1,6 @@
 "use server";
+import { createTransaction } from "@/lib/transactions";
+import { TransactionType } from "@prisma/client";
 import axios from "axios";
 
 interface CheckOutData {
@@ -6,6 +8,10 @@ interface CheckOutData {
   name: string;
   amount: number;
   email: string;
+  userId: string;
+  itemType: "book" | "article";
+  itemId: string;
+  itemTitle: string;
 }
 
 interface StkPushResponse {
@@ -28,7 +34,16 @@ export async function sendStkPush(
       ? "https://api.safaricom.co.ke"
       : "https://sandbox.safaricom.co.ke";
 
-  const { phoneNumber, amount } = body;
+  const {
+    phoneNumber,
+    amount,
+    userId,
+    itemType,
+    itemId,
+    itemTitle,
+    name,
+    email,
+  } = body;
 
   try {
     //create an encoded token
@@ -75,7 +90,7 @@ export async function sendStkPush(
         PartyA: formattedPhone,
         PartyB: process.env.MPESA_TILL_NO,
         PhoneNumber: formattedPhone,
-        CallBackURL: "https://3b48-105-163-158-226.ngrok-free.app/api/callback",
+        CallBackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/callback`,
         AccountReference: phoneNumber,
         TransactionDesc: "payment",
       },
@@ -85,6 +100,31 @@ export async function sendStkPush(
         },
       },
     );
+
+    // Create transaction record if M-Pesa request is successful
+    if (response.data.ResponseCode === "0") {
+      const transactionResult = await createTransaction({
+        userId,
+        phoneNumber: formattedPhone,
+        amount,
+        itemType:
+          itemType === "book" ? TransactionType.BOOK : TransactionType.ARTICLE,
+        itemId,
+        itemTitle,
+        customerName: name,
+        customerEmail: email,
+        checkoutRequestId: response.data.CheckoutRequestID,
+        merchantRequestId: response.data.MerchantRequestID,
+      });
+
+      if (!transactionResult.success) {
+        console.error(
+          "Failed to create transaction record:",
+          transactionResult.error,
+        );
+      }
+    }
+
     return { data: response.data };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

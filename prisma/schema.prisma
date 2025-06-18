@@ -19,6 +19,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   appointments  Appointment[]
+  transactions  Transaction[]
 
   @@unique([email])
   @@map("user")
@@ -87,7 +88,7 @@ model Appointment {
 }
 
 model Books {
-  id             String @id @default(cuid())
+  id             String        @id @default(cuid())
   coverImage     String
   price          Int
   highlights     String
@@ -95,9 +96,10 @@ model Books {
   targetAudience String
   downLoadUrl    String
   slug           String
-  title          String @unique
+  title          String        @unique
   bookOverview   String
   fileKey        String
+  transactions   Transaction[]
 }
 
 model Service {
@@ -111,16 +113,59 @@ model Service {
 }
 
 model Article {
-  id          String   @id @default(uuid())
-  title       String   @unique
-  coverImage  String
-  downloadUrl String
-  publishDate DateTime @default(now())
-  description String
-  slug        String
-  price       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id           String        @id @default(uuid())
+  title        String        @unique
+  coverImage   String
+  downloadUrl  String
+  publishDate  DateTime      @default(now())
+  description  String
+  slug         String
+  price        Int
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  transactions Transaction[]
+}
+
+model Transaction {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // M-Pesa Transaction Details
+  mpesaReceiptNumber String?   @unique
+  mpesaTransactionId String?
+  checkoutRequestId  String?   @unique
+  merchantRequestId  String?
+  phoneNumber        String
+  amount             Int
+  transactionDate    DateTime?
+
+  // Purchase Details
+  itemType  TransactionType
+  itemId    String?
+  itemTitle String
+  bookId    String?
+  book      Books?          @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  articleId String?
+  article   Article?        @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  // Transaction Status
+  status        TransactionStatus @default(PENDING)
+  paymentMethod String            @default("MPESA")
+
+  // Customer Details
+  customerName  String
+  customerEmail String
+
+  // Metadata
+  notes         String?
+  failureReason String?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("transactions")
 }
 
 enum Role {
@@ -144,4 +189,17 @@ enum AppointmentType {
   ADDICTION_SUPPORT
   COUPLES_THERAPY
   TEENAGE_SESSION
+}
+
+enum TransactionType {
+  BOOK
+  ARTICLE
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
 }

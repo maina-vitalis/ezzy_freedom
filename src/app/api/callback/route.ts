@@ -1,3 +1,5 @@
+import { updateTransactionFromCallback } from "@/lib/transactions";
+import { TransactionStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // Handle M-Pesa Callback
@@ -10,14 +12,74 @@ export async function POST(req: NextRequest) {
     if (!callbackData.Body || !callbackData.Body.stkCallback) {
       return NextResponse.json(
         { message: "Invalid callback data" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    //data preparationc
+    const stkCallback = callbackData.Body.stkCallback;
+    const { CheckoutRequestID, ResultCode, ResultDesc } = stkCallback;
+
+    // Determine transaction status based on result code
+    let status: TransactionStatus;
+    let mpesaReceiptNumber: string | undefined;
+    let mpesaTransactionId: string | undefined;
+    let transactionDate: Date | undefined;
+    let failureReason: string | undefined;
+
+    if (ResultCode === 0) {
+      // Payment successful
+      status = TransactionStatus.COMPLETED;
+
+      // Extract M-Pesa details from callback items
+      const callbackMetadata = stkCallback.CallbackMetadata?.Item || [];
+
+      for (const item of callbackMetadata) {
+        switch (item.Name) {
+          case "MpesaReceiptNumber":
+            mpesaReceiptNumber = item.Value;
+            break;
+          case "TransactionDate":
+            // Convert M-Pesa timestamp to Date
+            const timestamp = item.Value.toString();
+            transactionDate = new Date(
+              `${timestamp.slice(0, 4)}-${timestamp.slice(4, 6)}-${timestamp.slice(6, 8)} ` +
+                `${timestamp.slice(8, 10)}:${timestamp.slice(10, 12)}:${timestamp.slice(12, 14)}`,
+            );
+            break;
+          case "MpesaTransactionId":
+            mpesaTransactionId = item.Value;
+            break;
+        }
+      }
+    } else {
+      // Payment failed
+      status = TransactionStatus.FAILED;
+      failureReason = ResultDesc;
+    }
+
+    // Update transaction record
+    const updateResult = await updateTransactionFromCallback({
+      checkoutRequestId: CheckoutRequestID,
+      mpesaReceiptNumber,
+      mpesaTransactionId,
+      transactionDate,
+      status,
+      failureReason,
+      notes: `M-Pesa callback processed. Result: ${ResultDesc}`,
+    });
+
+    if (updateResult.success) {
+      console.log(
+        "✅ Transaction updated successfully:",
+        updateResult.data?.id,
+      );
+    } else {
+      console.error("❌ Failed to update transaction:", updateResult.error);
+    }
 
     return NextResponse.json({
       success: true,
+      message: "Callback processed successfully",
     });
   } catch (error) {
     console.log("❌ Error handling callback:", error);

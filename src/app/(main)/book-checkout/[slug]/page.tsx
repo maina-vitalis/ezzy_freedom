@@ -34,6 +34,7 @@ async function CheckOut(props: { params: CheckOutProps }) {
 
   // User prop data
   const user = {
+    id: session?.user.id,
     email: session?.user.email,
     name: session?.user.name,
   };

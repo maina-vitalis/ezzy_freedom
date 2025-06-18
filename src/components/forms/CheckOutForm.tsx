@@ -37,7 +37,7 @@ import {
 import { Input } from "../ui/input";
 
 interface CheckOutFormProps {
-  user: { email: string; name: string };
+  user: { id: string; email: string; name: string };
   item: { id: string; price: number; title?: string };
   type: "article" | "book";
 }
@@ -120,7 +120,15 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
   });
 
   const onSubmit = (data: CheckOutTypes) => {
-    sendPayment(data);
+    // Include additional parameters for transaction tracking
+    const paymentData = {
+      ...data,
+      userId: user.id,
+      itemType: type,
+      itemId: item.id,
+      itemTitle: item.title || `${type} purchase`,
+    };
+    sendPayment(paymentData);
   };
 
   const handleConfirmPayment = () => {
