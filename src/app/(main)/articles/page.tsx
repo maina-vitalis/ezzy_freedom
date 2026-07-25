@@ -64,7 +64,7 @@ async function Articles() {
           Latest Articles
         </h2>
         <div className="grid gap-6">
-          {articles.map((article) => (
+          {articles.map((article: (typeof articles)[number]) => (
             <ArticleComponent key={article.id} article={article} />
           ))}
         </div>

@@ -9,8 +9,8 @@ import { checkOutSchema, CheckOutTypes } from "@/util/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import {
-  AlertCircle,
-  CheckCircle,
+  CircleAlert,
+  CircleCheck,
   CreditCard,
   DollarSign,
   Mail,
@@ -289,7 +289,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
                     <Card className="border-primary/20 bg-primary/5">
                       <CardContent className="flex items-center gap-3 p-4">
                         <div className="rounded-full bg-primary/20 p-2">
-                          <AlertCircle className="h-4 w-4 text-primary" />
+                          <CircleAlert className="h-4 w-4 text-primary" />
                         </div>
                         <div className="flex-1">
                           <p className="text-sm font-medium text-primary">
@@ -308,7 +308,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
                       onClick={handleConfirmPayment}
                       type="button"
                     >
-                      <CheckCircle className="mr-2 h-4 w-4" />
+                      <CircleCheck className="mr-2 h-4 w-4" />
                       Confirm Payment
                     </LoadingButton>
                   </div>
