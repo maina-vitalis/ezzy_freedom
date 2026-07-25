@@ -34,7 +34,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Download,
-  Edit,
+  SquarePen,
   Eye,
   MoreHorizontal,
   Search,
@@ -159,7 +159,7 @@ export default function BooksManagementTable({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/admin/update-book/${book.id}`}>
-                  <Edit className="mr-2 h-4 w-4" />
+                  <SquarePen className="mr-2 h-4 w-4" />
                   Edit Book
                 </Link>
               </DropdownMenuItem>

@@ -1,6 +1,6 @@
 import {
   Award,
-  CheckCircle,
+  CircleCheck,
   Clock,
   HandHeart,
   Heart,
@@ -151,7 +151,7 @@ function ChooseUs() {
               {/* Floating Badge */}
               <div className="absolute left-4 top-4">
                 <Badge className="bg-white/90 text-primary shadow-lg backdrop-blur-sm">
-                  <CheckCircle size={14} className="mr-1" />
+                  <CircleCheck size={14} className="mr-1" />
                   Trusted Care
                 </Badge>
               </div>

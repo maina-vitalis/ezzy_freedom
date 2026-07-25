@@ -1,4 +1,4 @@
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { SquarePen, MoreHorizontal, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -101,7 +101,7 @@ export function ActionsDropdown({ id }: ActionsDropdownProps) {
             className="flex w-full items-center justify-center"
           >
             <p>Edit</p>
-            <Edit size={15} />
+            <SquarePen size={15} />
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

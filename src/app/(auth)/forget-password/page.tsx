@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { forgetPassword } from "@/lib/auth-client";
-import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { CircleAlert, ArrowLeft, CircleCheck } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -55,7 +55,7 @@ export default function Component() {
           </CardHeader>
           <CardContent>
             <Alert>
-              <CheckCircle2 className="h-4 w-4" />
+              <CircleCheck className="h-4 w-4" />
               <AlertDescription>
                 If you don&apos;t see the email, check your spam folder.
               </AlertDescription>
@@ -103,7 +103,7 @@ export default function Component() {
             </div>
             {error && (
               <Alert variant="destructive" className="mt-4">
-                <AlertCircle className="h-4 w-4" />
+                <CircleAlert className="h-4 w-4" />
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}

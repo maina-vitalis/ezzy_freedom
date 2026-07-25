@@ -36,7 +36,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Download,
-  Edit,
+  SquarePen,
   Eye,
   MoreHorizontal,
   Search,
@@ -161,7 +161,7 @@ export default function ArticlesManagementTable({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/admin/update-article/${article.id}`}>
-                  <Edit className="mr-2 h-4 w-4" />
+                  <SquarePen className="mr-2 h-4 w-4" />
                   Edit Article
                 </Link>
               </DropdownMenuItem>

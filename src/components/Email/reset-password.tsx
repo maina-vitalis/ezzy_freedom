@@ -10,7 +10,7 @@ import {
   Preview,
   Text,
   Section,
-} from "@react-email/components";
+} from "react-email";
 import * as React from "react";
 import { CSSProperties } from "react";
 

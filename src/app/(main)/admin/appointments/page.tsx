@@ -5,14 +5,14 @@ import axios from "axios";
 import { format } from "date-fns";
 import {
   CalendarIcon,
-  CheckCircle,
+  CircleCheck,
   Clock,
   Eye,
   Filter,
   MoreHorizontal,
   Trash2,
   User,
-  XCircle,
+  CircleX,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -397,7 +397,7 @@ export default function AdminAppointments() {
                                 }}
                                 className="text-green-600"
                               >
-                                <CheckCircle className="mr-2 h-4 w-4" />
+                                <CircleCheck className="mr-2 h-4 w-4" />
                                 Approve
                               </DropdownMenuItem>
                               <DropdownMenuItem
@@ -407,7 +407,7 @@ export default function AdminAppointments() {
                                 }}
                                 className="text-red-600"
                               >
-                                <XCircle className="mr-2 h-4 w-4" />
+                                <CircleX className="mr-2 h-4 w-4" />
                                 Reject
                               </DropdownMenuItem>
                             </>
@@ -504,7 +504,7 @@ export default function AdminAppointments() {
                       loading={updateStatusMutation.isPending}
                       className="flex-1 bg-green-600 hover:bg-green-700"
                     >
-                      <CheckCircle className="mr-2 h-4 w-4" />
+                      <CircleCheck className="mr-2 h-4 w-4" />
                       Approve
                     </LoadingButton>
                     <LoadingButton
@@ -513,7 +513,7 @@ export default function AdminAppointments() {
                       variant="destructive"
                       className="flex-1"
                     >
-                      <XCircle className="mr-2 h-4 w-4" />
+                      <CircleX className="mr-2 h-4 w-4" />
                       Reject
                     </LoadingButton>
                   </>

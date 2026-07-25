@@ -6,7 +6,7 @@ import {
   ArrowRight,
   Award,
   BookOpen,
-  CheckCircle,
+  CircleCheck,
   Download,
   Heart,
   Shield,
@@ -320,7 +320,7 @@ async function Books() {
                     {/* Features */}
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <CheckCircle size={12} />
+                        <CircleCheck size={12} />
                         <span>Expert Written</span>
                       </div>
                       <div className="flex items-center gap-1">

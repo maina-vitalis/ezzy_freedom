@@ -4,7 +4,7 @@ import {
   ClipboardPlus,
   CreditCard,
   NotebookPen,
-  PlusCircle,
+  CirclePlus,
   User,
 } from "lucide-react";
 
@@ -55,7 +55,7 @@ export async function AdminSidebar() {
     {
       title: "Add book",
       url: `/admin/create-books`,
-      icon: PlusCircle,
+      icon: CirclePlus,
     },
     {
       title: "Add article",

@@ -33,7 +33,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Edit,
+  SquarePen,
   Eye,
   MoreHorizontal,
   Search,
@@ -146,7 +146,7 @@ export default function ServicesManagementTable({
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href={`/admin/update-service/${service.id}`}>
-                  <Edit className="mr-2 h-4 w-4" />
+                  <SquarePen className="mr-2 h-4 w-4" />
                   Edit Service
                 </Link>
               </DropdownMenuItem>
