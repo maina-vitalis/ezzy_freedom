@@ -103,7 +103,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
 
     onSuccess: async () => {
       toast.success("Payment confirmed! Redirecting to your library...");
-      router.replace(`/users/${user.name}/library`);
+      router.replace("/dashboard/library");
     },
     onError: (error) => {
       toast.error(error.message);

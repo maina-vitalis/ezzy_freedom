@@ -12,13 +12,13 @@ export async function POST(req: Request) {
       headers: await headers(),
     });
 
-    if (!session || session.user.role === "user") {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
         {
           message: "unauthorized",
         },
         {
-          status: 500,
+          status: 401,
         },
       );
     }

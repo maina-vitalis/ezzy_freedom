@@ -19,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
           "/book-details/*",
         ],
         disallow: [
-          "/admin/*",
+          "/dashboard/*",
           "/users/*",
           "/api/*",
           "/sign-in",
@@ -43,7 +43,7 @@ export default function robots(): MetadataRoute.Robots {
           "/book-details/*",
         ],
         disallow: [
-          "/admin/*",
+          "/dashboard/*",
           "/users/*",
           "/api/*",
           "/sign-in",

@@ -16,13 +16,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Lock, UserIcon } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import SignOut from "./SignOut";
 
 async function UserButton({ className }: UserButtonProps) {
   const data = await auth.api.getSession({
     headers: await headers(),
   });
+
+  if (!data?.user) return null;
 
   return (
     <DropdownMenu>
@@ -31,27 +33,25 @@ async function UserButton({ className }: UserButtonProps) {
           name="user icon"
           className={cn("flex-none rounded-full", className)}
         >
-          <UserAvatar imageUrl={data?.user.image ?? undefined} size={40} />
+          <UserAvatar imageUrl={data.user.image ?? undefined} size={40} />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>{data?.user.name}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{data.user.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {data.user.email}
+            </p>
+          </div>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-1" asChild>
-          <Link href={`/users/${data?.user.name}}`}>
-            <UserIcon className="mr-2 size-4" />
-            Profile
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard" className="flex items-center gap-2 cursor-pointer">
+            <LayoutDashboard className="size-4 text-primary" />
+            <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
-        {data?.user.role === "ADMIN" && (
-          <DropdownMenuItem className="flex items-center gap-1" asChild>
-            <Link href={`/admin`}>
-              <Lock className="mr-2 size-4" />
-              Admin
-            </Link>
-          </DropdownMenuItem>
-        )}
-
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <SignOut />

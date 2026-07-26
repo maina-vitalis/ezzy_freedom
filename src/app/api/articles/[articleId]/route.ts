@@ -20,7 +20,7 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
       headers: await headers(),
     });
 
-    if (!session?.session || session.user.role === "user") {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json(
         {
           message: "Unauthorized",
@@ -68,7 +68,7 @@ export async function PUT(req: Request, props: { params: Params }) {
       headers: await headers(),
     });
 
-    if (!session?.session || session.user.role === "user") {
+    if (!session?.user || session.user.role !== "ADMIN") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 

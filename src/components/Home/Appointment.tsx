@@ -120,7 +120,7 @@ function Appointment() {
                 className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
               >
                 <Link
-                  href="/users/dashboard/appointments"
+                  href="/dashboard/appointments"
                   className="flex items-center justify-center gap-2"
                 >
                   <Calendar size={20} />
