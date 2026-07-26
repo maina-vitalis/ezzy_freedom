@@ -91,16 +91,24 @@ export async function PUT(req: Request, props: { params: Params }) {
     }
 
     // Parse and validate with ArticleSchema
-    const { title, coverImage, downloadUrl, publishDate, description, price } =
-      ArticleSchema.parse(data);
-
-    const parsedData = {
+    const {
       title,
       coverImage,
       downloadUrl,
       publishDate,
       description,
       price,
+      r2Key,
+    } = ArticleSchema.parse(data);
+
+    const parsedData = {
+      title,
+      coverImage,
+      downloadUrl: downloadUrl || `r2://${r2Key}`,
+      publishDate,
+      description,
+      price,
+      r2Key,
       slug: slugify(title, {
         lower: true,
         trim: true,

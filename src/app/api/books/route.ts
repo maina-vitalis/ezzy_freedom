@@ -28,13 +28,14 @@ export async function POST(req: Request) {
       targetAudience,
       title,
       fileKey,
+      r2Key,
     } = BookSchema.parse(bookData);
 
     const parsedBookData = {
       additionalInfo,
       bookOverview,
       coverImage,
-      downLoadUrl: downloadUrl,
+      downLoadUrl: downloadUrl || `r2://${r2Key}`,
       highlights,
       price,
       targetAudience,
@@ -43,7 +44,8 @@ export async function POST(req: Request) {
         lower: true,
         trim: true,
       }),
-      fileKey,
+      fileKey: fileKey || r2Key,
+      r2Key,
     };
 
     // Create the book in the database

@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
+const r2PublicHost = process.env.R2_PUBLIC_HOSTNAME;
+
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
@@ -14,7 +15,20 @@ const nextConfig: NextConfig = {
         hostname: "35jq5szehk.ufs.sh",
         pathname: "/f/*",
       },
-
+      {
+        protocol: "https",
+        hostname: "**.r2.dev",
+        pathname: "/**",
+      },
+      ...(r2PublicHost
+        ? [
+            {
+              protocol: "https" as const,
+              hostname: r2PublicHost,
+              pathname: "/**",
+            },
+          ]
+        : []),
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",

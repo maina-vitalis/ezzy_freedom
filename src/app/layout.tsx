@@ -1,12 +1,9 @@
 import { Toaster as SonnerToast } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import QueryProvider from "@/util/ReactQueryProvider";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter } from "next/font/google";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "./api/uploadthing/core";
 import "./globals.css";
 
 const inter = Inter({
@@ -199,7 +196,6 @@ export default async function RootLayout({
         className={`${inter.className} antialiased`}
         suppressHydrationWarning={true}
       >
-        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <QueryProvider>
           <ThemeProvider
             attribute="class"

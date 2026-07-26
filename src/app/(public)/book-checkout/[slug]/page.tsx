@@ -72,6 +72,14 @@ async function CheckOut(props: { params: CheckOutProps }) {
     );
   }
 
+  const alreadyOwned = await prisma.userPurchase.findFirst({
+    where: { userId: session.user.id, bookId: book.id },
+    select: { id: true },
+  });
+  if (alreadyOwned) {
+    redirect("/dashboard/library");
+  }
+
   return (
     <div className="min-h-screen bg-linear-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
