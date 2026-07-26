@@ -5,7 +5,6 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import {
   BookOpen,
-  Download,
   FileText,
   Library,
   Lock,
@@ -17,14 +16,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import DownloadButton from "./DownloadButton";
 
-type LibraryPageProps = Promise<{ userName: string }>;
-
 export const metadata = {
   title: "My Library – EZZ Freedom and Hope",
   description: "Access all your purchased books and articles.",
 };
 
-async function LibraryPage(props: { params: LibraryPageProps }) {
+async function LibraryPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/sign-in");
 
