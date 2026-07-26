@@ -16,7 +16,7 @@ export default function UserDashboardView({ user }: UserDashboardViewProps) {
   return (
     <div className="space-y-8 py-2">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary/80 p-8 text-primary-foreground shadow-lg">
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-primary to-primary/80 p-8 text-primary-foreground shadow-lg">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="flex items-center gap-4">
             <UserAvatar imageUrl={user.image ?? undefined} className="size-16 border-2 border-white/30" />
@@ -28,7 +28,7 @@ export default function UserDashboardView({ user }: UserDashboardViewProps) {
               <p className="text-sm opacity-90">{user.email}</p>
             </div>
           </div>
-          <Button asChild variant="secondary" className="rounded-full font-semibold shadow">
+          <Button asChild variant="secondary" className="rounded-full font-semibold shadow-sm">
             <Link href="/dashboard/profile">
               <UserIcon className="mr-2 h-4 w-4" />
               Edit Profile

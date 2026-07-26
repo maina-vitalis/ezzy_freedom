@@ -73,7 +73,7 @@ async function CheckOut(props: { params: CheckOutProps }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen bg-linear-to-br from-background via-background to-primary/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 space-y-4">
@@ -107,7 +107,7 @@ async function CheckOut(props: { params: CheckOutProps }) {
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Book Details Card */}
-            <Card className="overflow-hidden border-0 bg-card/50 shadow-xl backdrop-blur-sm">
+            <Card className="overflow-hidden border-0 bg-card/50 shadow-xl backdrop-blur-xs">
               <CardHeader className="border-b border-border/50 bg-primary/5 pb-4">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <BookOpen className="h-5 w-5 text-primary" />
@@ -119,7 +119,7 @@ async function CheckOut(props: { params: CheckOutProps }) {
                 <div className="space-y-6">
                   {/* Book Cover and Basic Info */}
                   <div className="flex gap-4">
-                    <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden rounded-lg shadow-lg">
+                    <div className="relative h-32 w-24 shrink-0 overflow-hidden rounded-lg shadow-lg">
                       <Image
                         src={book.coverImage}
                         alt={book.title}

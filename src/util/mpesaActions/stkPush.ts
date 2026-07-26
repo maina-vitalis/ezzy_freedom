@@ -1,6 +1,6 @@
 "use server";
 import { createTransaction } from "@/lib/transactions";
-import { TransactionType } from "@prisma/client";
+import { TransactionType } from "@/generated/prisma/client";
 import axios from "axios";
 
 interface CheckOutData {

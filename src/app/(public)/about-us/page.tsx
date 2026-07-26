@@ -143,7 +143,7 @@ function AboutUs() {
         {/* Hero Section */}
         <section className="relative">
           <div className="relative left-0 h-[40vh] overflow-hidden rounded-xl md:h-[50vh]">
-            <div className="absolute inset-0 z-10 bg-gradient-to-r from-primary/80 via-primary/60 to-transparent" />
+            <div className="absolute inset-0 z-10 bg-linear-to-r from-primary/80 via-primary/60 to-transparent" />
             <Image
               src="https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoO9G1xO3rXlKG4t5u3xDPbjmCwOpR8QUX7yFhg"
               alt="EZZ Freedom and Hope Foundation - Mental Health Support"
@@ -222,7 +222,7 @@ function AboutUs() {
         </section>
 
         {/* Stats Section */}
-        <section className="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 p-8">
+        <section className="rounded-2xl bg-linear-to-br from-primary/10 to-primary/5 p-8">
           <div className="mb-8 text-center">
             <h2 className="mb-4 text-3xl font-bold">Our Impact in Numbers</h2>
             <p className="mx-auto max-w-2xl text-muted-foreground">
@@ -296,7 +296,7 @@ function AboutUs() {
               {achievements.map((achievement, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <Check
-                    className="mt-0.5 flex-shrink-0 text-primary"
+                    className="mt-0.5 shrink-0 text-primary"
                     size={18}
                   />
                   <p className="text-sm text-muted-foreground">{achievement}</p>
@@ -308,7 +308,7 @@ function AboutUs() {
 
         {/* Mission & Vision */}
         <section className="grid gap-8 md:grid-cols-2">
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 p-8">
+          <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/10 p-8">
             <CardContent className="space-y-4 p-0">
               <div className="mb-4 flex items-center gap-3">
                 <Target className="text-primary" size={28} />
@@ -342,7 +342,7 @@ function AboutUs() {
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20 bg-gradient-to-br from-blue-500/5 to-primary/10 p-8">
+          <Card className="border-primary/20 bg-linear-to-br from-blue-500/5 to-primary/10 p-8">
             <CardContent className="space-y-4 p-0">
               <div className="mb-4 flex items-center gap-3">
                 <Globe className="text-primary" size={28} />

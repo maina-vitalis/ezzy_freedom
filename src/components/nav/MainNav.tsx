@@ -21,7 +21,7 @@ async function MainNav() {
   });
 
   return (
-    <nav className="sticky top-0 z-50 bg-card shadow-sm">
+    <nav className="sticky top-0 z-50 bg-card shadow-xs">
       <div className="mx-auto flex max-w-[1300px] items-center justify-between px-3">
         <div className="flex items-center gap-10 py-1">
           <Link href={"/"}>

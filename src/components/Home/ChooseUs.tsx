@@ -103,7 +103,7 @@ function StatCard({
 }) {
   const count = useCountUp(number, 1600, trigger);
   return (
-    <div className="group flex flex-col items-center gap-1 rounded-2xl border border-primary/20 bg-card px-6 py-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md">
+    <div className="group flex flex-col items-center gap-1 rounded-2xl border border-primary/20 bg-card px-6 py-5 text-center shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md">
       <span className="text-4xl font-extrabold tabular-nums text-primary">
         {count}
         {suffix}
@@ -168,7 +168,7 @@ function ChooseUs() {
         {reasons.map((reason, i) => (
           <Card
             key={i}
-            className="group relative overflow-hidden border border-border/50 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg"
+            className="group relative overflow-hidden border border-border/50 bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg"
           >
             {/* Subtle teal glow strip at top */}
             <div className="absolute inset-x-0 top-0 h-[3px] bg-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

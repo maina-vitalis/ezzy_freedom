@@ -24,7 +24,7 @@ import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
-import { Books } from "@prisma/client";
+import { Books } from "@/generated/prisma/client";
 
 interface AddBookFormProps {
   book?: Books;
@@ -128,7 +128,21 @@ function BookForm({ book, method }: AddBookFormProps) {
                     Price <span className="text-destructive">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} placeholder="3000" />
+                    <Input
+                      type="number"
+                      value={field.value ?? ""}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value === ""
+                            ? undefined
+                            : e.target.valueAsNumber,
+                        )
+                      }
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
+                      placeholder="3000"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

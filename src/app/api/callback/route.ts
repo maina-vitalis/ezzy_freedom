@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { updateTransactionFromCallback } from "@/lib/transactions";
-import { TransactionStatus, TransactionType } from "@prisma/client";
+import { TransactionStatus, TransactionType } from "@/generated/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // Handle M-Pesa Callback

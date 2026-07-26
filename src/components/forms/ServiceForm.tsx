@@ -21,7 +21,7 @@ import { UploadDropzone } from "@/util/uploadthing";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { Service } from "@prisma/client";
+import { Service } from "@/generated/prisma/client";
 import LoadingButton from "../LoadingButton";
 import { Button } from "../ui/button";
 import { toast } from "sonner";

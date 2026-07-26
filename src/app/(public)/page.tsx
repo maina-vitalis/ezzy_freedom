@@ -17,7 +17,7 @@ function Home() {
 
       {/* Books Section */}
       <section className="relative">
-        <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-b from-primary/50 to-transparent" />
+        <div className="absolute inset-0 -z-10 rounded-3xl bg-linear-to-b from-primary/50 to-transparent" />
         <div className="p-8">
           <Products />
         </div>
@@ -25,7 +25,7 @@ function Home() {
 
       {/* Articles Section */}
       <section className="relative">
-        <div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-b from-transparent via-primary/50 to-transparent" />
+        <div className="absolute inset-0 -z-10 rounded-3xl bg-linear-to-b from-transparent via-primary/50 to-transparent" />
         <div className="p-8">
           <Articles />
         </div>
@@ -33,7 +33,7 @@ function Home() {
 
       {/* Enhanced Appointment Section */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-primary/10 via-primary/5 to-transparent" />
+        <div className="absolute inset-0 rounded-3xl bg-linear-to-b from-primary/10 via-primary/5 to-transparent" />
         <div className="relative p-8">
           <Appointment />
         </div>
@@ -47,7 +47,7 @@ function Home() {
 
       {/* Enhanced WhatsApp Community Section */}
       <section className="relative">
-        <Card className="overflow-hidden border-0 bg-gradient-to-br from-green-500 via-green-600 to-green-700 text-white">
+        <Card className="overflow-hidden border-0 bg-linear-to-br from-green-500 via-green-600 to-green-700 text-white">
           <CardContent className="relative p-8 md:p-12">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">

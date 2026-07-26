@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 
 function Hero() {
   return (
-    <div className="relative min-h-[80vh] overflow-hidden bg-gradient-to-br from-primary to-primary/50">
+    <div className="relative min-h-[80vh] overflow-hidden bg-linear-to-br from-primary to-primary/50">
       {/* Hero Image */}
       <div className="absolute inset-0">
         <Image
@@ -16,7 +16,7 @@ function Hero() {
           priority
         />
         {/* Subtle Theme Gradient Overlay */}
-        {/* <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/40" /> */}
+        {/* <div className="absolute inset-0 bg-linear-to-r from-primary/60 via-primary/40" /> */}
       </div>
 
       {/* Main Content */}
@@ -25,7 +25,7 @@ function Hero() {
           {/* Content Container */}
           <div className="max-w-2xl space-y-8">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/20 px-4 py-2 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/20 px-4 py-2 backdrop-blur-xs">
               <Shield className="text-white" size={16} />
               <span className="text-sm font-medium text-white">
                 Trusted Mental Health Care
@@ -46,7 +46,7 @@ function Hero() {
               <h1 className="text-4xl font-bold leading-tight text-white sm:text-3xl lg:text-5xl">
                 <span className="block">Transform</span>
                 <span>Your Life </span>
-                <span className="bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-white to-blue-200 bg-clip-text text-transparent">
                   Find Hope
                 </span>
               </h1>
@@ -82,7 +82,7 @@ function Hero() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="group rounded-full border-2 border-white/50 bg-white/15 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/70 hover:bg-white/25"
+                className="group rounded-full border-2 border-white/50 bg-white/15 px-8 py-4 text-lg font-semibold text-white backdrop-blur-xs transition-all duration-300 hover:border-white/70 hover:bg-white/25"
               >
                 <Link href="/services" className="flex items-center gap-3">
                   <span>Our Services</span>

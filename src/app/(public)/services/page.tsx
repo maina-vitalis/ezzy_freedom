@@ -92,7 +92,7 @@ async function Services() {
 
       {/* Services Overview Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Heart className="text-primary" size={24} />
@@ -104,7 +104,7 @@ async function Services() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Users className="text-primary" size={24} />
@@ -116,7 +116,7 @@ async function Services() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Shield className="text-primary" size={24} />
@@ -157,18 +157,18 @@ async function Services() {
                     fill
                   />
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                   {/* Banner Badge */}
                   <div className="absolute left-4 top-4">
-                    <Badge className="rounded-full bg-primary/90 text-white shadow-lg backdrop-blur-sm">
+                    <Badge className="rounded-full bg-primary/90 text-white shadow-lg backdrop-blur-xs">
                       {service.bannerText}
                     </Badge>
                   </div>
 
                   {/* Service Number */}
                   <div className="absolute right-4 top-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 font-bold text-primary shadow-lg backdrop-blur-sm">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/90 font-bold text-primary shadow-lg backdrop-blur-xs">
                       {String(index + 1).padStart(2, "0")}
                     </div>
                   </div>
@@ -254,7 +254,7 @@ async function Services() {
       </div>
 
       {/* Call to Action Section */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
+      <Card className="border-primary/20 bg-linear-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -271,7 +271,7 @@ async function Services() {
             <Button
               size="lg"
               asChild
-              className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+              className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
             >
               <Link
                 href="/dashboard/appointments"

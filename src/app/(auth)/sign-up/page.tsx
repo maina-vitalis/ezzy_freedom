@@ -18,7 +18,7 @@ async function page() {
   if (session?.session) redirect("/");
   return (
     <main className="flex h-fit items-center justify-center p-2">
-      <div className="flex h-full max-h-[40rem] w-full max-w-[64rem] overflow-hidden rounded-xl bg-card">
+      <div className="flex h-full max-h-160 w-full max-w-5xl overflow-hidden rounded-xl bg-card">
         <div className="w-full space-y-10 overflow-y-auto md:w-1/2 md:p-8">
           <div className="space-y-1 text-center">
             <h1 className="text-center text-xl font-bold">

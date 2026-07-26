@@ -22,7 +22,7 @@ interface ArticleComponentProps {
 function ArticleComponent({ article }: ArticleComponentProps) {
   return (
     <Card className="group overflow-hidden border-0 bg-primary/10 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
-      <div className="grid gap-0 md:grid-cols-[300px,1fr]">
+      <div className="grid gap-0 md:grid-cols-[300px_1fr]">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden md:h-auto">
           <Link href={`/article-details/${article.slug}`}>
@@ -33,12 +33,12 @@ function ArticleComponent({ article }: ArticleComponentProps) {
               fill
             />
             {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
             {/* Price Badge */}
             <div className="absolute right-3 top-3">
               <Badge
-                className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-sm`}
+                className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-xs`}
               >
                 {article.price === 0 ? "Free" : `KES ${article.price}`}
               </Badge>
@@ -48,7 +48,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
             <div className="absolute left-3 top-3">
               <Badge
                 variant="secondary"
-                className="rounded-full bg-white/90 text-primary backdrop-blur-sm"
+                className="rounded-full bg-white/90 text-primary backdrop-blur-xs"
               >
                 <Tag size={12} className="mr-1" />
                 Article
@@ -123,7 +123,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
           <CardFooter className="p-0 pt-4">
             <Button
               asChild
-              className="w-full rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+              className="w-full rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
             >
               <Link
                 href={`/article-details/${article.slug}`}

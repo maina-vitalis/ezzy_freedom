@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { getTransactions, getTransactionStats } from "@/lib/transactions";
-import { TransactionStatus, TransactionType } from "@prisma/client";
+import { TransactionStatus, TransactionType } from "@/generated/prisma/client";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 

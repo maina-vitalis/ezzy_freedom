@@ -1,4 +1,4 @@
-import { Books } from "@prisma/client";
+import { Books } from "@/generated/prisma/client";
 import { ArrowRight, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +24,7 @@ function ProductCard({ book }: ProductCardProps) {
               className="object-cover transition-all duration-500 group-hover:scale-110"
             />
             {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
             {/* Floating Action */}
             <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
@@ -47,7 +47,7 @@ function ProductCard({ book }: ProductCardProps) {
 
         {/* Price Badge */}
         <div className="absolute right-3 top-3">
-          <Badge className="bg-primary/90 text-white shadow-lg backdrop-blur-sm">
+          <Badge className="bg-primary/90 text-white shadow-lg backdrop-blur-xs">
             {book.price} KES
           </Badge>
         </div>
@@ -74,7 +74,7 @@ function ProductCard({ book }: ProductCardProps) {
       <CardFooter className="space-y-3 p-6 pt-0">
         <Button
           asChild
-          className="w-full rounded-full bg-gradient-to-r from-primary/30 to-primary/5 text-white shadow-lg transition-all duration-300 hover:shadow-xl"
+          className="w-full rounded-full bg-linear-to-r from-primary/30 to-primary/5 text-white shadow-lg transition-all duration-300 hover:shadow-xl"
         >
           <Link
             href={`/book-details/${book.slug}`}

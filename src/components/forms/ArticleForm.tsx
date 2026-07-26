@@ -163,7 +163,6 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
                       disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
                       }
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>
@@ -182,7 +181,17 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
                 </FormLabel>
                 <FormControl>
                   <Input
-                    {...field}
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : e.target.valueAsNumber,
+                      )
+                    }
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
                     placeholder="e.g 1000"
                     className="w-full"
                     type="number"

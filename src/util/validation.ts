@@ -43,9 +43,11 @@ export type CheckOutTypes = z.infer<typeof checkOutSchema>;
 //add book form validation
 export const BookSchema = z.object({
   coverImage: requiredString,
-  price: z.coerce.number({
-    required_error: "A tour price is required",
-    invalid_type_error: "Must be a valid number",
+  price: z.number({
+    error: (issue) =>
+      issue.input === undefined
+        ? "A tour price is required"
+        : "Must be a valid number",
   }),
   highlights: requiredString,
   additionalInfo: requiredString,
@@ -73,14 +75,18 @@ export const ArticleSchema = z.object({
   title: z.string().min(1, "An article name is required"),
   coverImage: requiredString,
   downloadUrl: requiredString,
-  publishDate: z.coerce.date({
-    required_error: "Publish date is required",
-    invalid_type_error: "Must be a valid date",
+  publishDate: z.date({
+    error: (issue) =>
+      issue.input === undefined
+        ? "Publish date is required"
+        : "Must be a valid date",
   }),
   description: requiredString,
-  price: z.coerce.number({
-    required_error: "A tour price is required",
-    invalid_type_error: "Must be a valid number",
+  price: z.number({
+    error: (issue) =>
+      issue.input === undefined
+        ? "A tour price is required"
+        : "Must be a valid number",
   }),
 });
 export type ArticleType = z.infer<typeof ArticleSchema>;

@@ -113,12 +113,12 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
       </nav>
 
       {/* Main Content Grid */}
-      <div className="grid gap-8 xl:grid-cols-[400px,1fr]">
+      <div className="grid gap-8 xl:grid-cols-[400px_1fr]">
         {/* Left Column - Article Cover and Actions */}
         <div className="space-y-6">
           {/* Article Cover */}
           <Card className="overflow-hidden border-0 shadow-2xl">
-            <div className="relative aspect-[4/5] w-full">
+            <div className="relative aspect-4/5 w-full">
               <Image
                 src={article.coverImage}
                 alt={`${article.title} - Mental Health Article`}
@@ -129,14 +129,14 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               {/* Price Badge */}
               <div className="absolute right-3 top-3">
                 <Badge
-                  className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-sm`}
+                  className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-xs`}
                 >
                   {article.price === 0 ? "FREE" : `KES ${article.price}`}
                 </Badge>
               </div>
               {/* Category Badge */}
               <div className="absolute left-3 top-3">
-                <Badge className="bg-white/90 text-primary shadow-lg backdrop-blur-sm">
+                <Badge className="bg-white/90 text-primary shadow-lg backdrop-blur-xs">
                   <Tag size={12} className="mr-1" />
                   Article
                 </Badge>
@@ -145,7 +145,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           </Card>
 
           {/* Quick Access Card */}
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+          <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <div className="space-y-2 text-center">
                 <p className="text-2xl font-bold text-primary">
@@ -158,7 +158,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               {session?.session ? (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -183,7 +183,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               ) : (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -272,7 +272,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
             </div>
 
             {/* Article Content Preview */}
-            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+            <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
               <CardContent className="space-y-4 p-6">
                 <h3 className="font-bold">Article Preview</h3>
                 <div
@@ -392,7 +392,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           </Card>
 
           {/* Related Content Suggestion */}
-          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/5">
+          <Card className="border-primary/20 bg-linear-to-r from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <h3 className="font-bold">Continue Your Journey</h3>
               <p className="text-sm text-muted-foreground">
@@ -419,7 +419,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
       </div>
 
       {/* Bottom Call to Action */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
+      <Card className="border-primary/20 bg-linear-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -462,7 +462,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+                className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
               >
                 <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
                   <Lock size={20} className="mr-2" />

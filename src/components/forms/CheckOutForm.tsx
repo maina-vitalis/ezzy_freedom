@@ -134,7 +134,7 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
         <span className="font-medium">Secure Payment with M-Pesa</span>
       </div>
 
-      <Card className="border-0 bg-card/50 shadow-lg backdrop-blur-sm">
+      <Card className="border-0 bg-card/50 shadow-lg backdrop-blur-xs">
         <CardHeader className="space-y-1 pb-4">
           <CardTitle className="flex items-center gap-2 text-xl font-semibold">
             <CreditCard className="h-5 w-5 text-primary" />

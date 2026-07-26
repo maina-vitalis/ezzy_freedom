@@ -98,7 +98,7 @@ async function Books() {
 
       {/* Categories Overview */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Heart className="text-primary" size={24} />
@@ -110,7 +110,7 @@ async function Books() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Users className="text-primary" size={24} />
@@ -122,7 +122,7 @@ async function Books() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Shield className="text-primary" size={24} />
@@ -134,7 +134,7 @@ async function Books() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Target className="text-primary" size={24} />
@@ -174,7 +174,7 @@ async function Books() {
                     />
                     {/* Free Badge */}
                     <div className="absolute right-3 top-3">
-                      <Badge className="rounded-full bg-green-500 text-white shadow-lg backdrop-blur-sm">
+                      <Badge className="rounded-full bg-green-500 text-white shadow-lg backdrop-blur-xs">
                         FREE
                       </Badge>
                     </div>
@@ -225,7 +225,7 @@ async function Books() {
                   {/* Action Button */}
                   <Button
                     asChild
-                    className="w-full rounded-full bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transition-all duration-300 hover:from-green-600 hover:to-green-700 hover:shadow-xl"
+                    className="w-full rounded-full bg-linear-to-r from-green-500 to-green-600 text-white shadow-lg transition-all duration-300 hover:from-green-600 hover:to-green-700 hover:shadow-xl"
                   >
                     <Link
                       href={`/book-details/${book.slug}`}
@@ -272,14 +272,14 @@ async function Books() {
                     />
                     {/* Price Badge */}
                     <div className="absolute right-3 top-3">
-                      <Badge className="rounded-full bg-primary text-white shadow-lg backdrop-blur-sm">
+                      <Badge className="rounded-full bg-primary text-white shadow-lg backdrop-blur-xs">
                         KES {book.price}
                       </Badge>
                     </div>
 
                     {/* Premium Badge */}
                     <div className="absolute left-3 top-3">
-                      <Badge className="rounded-full bg-yellow-500 text-white shadow-lg backdrop-blur-sm">
+                      <Badge className="rounded-full bg-yellow-500 text-white shadow-lg backdrop-blur-xs">
                         <Award size={12} className="mr-1" />
                         Premium
                       </Badge>
@@ -343,7 +343,7 @@ async function Books() {
                   {/* Action Button */}
                   <Button
                     asChild
-                    className="w-full rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                    className="w-full rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                   >
                     <Link
                       href={`/book-details/${book.slug}`}
@@ -362,7 +362,7 @@ async function Books() {
       )}
 
       {/* Call to Action Section */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
+      <Card className="border-primary/20 bg-linear-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -380,7 +380,7 @@ async function Books() {
             <Button
               size="lg"
               asChild
-              className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+              className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
             >
               <Link href="/contact" className="flex items-center gap-2">
                 <Heart size={20} />

@@ -196,7 +196,6 @@ export default function AppointmentBookingForm({
                       selected={selectedDate}
                       onSelect={handleDateSelect}
                       disabled={isDateDisabled}
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>

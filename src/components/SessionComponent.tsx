@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Service } from "@prisma/client";
+import { Service } from "@/generated/prisma/client";
 import { ArrowRight, Clock, Star, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,11 +27,11 @@ function SessionComponent({ item }: SessionComponentProps) {
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Banner Badge */}
         <div className="absolute left-3 top-3">
-          <Badge className="rounded-full bg-primary/90 text-white shadow-lg backdrop-blur-sm">
+          <Badge className="rounded-full bg-primary/90 text-white shadow-lg backdrop-blur-xs">
             {item.bannerText}
           </Badge>
         </div>

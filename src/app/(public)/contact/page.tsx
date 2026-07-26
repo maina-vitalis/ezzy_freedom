@@ -61,7 +61,7 @@ export default function ContactForm() {
 
   return (
     <div className="mt-3 space-y-8">
-      <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-gradient-to-r md:before:opacity-90">
+      <div className="before: relative left-0 h-[30vh] from-primary to-transparent before:absolute before:top-0 before:z-10 before:h-full before:w-full before:rounded-lg before:bg-primary/50 before:content-[''] md:before:bg-transparent md:before:bg-linear-to-r md:before:opacity-90">
         <Image
           src={
             "https://35jq5szehk.ufs.sh/f/tNU9RDFz3KoOeQQSklyiu2YH8n5AWxKSMldjts96UrEGeQBy"
@@ -70,7 +70,7 @@ export default function ContactForm() {
           fill
           className="rounded-lg object-cover"
         />
-        <h1 className="absolute left-[50%] top-[30%] z-10 -translate-x-[50%] text-center text-3xl font-bold text-white">
+        <h1 className="absolute left-[50%] top-[30%] z-10 translate-x-[-50%] text-center text-3xl font-bold text-white">
           Contact Us
         </h1>
       </div>

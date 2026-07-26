@@ -36,11 +36,11 @@ function Articles() {
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-black/20 to-transparent" />
 
             {/* Floating Badge */}
             <div className="absolute left-4 top-4">
-              <div className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-primary backdrop-blur-sm">
+              <div className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-primary backdrop-blur-xs">
                 Featured Article
               </div>
             </div>
@@ -104,7 +104,7 @@ function Articles() {
 
       {/* Call to Action Section */}
       <div className="text-center">
-        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-gradient-to-r from-green-500/10 to-primary/10 p-6 sm:flex-row">
+        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-linear-to-r from-green-500/10 to-primary/10 p-6 sm:flex-row">
           <div className="text-center sm:text-left">
             <h4 className="mb-1 font-semibold text-foreground">
               Stay Informed & Inspired

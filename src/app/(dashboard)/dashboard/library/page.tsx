@@ -194,14 +194,14 @@ function LibraryItemCard({
   return (
     <Card className="group overflow-hidden border border-border/50 shadow-md transition-shadow hover:shadow-lg">
       {/* Cover */}
-      <div className="relative aspect-[3/2] w-full overflow-hidden bg-muted">
+      <div className="relative aspect-3/2 w-full overflow-hidden bg-muted">
         <Image
           src={coverImage}
           alt={title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
         <Badge className="absolute left-3 top-3 bg-primary text-primary-foreground">
           {itemType === "BOOK" ? "Book" : "Article"}
         </Badge>
