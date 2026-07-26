@@ -1,5 +1,5 @@
 //app sidebar
-import { Calendar, User } from "lucide-react";
+import { Calendar, Library, User } from "lucide-react";
 
 import {
   Sidebar,
@@ -32,7 +32,11 @@ export async function AppSidebar() {
       url: `/users/${user?.name}`,
       icon: User,
     },
-
+    {
+      title: "My Library",
+      url: `/users/${user?.name}/library`,
+      icon: Library,
+    },
     {
       title: "Appointments",
       url: `/users/${user?.name}/appointments`,

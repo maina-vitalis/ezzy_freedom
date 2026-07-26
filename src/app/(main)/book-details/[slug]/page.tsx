@@ -129,7 +129,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
           </Card>
 
           {/* Quick Purchase Card */}
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <div className="space-y-2 text-center">
                 <p className="text-2xl font-bold text-primary">
@@ -145,7 +145,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                 book.price === 0 ? (
                   <Button
                     size="lg"
-                    className="w-full transform rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+                    className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                     asChild
                   >
                     <a
@@ -161,7 +161,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                 ) : (
                   <Button
                     size="lg"
-                    className="w-full transform rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+                    className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                     asChild
                   >
                     <Link
@@ -177,7 +177,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               ) : (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+                  className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -340,7 +340,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
           </Card>
 
           {/* Author & Quality Assurance */}
-          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-blue-500/5">
+          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <h3 className="font-bold">Quality Assurance</h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -375,7 +375,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
       </div>
 
       {/* Bottom Call to Action */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10">
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -393,7 +393,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-gradient-to-r from-primary to-blue-600 px-8 hover:from-primary/90 hover:to-blue-600/90"
+                className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
               >
                 <Link
                   href={`/book-checkout/${book.slug}`}
@@ -408,7 +408,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-gradient-to-r from-primary to-blue-600 px-8 hover:from-primary/90 hover:to-blue-600/90"
+                className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
               >
                 <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
                   <Lock size={20} className="mr-2" />

@@ -106,7 +106,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
               </Badge>
               <Badge
                 variant="outline"
-                className="border-blue-600/30 text-xs text-blue-600"
+                className="border-blue-600/30 text-xs text-primary"
               >
                 Wellness
               </Badge>
@@ -123,7 +123,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
           <CardFooter className="p-0 pt-4">
             <Button
               asChild
-              className="w-full rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+              className="w-full rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
             >
               <Link
                 href={`/article-details/${article.slug}`}

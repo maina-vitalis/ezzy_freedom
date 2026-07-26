@@ -342,15 +342,15 @@ function AboutUs() {
             </CardContent>
           </Card>
 
-          <Card className="border-blue-500/20 bg-gradient-to-br from-blue-500/5 to-blue-500/10 p-8">
+          <Card className="border-primary/20 bg-gradient-to-br from-blue-500/5 to-primary/10 p-8">
             <CardContent className="space-y-4 p-0">
               <div className="mb-4 flex items-center gap-3">
-                <Globe className="text-blue-600" size={28} />
+                <Globe className="text-primary" size={28} />
                 <h3 className="text-2xl font-bold">Our Vision</h3>
               </div>
               <p className="leading-relaxed text-muted-foreground">
                 We envision a future where{" "}
-                <strong className="text-blue-600">
+                <strong className="text-primary">
                   recovery support groups
                 </strong>{" "}
                 are established in all sub-counties, providing accessible and
@@ -358,7 +358,7 @@ function AboutUs() {
               </p>
               <p className="leading-relaxed text-muted-foreground">
                 Additionally, we aim to create a comprehensive{" "}
-                <strong className="text-blue-600">digital platform</strong> that
+                <strong className="text-primary">digital platform</strong> that
                 offers round-the-clock access to mental health support services,
                 ensuring help is always within reach for every Kenyan.
               </p>

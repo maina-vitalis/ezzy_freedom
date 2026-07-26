@@ -79,7 +79,7 @@ function Articles() {
                 <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
                   Mental Health
                 </span>
-                <span className="rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-blue-600">
+                <span className="rounded-full bg-blue-500/10 px-2 py-1 text-xs font-medium text-primary">
                   Inspiration
                 </span>
                 <span className="rounded-full bg-green-500/10 px-2 py-1 text-xs font-medium text-green-600">
@@ -104,7 +104,7 @@ function Articles() {
 
       {/* Call to Action Section */}
       <div className="text-center">
-        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-gradient-to-r from-green-500/10 to-blue-500/10 p-6 sm:flex-row">
+        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-green-500/20 bg-gradient-to-r from-green-500/10 to-primary/10 p-6 sm:flex-row">
           <div className="text-center sm:text-left">
             <h4 className="mb-1 font-semibold text-foreground">
               Stay Informed & Inspired

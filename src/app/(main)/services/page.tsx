@@ -92,7 +92,7 @@ async function Services() {
 
       {/* Services Overview Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Heart className="text-primary" size={24} />
@@ -104,7 +104,7 @@ async function Services() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Users className="text-primary" size={24} />
@@ -116,7 +116,7 @@ async function Services() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
           <CardContent className="space-y-3 p-6 text-center">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Shield className="text-primary" size={24} />
@@ -254,7 +254,7 @@ async function Services() {
       </div>
 
       {/* Call to Action Section */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10">
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -271,7 +271,7 @@ async function Services() {
             <Button
               size="lg"
               asChild
-              className="rounded-full bg-gradient-to-r from-primary to-blue-600 px-8 hover:from-primary/90 hover:to-blue-600/90"
+              className="rounded-full bg-gradient-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
             >
               <Link
                 href="/users/appointments"

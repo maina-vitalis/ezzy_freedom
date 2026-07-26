@@ -60,7 +60,7 @@ async function Services() {
 
       {/* Call to Action */}
       <div className="pt-8 text-center">
-        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10 p-6 sm:flex-row">
+        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10 p-6 sm:flex-row">
           <div className="flex items-center gap-2 text-primary">
             <Users className="fill-current" size={20} />
             <span className="font-medium">Discover All Our Services</span>

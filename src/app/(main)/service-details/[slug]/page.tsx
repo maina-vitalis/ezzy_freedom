@@ -173,7 +173,7 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
           </div>
 
           {/* Service Features */}
-          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-blue-500/5">
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <h3 className="font-bold">What&apos;s Included</h3>
               <div className="grid gap-3 md:grid-cols-2">
@@ -201,7 +201,7 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
           <div className="grid gap-3 sm:grid-cols-2">
             <Button
               size="lg"
-              className="rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg hover:from-primary/90 hover:to-blue-600/90"
+              className="rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg hover:from-primary/80 hover:to-primary/60"
               asChild
             >
               <Link
@@ -329,7 +329,7 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
       </Card>
 
       {/* Bottom CTA Section */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10">
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
@@ -346,7 +346,7 @@ async function ServiceDetails(props: { params: ServiceDetailsProps }) {
             <Button
               size="lg"
               asChild
-              className="rounded-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+              className="rounded-full bg-gradient-to-r from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60"
             >
               <Link
                 href="/users/appointments"

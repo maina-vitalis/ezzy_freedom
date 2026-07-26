@@ -8,18 +8,19 @@ datasource db {
 }
 
 model User {
-  id            String        @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String
   email         String
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  role          Role          @default(USER)
+  role          Role           @default(USER)
   sessions      Session[]
   accounts      Account[]
   appointments  Appointment[]
   transactions  Transaction[]
+  purchases     UserPurchase[]
 
   @@unique([email])
   @@map("user")
@@ -88,7 +89,7 @@ model Appointment {
 }
 
 model Books {
-  id             String        @id @default(cuid())
+  id             String         @id @default(cuid())
   coverImage     String
   price          Int
   highlights     String
@@ -96,10 +97,12 @@ model Books {
   targetAudience String
   downLoadUrl    String
   slug           String
-  title          String        @unique
+  title          String         @unique
   bookOverview   String
   fileKey        String
+  r2Key          String? // Cloudflare R2 object key for secure downloads
   transactions   Transaction[]
+  purchases      UserPurchase[]
 }
 
 model Service {
@@ -113,17 +116,19 @@ model Service {
 }
 
 model Article {
-  id           String        @id @default(uuid())
-  title        String        @unique
+  id           String         @id @default(uuid())
+  title        String         @unique
   coverImage   String
   downloadUrl  String
-  publishDate  DateTime      @default(now())
+  r2Key        String? // Cloudflare R2 object key for secure downloads
+  publishDate  DateTime       @default(now())
   description  String
   slug         String
   price        Int
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now()) @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now()) @updatedAt
   transactions Transaction[]
+  purchases    UserPurchase[]
 }
 
 model Transaction {
@@ -166,6 +171,23 @@ model Transaction {
   updatedAt DateTime @updatedAt
 
   @@map("transactions")
+}
+
+// Tracks purchased items per user (their library)
+model UserPurchase {
+  id        String          @id @default(cuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  itemType  TransactionType
+  bookId    String?
+  book      Books?          @relation(fields: [bookId], references: [id], onDelete: SetNull)
+  articleId String?
+  article   Article?        @relation(fields: [articleId], references: [id], onDelete: SetNull)
+  createdAt DateTime        @default(now())
+
+  @@unique([userId, bookId])
+  @@unique([userId, articleId])
+  @@map("user_purchases")
 }
 
 enum Role {

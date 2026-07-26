@@ -37,7 +37,7 @@ async function page() {
               <p className="text-center">
                 <Link
                   href={"/sign-up"}
-                  className="text-blue-500 hover:underline"
+                  className="text-primary hover:underline"
                 >
                   Don&apos;t have an account? Sign Up
                 </Link>

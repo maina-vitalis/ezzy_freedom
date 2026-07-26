@@ -90,7 +90,7 @@ function Appointment() {
         </div>
 
         {/* Right Side - CTA Card */}
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-primary/10 to-blue-500/10 p-8 shadow-xl">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/10 p-8 shadow-xl">
           <CardContent className="space-y-6 p-0 text-center">
             <div className="space-y-4">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
@@ -117,7 +117,7 @@ function Appointment() {
               <Button
                 asChild
                 size="lg"
-                className="w-full transform rounded-full bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/90 hover:to-blue-600/90 hover:shadow-xl"
+                className="w-full transform rounded-full bg-gradient-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
               >
                 <Link
                   href="/users/dashboard/appointments"
@@ -139,7 +139,7 @@ function Appointment() {
 
       {/* Bottom CTA */}
       <div className="text-center">
-        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10 p-6 sm:flex-row">
+        <div className="inline-flex flex-col items-center gap-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10 p-6 sm:flex-row">
           <div className="text-center sm:text-left">
             <h4 className="mb-1 font-semibold text-foreground">
               Need immediate support?

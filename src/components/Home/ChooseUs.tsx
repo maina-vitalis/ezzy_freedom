@@ -173,7 +173,7 @@ function ChooseUs() {
             {stats.map((stat, index) => (
               <Card
                 key={index}
-                className="border-0 bg-gradient-to-br from-primary/5 to-blue-500/5 p-4 text-center shadow-md transition-all duration-300 hover:shadow-lg"
+                className="border-0 bg-gradient-to-br from-primary/5 to-primary/5 p-4 text-center shadow-md transition-all duration-300 hover:shadow-lg"
               >
                 <CardContent className="space-y-1 p-0">
                   <div className="text-2xl font-bold text-primary">
@@ -188,7 +188,7 @@ function ChooseUs() {
           </div>
 
           {/* Additional Visual Balance Element */}
-          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-blue-500/5">
+          <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/5">
             <CardContent className="space-y-4 p-6">
               <div className="text-center">
                 <h4 className="text-lg font-bold text-foreground">
@@ -223,7 +223,7 @@ function ChooseUs() {
       </div>
 
       {/* Bottom Section - Additional Trust Indicators */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-blue-500/10">
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 to-primary/10">
         <CardContent className="p-8">
           <div className="grid gap-8 text-center md:grid-cols-3">
             <div className="space-y-4">

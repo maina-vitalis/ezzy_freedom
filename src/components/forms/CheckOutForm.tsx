@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { sendArticle } from "@/app/(main)/article-checkout/actions/sendArticle";
-import { sendBook } from "@/app/(main)/book-checkout/actions/sendBook";
 import { sendStkPush } from "@/util/mpesaActions/stkPush";
 import { stkPushQuery } from "@/util/mpesaActions/stkPushQuery";
 import { checkOutSchema, CheckOutTypes } from "@/util/validation";
@@ -104,15 +102,8 @@ function CheckOutForm({ user, item, type }: CheckOutFormProps) {
     },
 
     onSuccess: async () => {
-      toast.success("Payment confirmed successfully");
-
-      if (type === "article") {
-        await sendArticle(item.id);
-        router.replace(`/download`);
-      } else {
-        await sendBook(item.id);
-        router.replace(`/download`);
-      }
+      toast.success("Payment confirmed! Redirecting to your library...");
+      router.replace(`/users/${user.name}/library`);
     },
     onError: (error) => {
       toast.error(error.message);

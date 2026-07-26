@@ -83,7 +83,7 @@ export default function ContactForm() {
           <p className="text-sm">For any assistance, call us directly:</p>
           <a
             href="tel:+254791672961"
-            className="text-sm font-medium text-blue-500 underline"
+            className="text-sm font-medium text-primary underline"
           >
             click here
           </a>
@@ -96,7 +96,7 @@ export default function ContactForm() {
             <Mail size={50} className="text-primary" />
             <p className="text-lg font-bold">Email</p>
             <p className="text-sm">Reach out via email for inquiries:</p>
-            <p className="text-sm font-semibold text-blue-500 underline">
+            <p className="text-sm font-semibold text-primary underline">
               info@ezzyfreedomandhope.or.ke
             </p>
           </Card>
@@ -122,7 +122,7 @@ export default function ContactForm() {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold text-blue-500 underline"
+            className="text-sm font-semibold text-primary underline"
           >
             Click Here
           </a>{" "}

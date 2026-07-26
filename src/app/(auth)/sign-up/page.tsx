@@ -33,7 +33,7 @@ async function page() {
             <SignupForm />
             <Link
               href={"/sign-in"}
-              className="block text-center text-blue-500 hover:underline"
+              className="block text-center text-primary hover:underline"
             >
               Already have an account? Login
             </Link>

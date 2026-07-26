@@ -1,5 +1,6 @@
+import prisma from "@/lib/prisma";
 import { updateTransactionFromCallback } from "@/lib/transactions";
-import { TransactionStatus } from "@prisma/client";
+import { TransactionStatus, TransactionType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // Handle M-Pesa Callback
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
           case "MpesaReceiptNumber":
             mpesaReceiptNumber = item.Value;
             break;
-          case "TransactionDate":
+          case "TransactionDate": {
             // Convert M-Pesa timestamp to Date
             const timestamp = item.Value.toString();
             transactionDate = new Date(
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
                 `${timestamp.slice(8, 10)}:${timestamp.slice(10, 12)}:${timestamp.slice(12, 14)}`,
             );
             break;
+          }
           case "MpesaTransactionId":
             mpesaTransactionId = item.Value;
             break;
@@ -68,11 +70,51 @@ export async function POST(req: NextRequest) {
       notes: `M-Pesa callback processed. Result: ${ResultDesc}`,
     });
 
-    if (updateResult.success) {
-      console.log(
-        "✅ Transaction updated successfully:",
-        updateResult.data?.id,
-      );
+    if (updateResult.success && updateResult.data) {
+      console.log("✅ Transaction updated successfully:", updateResult.data.id);
+
+      // ── Grant library access on successful payment ─────────────────────────
+      // Create a UserPurchase record so the user can access their content
+      // via the secure /api/library/download endpoint.
+      if (status === TransactionStatus.COMPLETED) {
+        const tx = updateResult.data;
+        try {
+          if (
+            tx.itemType === TransactionType.BOOK &&
+            tx.bookId &&
+            tx.userId
+          ) {
+            await prisma.userPurchase.upsert({
+              where: { userId_bookId: { userId: tx.userId, bookId: tx.bookId } },
+              create: {
+                userId: tx.userId,
+                itemType: TransactionType.BOOK,
+                bookId: tx.bookId,
+              },
+              update: {}, // idempotent – do nothing if already exists
+            });
+            console.log(`📚 Library access granted: userId=${tx.userId}, bookId=${tx.bookId}`);
+          } else if (
+            tx.itemType === TransactionType.ARTICLE &&
+            tx.articleId &&
+            tx.userId
+          ) {
+            await prisma.userPurchase.upsert({
+              where: { userId_articleId: { userId: tx.userId, articleId: tx.articleId } },
+              create: {
+                userId: tx.userId,
+                itemType: TransactionType.ARTICLE,
+                articleId: tx.articleId,
+              },
+              update: {},
+            });
+            console.log(`📄 Library access granted: userId=${tx.userId}, articleId=${tx.articleId}`);
+          }
+        } catch (purchaseError) {
+          // Log but don't fail the callback response – Safaricom expects 200
+          console.error("❌ Failed to create UserPurchase:", purchaseError);
+        }
+      }
     } else {
       console.error("❌ Failed to update transaction:", updateResult.error);
     }

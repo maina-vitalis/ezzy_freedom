@@ -419,7 +419,7 @@ export default function AdminDashboard() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Content Engagement</span>
-              <span className="font-medium text-blue-600">+8.3%</span>
+              <span className="font-medium text-primary">+8.3%</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Appointment Rate</span>
