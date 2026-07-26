@@ -18,16 +18,24 @@ export async function POST(req: Request) {
 
     // Parse and validate incoming article data with Zod schema
     const articleData: ArticleType = await req.json();
-    const { title, coverImage, downloadUrl, publishDate, description, price } =
-      ArticleSchema.parse(articleData);
-
-    const parsedArticleData = {
+    const {
       title,
       coverImage,
       downloadUrl,
       publishDate,
       description,
       price,
+      r2Key,
+    } = ArticleSchema.parse(articleData);
+
+    const parsedArticleData = {
+      title,
+      coverImage,
+      downloadUrl: downloadUrl || `r2://${r2Key}`,
+      publishDate,
+      description,
+      price,
+      r2Key,
       slug: slugify(title, {
         lower: true,
         trim: true,

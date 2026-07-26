@@ -2,6 +2,7 @@
 "use client";
 
 import LoadingButton from "@/components/LoadingButton";
+import R2Upload from "@/components/R2Upload";
 import TinyMCE from "@/components/TinyMCE";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -20,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { UploadDropzone } from "@/util/uploadthing";
+import { Article } from "@/generated/prisma/client";
 import { ArticleSchema, ArticleType } from "@/util/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -34,46 +35,43 @@ import { toast } from "sonner";
 import { Label } from "../ui/label";
 
 interface ArticleFormProps {
-  article?: (ArticleType & { id?: string }) | null;
+  article?: Article | null;
   method: "create" | "update";
 }
 
 export default function ArticleForm({ article, method }: ArticleFormProps) {
   const [imageUrl, setImageUrl] = useState(article?.coverImage || "");
-  const [bookName, setBookName] = useState(article?.downloadUrl);
+  const [pdfName, setPdfName] = useState(
+    article?.r2Key ? article.r2Key.split("/").pop() : undefined,
+  );
 
   const form = useForm<ArticleType>({
     resolver: zodResolver(ArticleSchema),
     defaultValues: {
       title: article?.title || "",
       coverImage: article?.coverImage || "",
-      downloadUrl: article?.downloadUrl || "",
+      downloadUrl: "",
       publishDate: article?.publishDate || new Date(),
       description: article?.description || "",
       price: article?.price || 0,
+      r2Key: article?.r2Key || "",
     },
   });
 
-  // Reset form
   const handleReset = () => {
-    form.reset();
+    form.reset({
+      title: "",
+      coverImage: "",
+      downloadUrl: "",
+      publishDate: new Date(),
+      description: "",
+      price: 0,
+      r2Key: "",
+    });
     setImageUrl("");
+    setPdfName(undefined);
   };
 
-  // Handle image upload
-  const handleUploadImage = (files: any) => {
-    const url = files[0].url;
-    form.setValue("coverImage", url);
-    setImageUrl(url);
-  };
-
-  //handle the pdf
-  async function handleUploadPdf(files: any) {
-    form.setValue("downloadUrl", files[0].url);
-    setBookName(files[0].name);
-  }
-
-  // Mutation for creating/updating article
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: ArticleType) => {
       if (method === "create") {
@@ -87,7 +85,7 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
       toast.success(
         `${method === "create" ? "Created" : "Updated"} article successfully`,
       );
-      handleReset();
+      if (method === "create") handleReset();
     },
     onError: (error: any) => {
       console.error(error);
@@ -97,16 +95,16 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
     },
   });
 
-  // Submit handler
   const onSubmit = (data: ArticleType) => {
     mutate(data);
   };
+
+  const hasPdf = Boolean(form.watch("r2Key"));
 
   return (
     <div className="mx-auto max-w-4xl rounded-lg bg-background p-6 shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          {/* Article Name */}
           <FormField
             control={form.control}
             name="title"
@@ -127,7 +125,6 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
             )}
           />
 
-          {/* Publish Date */}
           <FormField
             control={form.control}
             name="publishDate"
@@ -202,7 +199,6 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
             )}
           />
 
-          {/* Article Content */}
           <FormField
             control={form.control}
             name="description"
@@ -219,37 +215,43 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
             )}
           />
 
-          {/* Article Upload */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="flex-1">
-              <Label>Article Upload</Label>
-              {bookName && (
-                <div>
-                  <p className="text-sm font-semibold">
-                    You have already uploaded the: {bookName}
+            <div className="flex-1 space-y-2">
+              <Label>
+                Article PDF <span className="text-destructive">*</span>
+              </Label>
+              {hasPdf ? (
+                <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
+                  <p className="font-semibold">
+                    PDF on R2{pdfName ? `: ${pdfName}` : ""}
                   </p>
-
-                  <i className="text-sm">
-                    to upload a new book click on the{" "}
-                    <span className="font-bold text-primary">
-                      reset form button
-                    </span>
-                  </i>
                 </div>
+              ) : (
+                <p className="text-sm text-amber-600">
+                  No PDF on Cloudflare yet — upload one to enable downloads.
+                </p>
               )}
-
-              <UploadDropzone
-                endpoint={"articleUpload"}
-                onClientUploadComplete={handleUploadPdf}
-                onUploadError={(error) =>
-                  console.error("Upload failed:", error)
-                }
+              <R2Upload
+                folder="articles/pdfs"
+                accept="application/pdf,.pdf"
+                label="Upload PDF to R2"
+                onUploaded={({ key, name }) => {
+                  form.setValue("r2Key", key, { shouldValidate: true });
+                  form.setValue("downloadUrl", "");
+                  setPdfName(name);
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="r2Key"
+                render={() => <FormMessage />}
               />
             </div>
 
-            {/* image upload */}
-            <div>
-              <FormLabel>Article Image</FormLabel>
+            <div className="space-y-2">
+              <FormLabel>
+                Article Image <span className="text-destructive">*</span>
+              </FormLabel>
               {imageUrl && (
                 <div className="relative mt-2 h-48 w-full">
                   <Image
@@ -257,21 +259,34 @@ export default function ArticleForm({ article, method }: ArticleFormProps) {
                     alt="Article image"
                     fill
                     className="rounded-md object-cover"
+                    unoptimized
                   />
                 </div>
               )}
-              <UploadDropzone
-                endpoint="articleCoverImage"
-                onClientUploadComplete={handleUploadImage}
-                onUploadError={(error) => {
-                  toast.error(`Upload failed: ${error.message}`);
+              <R2Upload
+                folder="articles/covers"
+                accept="image/*"
+                label="Upload cover to R2"
+                publicAsset
+                onUploaded={({ publicUrl }) => {
+                  if (!publicUrl) {
+                    toast.error("R2_PUBLIC_URL is not configured");
+                    return;
+                  }
+                  form.setValue("coverImage", publicUrl, {
+                    shouldValidate: true,
+                  });
+                  setImageUrl(publicUrl);
                 }}
-                className="mt-2"
+              />
+              <FormField
+                control={form.control}
+                name="coverImage"
+                render={() => <FormMessage />}
               />
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="mt-6 flex w-full flex-col gap-4 md:flex-row">
             <LoadingButton
               loading={isPending}

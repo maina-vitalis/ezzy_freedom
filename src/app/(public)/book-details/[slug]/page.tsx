@@ -1,3 +1,4 @@
+import { TransactionType } from "@/generated/prisma/client";
 import {
   Accordion,
   AccordionContent,
@@ -66,6 +67,35 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
   //callback url
   const callbackUrl = encodeURIComponent(`/book-details/${slug}` || "/");
+
+  const hasPurchased =
+    session?.user?.id && book
+      ? Boolean(
+          await prisma.userPurchase.findFirst({
+            where: { userId: session.user.id, bookId: book.id },
+            select: { id: true },
+          }),
+        )
+      : false;
+
+  // Free books: grant library access for logged-in users (no checkout).
+  if (session?.user?.id && book && book.price === 0 && !hasPurchased) {
+    await prisma.userPurchase.upsert({
+      where: {
+        userId_bookId: { userId: session.user.id, bookId: book.id },
+      },
+      create: {
+        userId: session.user.id,
+        itemType: TransactionType.BOOK,
+        bookId: book.id,
+      },
+      update: {},
+    });
+  }
+
+  const ownsBook =
+    hasPurchased ||
+    Boolean(session?.user?.id && book && book.price === 0);
 
   if (!book) {
     return (
@@ -140,25 +170,23 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                 </p>
               </div>
 
-              {/* Purchase Button */}
-              {session?.session ? (
-                book.price === 0 ? (
-                  <Button
-                    size="lg"
-                    className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
-                    asChild
+              {/* Purchase / owned actions */}
+              {ownsBook ? (
+                <Button
+                  size="lg"
+                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  asChild
+                >
+                  <Link
+                    href="/dashboard/library"
+                    className="flex items-center justify-center gap-2"
                   >
-                    <a
-                      href={book.downLoadUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2"
-                    >
-                      <Download size={20} />
-                      <span className="font-semibold">Download Free</span>
-                    </a>
-                  </Button>
-                ) : (
+                    <Download size={20} />
+                    <span className="font-semibold">Go to Library</span>
+                    <ArrowRight size={16} />
+                  </Link>
+                </Button>
+              ) : session?.session ? (
                   <Button
                     size="lg"
                     className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
@@ -173,7 +201,6 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                       <ArrowRight size={16} />
                     </Link>
                   </Button>
-                )
               ) : (
                 <Button
                   size="lg"
@@ -194,7 +221,9 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               )}
 
               <p className="text-center text-xs text-muted-foreground">
-                Secure checkout • 30-day money-back guarantee • Instant access
+                {ownsBook
+                  ? "You already own this book — download it from your library."
+                  : "Secure checkout • 30-day money-back guarantee • Instant access"}
               </p>
             </CardContent>
           </Card>
@@ -389,7 +418,22 @@ async function ProductDetails(props: { params: ProductPageProps }) {
           </div>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {session?.session ? (
+            {ownsBook ? (
+              <Button
+                size="lg"
+                asChild
+                className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+              >
+                <Link
+                  href="/dashboard/library"
+                  className="flex items-center gap-2"
+                >
+                  <Download size={20} />
+                  Open in Library
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+            ) : session?.session ? (
               <Button
                 size="lg"
                 asChild

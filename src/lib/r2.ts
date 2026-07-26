@@ -53,3 +53,19 @@ export async function getSignedUploadUrl(
   });
   return getSignedUrl(getR2Client(), command, { expiresIn: expiresInSeconds });
 }
+
+/** Public object URL for covers/images (requires R2_PUBLIC_URL, e.g. https://pub-xxx.r2.dev). */
+export function getPublicObjectUrl(r2Key: string): string {
+  const base = process.env.R2_PUBLIC_URL?.replace(/\/$/, "");
+  if (!base) {
+    throw new Error(
+      "Missing R2_PUBLIC_URL. Set it to your R2 public bucket URL or custom domain.",
+    );
+  }
+  return `${base}/${r2Key}`;
+}
+
+export function buildObjectKey(folder: string, filename: string): string {
+  const safeName = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+  return `${folder}/${Date.now()}-${safeName}`;
+}

@@ -7,15 +7,10 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * GET /api/library/download?itemType=BOOK&itemId=xxx
  *
- * Security model:
- * 1. User must be authenticated.
- * 2. A completed UserPurchase record must exist linking the user to this item.
- * 3. The R2 key is retrieved server-side and a short-lived (1h) pre-signed URL
- *    is returned. The real R2 URL is never exposed to the client.
+ * Books and articles require R2 keys — no UploadThing fallback.
  */
 export async function GET(req: NextRequest) {
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────────────
     const session = await auth.api.getSession({ headers: await headers() });
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -23,7 +18,7 @@ export async function GET(req: NextRequest) {
 
     const userId = session.user.id;
     const { searchParams } = new URL(req.url);
-    const itemType = searchParams.get("itemType"); // "BOOK" | "ARTICLE"
+    const itemType = searchParams.get("itemType");
     const itemId = searchParams.get("itemId");
 
     if (!itemType || !itemId) {
@@ -37,12 +32,44 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Invalid itemType" }, { status: 400 });
     }
 
-    // ── 2. Verify ownership ──────────────────────────────────────────────────
+    if (itemType === "BOOK") {
+      const book = await prisma.books.findUnique({
+        where: { id: itemId },
+        select: { r2Key: true, price: true },
+      });
+
+      if (!book) {
+        return NextResponse.json({ error: "Book not found" }, { status: 404 });
+      }
+
+      if (book.price !== 0) {
+        const purchase = await prisma.userPurchase.findFirst({
+          where: { userId, bookId: itemId },
+        });
+        if (!purchase) {
+          return NextResponse.json(
+            { error: "You have not purchased this item" },
+            { status: 403 },
+          );
+        }
+      }
+
+      if (!book.r2Key) {
+        return NextResponse.json(
+          {
+            error:
+              "Download file not available. The admin needs to re-upload this book to Cloudflare R2.",
+          },
+          { status: 404 },
+        );
+      }
+
+      const signedUrl = await getSignedDownloadUrl(book.r2Key, 3600);
+      return NextResponse.json({ url: signedUrl });
+    }
+
     const purchase = await prisma.userPurchase.findFirst({
-      where: {
-        userId,
-        ...(itemType === "BOOK" ? { bookId: itemId } : { articleId: itemId }),
-      },
+      where: { userId, articleId: itemId },
     });
 
     if (!purchase) {
@@ -52,43 +79,22 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // ── 3. Get the R2 key ────────────────────────────────────────────────────
-    let r2Key: string | null | undefined;
+    const article = await prisma.article.findUnique({
+      where: { id: itemId },
+      select: { r2Key: true },
+    });
 
-    if (itemType === "BOOK") {
-      const book = await prisma.books.findUnique({
-        where: { id: itemId },
-        select: { r2Key: true, downLoadUrl: true },
-      });
-      r2Key = book?.r2Key;
-
-      // Fallback: if no R2 key yet, return the legacy URL (uploadthing)
-      if (!r2Key && book?.downLoadUrl) {
-        return NextResponse.json({ url: book.downLoadUrl });
-      }
-    } else {
-      const article = await prisma.article.findUnique({
-        where: { id: itemId },
-        select: { r2Key: true, downloadUrl: true },
-      });
-      r2Key = article?.r2Key;
-
-      // Fallback: if no R2 key yet, return the legacy URL
-      if (!r2Key && article?.downloadUrl) {
-        return NextResponse.json({ url: article.downloadUrl });
-      }
-    }
-
-    if (!r2Key) {
+    if (!article?.r2Key) {
       return NextResponse.json(
-        { error: "Download file not available" },
+        {
+          error:
+            "Download file not available. The admin needs to re-upload this article to Cloudflare R2.",
+        },
         { status: 404 },
       );
     }
 
-    // ── 4. Generate pre-signed URL (1 hour) ──────────────────────────────────
-    const signedUrl = await getSignedDownloadUrl(r2Key, 3600);
-
+    const signedUrl = await getSignedDownloadUrl(article.r2Key, 3600);
     return NextResponse.json({ url: signedUrl });
   } catch (error) {
     console.error("Error generating download URL:", error);

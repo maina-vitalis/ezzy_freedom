@@ -226,8 +226,9 @@ function LibraryItemCard({
           </Button>
         </div>
         {!hasR2Key && (
-          <p className="text-center text-[11px] text-muted-foreground">
-            * Legacy download link (UploadThing). Admin can migrate to R2.
+          <p className="text-center text-[11px] text-amber-600">
+            File not on Cloudflare yet — ask an admin to re-upload this{" "}
+            {itemType === "BOOK" ? "book" : "article"}.
           </p>
         )}
       </CardContent>

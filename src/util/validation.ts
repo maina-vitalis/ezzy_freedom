@@ -52,10 +52,12 @@ export const BookSchema = z.object({
   highlights: requiredString,
   additionalInfo: requiredString,
   targetAudience: requiredString,
-  downloadUrl: requiredString,
+  /** Kept for DB compatibility; PDF access uses r2Key + signed URLs. */
+  downloadUrl: z.string(),
   title: requiredString,
   bookOverview: requiredString,
   fileKey: z.string(),
+  r2Key: requiredString,
 });
 
 export type BookTypes = z.infer<typeof BookSchema>;
@@ -74,7 +76,7 @@ export type ServiceTypes = z.infer<typeof ServiceSchema>;
 export const ArticleSchema = z.object({
   title: z.string().min(1, "An article name is required"),
   coverImage: requiredString,
-  downloadUrl: requiredString,
+  downloadUrl: z.string(),
   publishDate: z.date({
     error: (issue) =>
       issue.input === undefined
@@ -88,6 +90,7 @@ export const ArticleSchema = z.object({
         ? "A tour price is required"
         : "Must be a valid number",
   }),
+  r2Key: requiredString,
 });
 export type ArticleType = z.infer<typeof ArticleSchema>;
 

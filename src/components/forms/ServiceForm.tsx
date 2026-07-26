@@ -17,7 +17,7 @@ import { Textarea } from "../ui/textarea";
 import TinyMCE from "../TinyMCE";
 import { Label } from "../ui/label";
 import Image from "next/image";
-import { UploadDropzone } from "@/util/uploadthing";
+import R2Upload from "@/components/R2Upload";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -48,11 +48,6 @@ function ServiceForm({ method, service }: ServiceFormProps) {
   function handleReset() {
     form.reset();
     setCoverImage(undefined);
-  }
-
-  async function handleUploadImage(files: any) {
-    form.setValue("image", files[0].url);
-    setCoverImage(files[0].url);
   }
 
   //mutation api call
@@ -150,8 +145,10 @@ function ServiceForm({ method, service }: ServiceFormProps) {
           )}
         />
 
-        <div className="mb-5 flex-1">
-          <Label>Cover image</Label>
+        <div className="mb-5 flex-1 space-y-2">
+          <Label>
+            Cover image <span className="text-destructive">*</span>
+          </Label>
 
           <div className="relative min-h-36 flex-1">
             {coverImage && (
@@ -160,14 +157,29 @@ function ServiceForm({ method, service }: ServiceFormProps) {
                 alt="cover image"
                 fill
                 className="mt-2 w-full object-cover"
+                unoptimized
               />
             )}
           </div>
 
-          <UploadDropzone
-            endpoint={"serviceImage"}
-            onClientUploadComplete={handleUploadImage}
-            onUploadError={(error) => console.error("Upload failed:", error)}
+          <R2Upload
+            folder="services/images"
+            accept="image/*"
+            label="Upload image to R2"
+            publicAsset
+            onUploaded={({ publicUrl }) => {
+              if (!publicUrl) {
+                toast.error("R2_PUBLIC_URL is not configured");
+                return;
+              }
+              form.setValue("image", publicUrl, { shouldValidate: true });
+              setCoverImage(publicUrl);
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="image"
+            render={() => <FormMessage />}
           />
         </div>
 

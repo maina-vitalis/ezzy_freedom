@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import TinyMCE from "../TinyMCE";
 import { Textarea } from "../ui/textarea";
-import { UploadDropzone } from "@/util/uploadthing";
+import R2Upload from "@/components/R2Upload";
 import { Label } from "../ui/label";
 import { useState } from "react";
 import LoadingButton from "../LoadingButton";
@@ -33,43 +33,43 @@ interface AddBookFormProps {
 
 function BookForm({ book, method }: AddBookFormProps) {
   const [coverImage, setCoverImage] = useState(book?.coverImage || undefined);
-  const [bookName, setBookName] = useState(`${book?.title} pdf` || undefined);
-  // const [isPending, startTransition] = useTransition();
+  const [bookName, setBookName] = useState(
+    book?.r2Key ? book.r2Key.split("/").pop() : undefined,
+  );
 
   const form = useForm<BookTypes>({
     resolver: zodResolver(BookSchema),
     defaultValues: {
       additionalInfo: book?.additionalInfo || "",
       coverImage: book?.coverImage || "",
-      downloadUrl: book?.downLoadUrl || "",
+      downloadUrl: "",
       highlights: book?.highlights || "",
       bookOverview: book?.bookOverview || "",
       price: book?.price || 0,
       targetAudience: book?.targetAudience || "",
       title: book?.title || "",
-      fileKey: book?.fileKey || "",
+      fileKey: book?.r2Key || book?.fileKey || "",
+      r2Key: book?.r2Key || "",
     },
   });
 
-  //handle reset
   function handleReset() {
-    form.reset();
+    form.reset({
+      additionalInfo: "",
+      coverImage: "",
+      downloadUrl: "",
+      highlights: "",
+      bookOverview: "",
+      price: 0,
+      targetAudience: "",
+      title: "",
+      fileKey: "",
+      r2Key: "",
+    });
     setCoverImage(undefined);
     setBookName(undefined);
   }
 
-  async function handleUploadPdf(files: any) {
-    form.setValue("downloadUrl", files[0].url);
-    form.setValue("fileKey", files[0].key);
-    setBookName(files[0].name);
-  }
-
-  async function handleUploadImage(files: any) {
-    form.setValue("coverImage", files[0].url);
-    setCoverImage(files[0].url);
-  }
-
-  //mutation
   const { mutate, isPending } = useMutation({
     mutationFn: async (bookData: BookTypes) => {
       if (method === "create") {
@@ -82,7 +82,7 @@ function BookForm({ book, method }: AddBookFormProps) {
     },
     onSuccess: () => {
       toast.success("success");
-      handleReset();
+      if (method === "create") handleReset();
     },
     onError: (error: any) => {
       console.log(error);
@@ -93,10 +93,11 @@ function BookForm({ book, method }: AddBookFormProps) {
     },
   });
 
-  //submit function
   function onSubmit(data: BookTypes) {
     mutate(data);
   }
+
+  const hasPdf = Boolean(form.watch("r2Key"));
 
   return (
     <div>
@@ -221,34 +222,48 @@ function BookForm({ book, method }: AddBookFormProps) {
           />
 
           <div className="flex flex-col gap-5 md:flex-row">
-            <div className="flex-1">
-              <Label>Book Upload</Label>
-              {bookName && (
-                <div>
-                  <p className="text-sm font-semibold">
-                    You have already uploaded the: {bookName}
+            <div className="flex-1 space-y-2">
+              <Label>
+                Book PDF <span className="text-destructive">*</span>
+              </Label>
+              {hasPdf ? (
+                <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm">
+                  <p className="font-semibold">
+                    PDF on R2
+                    {bookName ? `: ${bookName}` : ""}
                   </p>
-
-                  <i className="text-sm">
-                    to upload a new book click on the{" "}
-                    <span className="font-bold text-primary">
-                      reset form button
-                    </span>
-                  </i>
+                  <p className="mt-1 text-muted-foreground">
+                    Upload a new file below to replace it. Old UploadThing links
+                    are not used.
+                  </p>
                 </div>
+              ) : (
+                <p className="text-sm text-amber-600">
+                  No PDF on Cloudflare yet — upload one to enable downloads.
+                </p>
               )}
-
-              <UploadDropzone
-                endpoint={"bookUpload"}
-                onClientUploadComplete={handleUploadPdf}
-                onUploadError={(error) =>
-                  console.error("Upload failed:", error)
-                }
+              <R2Upload
+                folder="books/pdfs"
+                accept="application/pdf,.pdf"
+                label="Upload PDF to R2"
+                onUploaded={({ key, name }) => {
+                  form.setValue("r2Key", key, { shouldValidate: true });
+                  form.setValue("fileKey", key);
+                  form.setValue("downloadUrl", "");
+                  setBookName(name);
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="r2Key"
+                render={() => <FormMessage />}
               />
             </div>
 
-            <div className="flex-1">
-              <Label>Cover image</Label>
+            <div className="flex-1 space-y-2">
+              <Label>
+                Cover image <span className="text-destructive">*</span>
+              </Label>
               {coverImage && (
                 <div className="relative min-h-36 flex-1">
                   <Image
@@ -256,16 +271,30 @@ function BookForm({ book, method }: AddBookFormProps) {
                     alt="cover image"
                     fill
                     className="mt-2 w-full object-cover"
+                    unoptimized
                   />
                 </div>
               )}
-
-              <UploadDropzone
-                endpoint={"coverImage"}
-                onClientUploadComplete={handleUploadImage}
-                onUploadError={(error) =>
-                  console.error("Upload failed:", error)
-                }
+              <R2Upload
+                folder="books/covers"
+                accept="image/*"
+                label="Upload cover to R2"
+                publicAsset
+                onUploaded={({ publicUrl }) => {
+                  if (!publicUrl) {
+                    toast.error("R2_PUBLIC_URL is not configured");
+                    return;
+                  }
+                  form.setValue("coverImage", publicUrl, {
+                    shouldValidate: true,
+                  });
+                  setCoverImage(publicUrl);
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="coverImage"
+                render={() => <FormMessage />}
               />
             </div>
           </div>

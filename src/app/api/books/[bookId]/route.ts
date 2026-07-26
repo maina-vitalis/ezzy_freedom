@@ -96,13 +96,14 @@ export async function PUT(req: Request, props: { params: Params }) {
       targetAudience,
       title,
       fileKey,
+      r2Key,
     } = BookSchema.parse(data);
 
     const parsedData = {
       additionalInfo,
       bookOverview,
       coverImage,
-      downLoadUrl: downloadUrl,
+      downLoadUrl: downloadUrl || `r2://${r2Key}`,
       highlights,
       price,
       targetAudience,
@@ -111,7 +112,8 @@ export async function PUT(req: Request, props: { params: Params }) {
         lower: true,
         trim: true,
       }),
-      fileKey,
+      fileKey: fileKey || r2Key,
+      r2Key,
     };
 
     // Update book
