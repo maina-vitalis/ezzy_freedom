@@ -5,6 +5,7 @@ import LoadingScreen from "@/components/reader/LoadingScreen";
 import ReaderError from "@/components/reader/ReaderError";
 import ReaderToolbar from "@/components/reader/ReaderToolbar";
 import PdfPage from "@/components/reader/PdfPage";
+import ReaderTouchNav from "@/components/reader/ReaderTouchNav";
 import SearchPanel from "@/components/reader/SearchPanel";
 import ThumbnailPanel from "@/components/reader/ThumbnailPanel";
 import TocPanel from "@/components/reader/TocPanel";
@@ -111,6 +112,17 @@ export default function EbookReader({
     return uniq;
   }, [currentPage, pdfState.numPages, pdfState.pdf]);
 
+  const goPrev = useCallback(() => {
+    setCurrentPage((p) => Math.max(1, p - 1));
+  }, [setCurrentPage]);
+
+  const goNext = useCallback(() => {
+    setCurrentPage((p) => {
+      const max = pdfState.numPages || p + 1;
+      return Math.min(max, p + 1);
+    });
+  }, [pdfState.numPages, setCurrentPage]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
@@ -118,13 +130,10 @@ export default function EbookReader({
 
       if (e.key === "ArrowRight" || e.key === " ") {
         e.preventDefault();
-        setCurrentPage((p) => {
-          const max = pdfState.numPages || Number.POSITIVE_INFINITY;
-          return Math.min(max, p + 1);
-        });
+        goNext();
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        setCurrentPage((p) => Math.max(1, p - 1));
+        goPrev();
       } else if (e.key === "Escape" && panel !== "none") {
         setPanel("none");
       } else if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "p")) {
@@ -133,7 +142,7 @@ export default function EbookReader({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [panel, setCurrentPage, setPanel, pdfState.numPages]);
+  }, [panel, setPanel, goNext, goPrev]);
 
   const loading = access.loading || (pdfState.loading && !pdfState.pdf);
 
@@ -206,13 +215,8 @@ export default function EbookReader({
         isFullscreen={isFullscreen}
         isBookmarked={bookmarked}
         showBookmarks={isBook}
-        onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-        onNext={() =>
-          setCurrentPage((p) => {
-            const max = pdfState.numPages || p + 1;
-            return Math.min(max, p + 1);
-          })
-        }
+        onPrev={goPrev}
+        onNext={goNext}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         onToggleFit={() =>
@@ -232,8 +236,14 @@ export default function EbookReader({
       />
 
       <div className="relative flex min-h-0 flex-1">
-        <div className="flex min-w-0 flex-1 items-center justify-center overflow-hidden p-4 md:p-8">
-          <div className="relative">
+        <ReaderTouchNav
+          canPrev={currentPage > 1}
+          canNext={currentPage < (pdfState.numPages || 1)}
+          onPrev={goPrev}
+          onNext={goNext}
+          darkChrome={darkChrome}
+        >
+          <div className="pointer-events-none relative p-4 md:p-8">
             {bufferedPageNumbers.map((pageNumber) => {
               const isCurrent = pageNumber === currentPage;
               return (
@@ -255,7 +265,7 @@ export default function EbookReader({
               );
             })}
           </div>
-        </div>
+        </ReaderTouchNav>
 
         {panel === "toc" && (
           <TocPanel
