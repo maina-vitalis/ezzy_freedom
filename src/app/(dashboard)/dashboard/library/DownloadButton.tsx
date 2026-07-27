@@ -7,12 +7,12 @@ import { toast } from "sonner";
 
 interface DownloadButtonProps {
   itemId: string;
-  itemType: "BOOK" | "ARTICLE";
+  itemType: "ARTICLE";
 }
 
 /**
- * Client component that fetches a signed R2 download URL from the server,
- * then opens it in a new tab. The URL expires in 1 hour.
+ * Fetches a short-lived signed R2 download URL for articles only.
+ * Books are reader-only and must not use this component.
  */
 export default function DownloadButton({ itemId, itemType }: DownloadButtonProps) {
   const [loading, setLoading] = useState(false);

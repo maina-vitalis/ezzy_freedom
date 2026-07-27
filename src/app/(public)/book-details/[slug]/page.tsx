@@ -17,7 +17,6 @@ import {
   BookOpen,
   CheckCircle,
   Clock,
-  Download,
   Heart,
   Lock,
   Shield,
@@ -163,7 +162,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
             <CardContent className="space-y-4 p-6">
               <div className="space-y-2 text-center">
                 <p className="text-2xl font-bold text-primary">
-                  {book.price === 0 ? "Free Download" : `KES ${book.price}`}
+                  {book.price === 0 ? "Free to Read" : `KES ${book.price}`}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   Digital PDF Format
@@ -219,7 +218,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                   >
                     <Lock size={20} />
                     <span className="font-semibold">
-                      Login to {book.price === 0 ? "Download" : "Purchase"}
+                      Login to {book.price === 0 ? "Read" : "Purchase"}
                     </span>
                     <ArrowRight size={16} />
                   </Link>
@@ -228,7 +227,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
 
               <p className="text-center text-xs text-muted-foreground">
                 {ownsBook
-                  ? "You already own this book — download it from your library."
+                  ? "You already own this book — open it in the secure reader."
                   : "Secure checkout • 30-day money-back guarantee • Instant access"}
               </p>
             </CardContent>
@@ -243,7 +242,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="text-green-500" size={16} />
-                  <span>Instant download after purchase</span>
+                  <span>Instant access in the in-app reader</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="text-green-500" size={16} />
@@ -302,7 +301,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
               </div>
               <div className="text-center">
                 <div className="text-xl font-bold text-primary">500+</div>
-                <div className="text-xs text-muted-foreground">Downloads</div>
+                <div className="text-xs text-muted-foreground">Readers</div>
               </div>
             </div>
           </div>
@@ -488,7 +487,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                 Instant Access
               </div>
               <div className="text-sm text-muted-foreground">
-                Download immediately after purchase
+                Open in the secure reader after purchase
               </div>
             </div>
             <div className="space-y-2">

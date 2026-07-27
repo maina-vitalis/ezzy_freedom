@@ -36,7 +36,7 @@ export async function sendBook(bookId: string) {
       subject: `Your Requested Book: ${book.title}`,
       react: BookEmail({
         bookTitle: book.title,
-        downloadLink: book.downLoadUrl,
+        libraryLink: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://ezzfreedomandhope.or.ke"}/dashboard/library`,
         recipientName: user.name,
       }),
     });

@@ -36,7 +36,6 @@ async function LibraryPage() {
           coverImage: true,
           slug: true,
           r2Key: true,
-          downLoadUrl: true,
         },
       },
       article: {
@@ -46,7 +45,6 @@ async function LibraryPage() {
           coverImage: true,
           slug: true,
           r2Key: true,
-          downloadUrl: true,
         },
       },
     },
@@ -159,7 +157,7 @@ async function LibraryPage() {
         <CardContent className="flex items-center gap-4 p-5">
           <Lock className="h-5 w-5 shrink-0 text-primary" />
           <p className="text-sm text-muted-foreground">
-            Books open in our in-app reader with short-lived access links.
+            Books open in our in-app reader only — no file download.
             Article download links expire after <strong>1 hour</strong>.
           </p>
         </CardContent>
