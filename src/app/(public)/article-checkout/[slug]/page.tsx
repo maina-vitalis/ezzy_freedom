@@ -163,9 +163,12 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                       <h4 className="text-sm font-medium text-foreground">
                         Description
                       </h4>
-                      <p className="line-clamp-4 text-sm text-muted-foreground">
-                        {article.description}
-                      </p>
+                      <div
+                        className="prose prose-sm line-clamp-4 max-w-none text-muted-foreground dark:prose-invert"
+                        dangerouslySetInnerHTML={{
+                          __html: article.description,
+                        }}
+                      />
                     </div>
                   )}
 
