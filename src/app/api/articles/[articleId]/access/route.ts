@@ -3,6 +3,11 @@ import {
   assertCanAccessArticle,
   BookAccessError,
 } from "@/lib/books/access";
+import {
+  readerCookieName,
+  readerTokenCookieOptions,
+  signReaderToken,
+} from "@/lib/books/reader-token";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -10,7 +15,7 @@ type Params = Promise<{ articleId: string }>;
 
 /**
  * GET /api/articles/[articleId]/access
- * Entitlement + reader metadata after verifying session + purchase.
+ * Entitlement + reader metadata + short-lived reader JWT cookie.
  */
 export async function GET(_req: Request, props: { params: Params }) {
   try {
@@ -25,6 +30,13 @@ export async function GET(_req: Request, props: { params: Params }) {
       articleId,
     );
 
+    const token = await signReaderToken({
+      uid: session.user.id,
+      cid: article.id,
+      kind: "article",
+      r2Key: article.r2Key,
+    });
+
     const res = NextResponse.json({
       book: {
         id: article.id,
@@ -38,13 +50,13 @@ export async function GET(_req: Request, props: { params: Params }) {
         orderId: purchaseId ?? "FREE",
         date: new Date().toISOString().slice(0, 10),
       },
-      // Article progress is not persisted yet — always start at page 1.
       progress: {
         currentPage: 1,
         lastRead: null,
       },
     });
 
+    res.cookies.set(readerCookieName(), token, readerTokenCookieOptions());
     res.headers.set("Cache-Control", "private, max-age=60, must-revalidate");
     res.headers.set("Vary", "Cookie");
     return res;

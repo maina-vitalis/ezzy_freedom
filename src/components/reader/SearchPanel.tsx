@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { Search, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type SearchHit = {
   pageNumber: number;
@@ -18,6 +18,16 @@ type SearchPanelProps = {
   onClose: () => void;
 };
 
+function yieldToMain() {
+  return new Promise<void>((resolve) => {
+    if (typeof requestIdleCallback === "function") {
+      requestIdleCallback(() => resolve(), { timeout: 50 });
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
+}
+
 export default function SearchPanel({
   pdf,
   numPages,
@@ -28,16 +38,21 @@ export default function SearchPanel({
   const [hits, setHits] = useState<SearchHit[]>([]);
   const [searching, setSearching] = useState(false);
   const [done, setDone] = useState(false);
+  const [scanned, setScanned] = useState(0);
+  const cancelRef = useRef(false);
 
   const runSearch = async () => {
     const q = query.trim().toLowerCase();
     if (!q) return;
+    cancelRef.current = false;
     setSearching(true);
     setDone(false);
     setHits([]);
+    setScanned(0);
     const found: SearchHit[] = [];
     try {
       for (let i = 1; i <= numPages; i++) {
+        if (cancelRef.current) break;
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
         const text = content.items
@@ -54,9 +69,15 @@ export default function SearchPanel({
             snippet: `${start > 0 ? "…" : ""}${text.slice(start, end).trim()}${end < text.length ? "…" : ""}`,
           });
         }
+        if (i % 4 === 0) {
+          setScanned(i);
+          setHits([...found]);
+          await yieldToMain();
+        }
         if (found.length >= 50) break;
       }
       setHits(found);
+      setScanned(numPages);
     } finally {
       setSearching(false);
       setDone(true);
@@ -70,7 +91,16 @@ export default function SearchPanel({
           <Search className="h-4 w-4 text-primary" />
           Search
         </h2>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose} aria-label="Close">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={() => {
+            cancelRef.current = true;
+            onClose();
+          }}
+          aria-label="Close"
+        >
           <X className="h-4 w-4" />
         </Button>
       </div>
@@ -78,38 +108,41 @@ export default function SearchPanel({
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Find in book…"
-          className="h-9 border-white/15 bg-white/5 text-neutral-100"
           onKeyDown={(e) => {
             if (e.key === "Enter") void runSearch();
           }}
+          placeholder="Find in book…"
+          className="h-9 bg-white/5"
         />
-        <Button size="sm" className="rounded-full" onClick={() => void runSearch()} disabled={searching}>
+        <Button
+          size="sm"
+          className="rounded-full"
+          disabled={searching || !query.trim()}
+          onClick={() => void runSearch()}
+        >
           {searching ? "…" : "Go"}
         </Button>
       </div>
-      <div className="flex-1 overflow-y-auto p-2">
+      {searching && (
+        <p className="px-3 py-2 text-xs text-neutral-400">
+          Scanning page {scanned}/{numPages}…
+        </p>
+      )}
+      <div className="flex-1 space-y-2 overflow-y-auto p-3">
         {done && hits.length === 0 && (
-          <p className="px-2 text-xs text-neutral-400">No matches found.</p>
+          <p className="text-sm text-neutral-400">No matches found.</p>
         )}
-        <ul className="space-y-1">
-          {hits.map((hit, i) => (
-            <li key={`${hit.pageNumber}-${i}`}>
-              <button
-                type="button"
-                className="w-full rounded-md px-3 py-2 text-left hover:bg-white/5"
-                onClick={() => onJump(hit.pageNumber)}
-              >
-                <div className="text-[11px] font-medium text-primary">
-                  Page {hit.pageNumber}
-                </div>
-                <div className="line-clamp-2 text-xs text-neutral-300">
-                  {hit.snippet}
-                </div>
-              </button>
-            </li>
-          ))}
-        </ul>
+        {hits.map((hit) => (
+          <button
+            key={`${hit.pageNumber}-${hit.snippet.slice(0, 12)}`}
+            type="button"
+            onClick={() => onJump(hit.pageNumber)}
+            className="block w-full rounded-md border border-white/10 p-2 text-left text-sm hover:border-primary/40"
+          >
+            <span className="text-xs text-primary">Page {hit.pageNumber}</span>
+            <p className="mt-1 text-neutral-300">{hit.snippet}</p>
+          </button>
+        ))}
       </div>
     </aside>
   );

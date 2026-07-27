@@ -1,5 +1,10 @@
 import { auth } from "@/lib/auth";
 import { assertCanAccessBook, BookAccessError } from "@/lib/books/access";
+import {
+  readerCookieName,
+  readerTokenCookieOptions,
+  signReaderToken,
+} from "@/lib/books/reader-token";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -8,7 +13,8 @@ type Params = Promise<{ bookId: string }>;
 
 /**
  * GET /api/books/[bookId]/access
- * Entitlement + reader metadata after verifying session + purchase.
+ * Entitlement + reader metadata. Sets a short-lived HttpOnly JWT so
+ * subsequent /file Range requests can skip DB lookups on Vercel.
  */
 export async function GET(_req: Request, props: { params: Params }) {
   try {
@@ -30,6 +36,13 @@ export async function GET(_req: Request, props: { params: Params }) {
       select: { currentPage: true, lastRead: true },
     });
 
+    const token = await signReaderToken({
+      uid: session.user.id,
+      cid: book.id,
+      kind: "book",
+      r2Key: book.r2Key,
+    });
+
     const res = NextResponse.json({
       book: {
         id: book.id,
@@ -49,7 +62,7 @@ export async function GET(_req: Request, props: { params: Params }) {
       },
     });
 
-    // User-specific metadata; keep it short-lived and private.
+    res.cookies.set(readerCookieName(), token, readerTokenCookieOptions());
     res.headers.set("Cache-Control", "private, max-age=60, must-revalidate");
     res.headers.set("Vary", "Cookie");
     return res;

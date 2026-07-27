@@ -28,7 +28,7 @@ export function useReadingProgress(bookId: string, currentPage: number) {
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       void save(currentPage);
-    }, 2000);
+    }, 4000);
 
     return () => {
       if (timer.current) clearTimeout(timer.current);

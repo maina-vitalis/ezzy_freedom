@@ -17,8 +17,9 @@ import { useBookmarks } from "@/hooks/reader/useBookmarks";
 import { usePdfDocument } from "@/hooks/reader/usePdfDocument";
 import { useReaderControls } from "@/hooks/reader/useReaderControls";
 import { useReadingProgress } from "@/hooks/reader/useReadingProgress";
+import { useReaderPageWidth } from "@/hooks/reader/useReaderPageWidth";
 import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type EbookReaderProps = {
   contentId: string;
@@ -81,11 +82,17 @@ export default function EbookReader({
 
   useReadingProgress(isBook ? contentId : "", currentPage);
 
-  const pageSize = useMemo(() => {
-    const baseW = fitMode === "width" ? 520 : 420;
-    const w = Math.round(baseW * zoom);
-    return { width: w };
-  }, [fitMode, zoom]);
+  const pageWidth = useReaderPageWidth(zoom, fitMode);
+
+  // Narrow screens: smaller lookahead (current + next only) to save GPU/memory.
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setIsNarrow(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const jumpToPage = useCallback(
     (pageOneBased: number) => {
@@ -99,18 +106,15 @@ export default function EbookReader({
 
   const bufferedPageNumbers = useMemo(() => {
     if (!pdfState.pdf || pdfState.numPages < 1) return [];
-    const desired = [
-      currentPage - 1,
-      currentPage,
-      currentPage + 1,
-      currentPage + 2,
-    ];
+    const desired = isNarrow
+      ? [currentPage, currentPage + 1]
+      : [currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
     const uniq = Array.from(new Set(desired)).filter(
       (p) => p >= 1 && p <= pdfState.numPages,
     );
     uniq.sort((a, b) => a - b);
     return uniq;
-  }, [currentPage, pdfState.numPages, pdfState.pdf]);
+  }, [currentPage, pdfState.numPages, pdfState.pdf, isNarrow]);
 
   const goPrev = useCallback(() => {
     setCurrentPage((p) => Math.max(1, p - 1));
@@ -257,9 +261,10 @@ export default function EbookReader({
                   <PdfPage
                     pdf={pdf}
                     pageNumber={pageNumber}
-                    width={pageSize.width}
+                    width={pageWidth}
                     watermark={watermark}
                     active
+                    priority={isCurrent}
                   />
                 </div>
               );
