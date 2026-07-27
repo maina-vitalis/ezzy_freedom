@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import DownloadButton from "./DownloadButton";
+import LibraryBookActions from "./LibraryBookActions";
 
 export const metadata = {
   title: "My Library – EZZ Freedom and Hope",
@@ -25,7 +26,6 @@ async function LibraryPage() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) redirect("/sign-in");
 
-  // Fetch all purchases for this user (books + articles)
   const purchases = await prisma.userPurchase.findMany({
     where: { userId: session.user.id },
     include: {
@@ -60,7 +60,6 @@ async function LibraryPage() {
 
   return (
     <div className="min-h-screen space-y-10 py-8">
-      {/* ── Header ── */}
       <div className="space-y-3 text-center">
         <div className="flex items-center justify-center gap-2 text-primary">
           <Library className="h-6 w-6" />
@@ -70,13 +69,11 @@ async function LibraryPage() {
         </div>
         <h1 className="text-4xl font-bold text-foreground">Your Purchased Content</h1>
         <p className="mx-auto max-w-xl text-muted-foreground">
-          All your books and articles are here. Click{" "}
-          <strong>Download</strong> to get a secure, time-limited link to your
-          file.
+          Open books in the <strong>secure reader</strong>. Articles can still be
+          downloaded with a short-lived link.
         </p>
       </div>
 
-      {/* ── Empty state ── */}
       {purchases.length === 0 && (
         <Card className="mx-auto max-w-lg border-dashed border-primary/30">
           <CardContent className="flex flex-col items-center gap-5 py-16 text-center">
@@ -108,7 +105,6 @@ async function LibraryPage() {
         </Card>
       )}
 
-      {/* ── Books ── */}
       {bookPurchases.length > 0 && (
         <section className="space-y-5">
           <div className="flex items-center gap-2">
@@ -134,7 +130,6 @@ async function LibraryPage() {
         </section>
       )}
 
-      {/* ── Articles ── */}
       {articlePurchases.length > 0 && (
         <section className="space-y-5">
           <div className="flex items-center gap-2">
@@ -160,14 +155,12 @@ async function LibraryPage() {
         </section>
       )}
 
-      {/* ── Security notice ── */}
       <Card className="border-primary/20 bg-primary/5">
         <CardContent className="flex items-center gap-4 p-5">
           <Lock className="h-5 w-5 shrink-0 text-primary" />
           <p className="text-sm text-muted-foreground">
-            Download links are generated fresh each time and expire after{" "}
-            <strong>1 hour</strong> for your security. Simply click Download
-            again if your link expires.
+            Books open in our in-app reader with short-lived access links.
+            Article download links expire after <strong>1 hour</strong>.
           </p>
         </CardContent>
       </Card>
@@ -175,7 +168,6 @@ async function LibraryPage() {
   );
 }
 
-// ── Item Card (server) ─────────────────────────────────────────────────────────
 function LibraryItemCard({
   id,
   title,
@@ -193,7 +185,6 @@ function LibraryItemCard({
 }) {
   return (
     <Card className="group overflow-hidden border border-border/50 shadow-md transition-shadow hover:shadow-lg">
-      {/* Cover */}
       <div className="relative aspect-3/2 w-full overflow-hidden bg-muted">
         <Image
           src={coverImage}
@@ -212,8 +203,11 @@ function LibraryItemCard({
           {title}
         </h3>
         <div className="flex flex-col gap-2">
-          {/* Client download button handles the API call */}
-          <DownloadButton itemId={id} itemType={itemType} />
+          {itemType === "BOOK" ? (
+            <LibraryBookActions bookId={id} hasR2Key={hasR2Key} />
+          ) : (
+            <DownloadButton itemId={id} itemType={itemType} />
+          )}
           <Button variant="outline" size="sm" className="w-full rounded-full" asChild>
             <Link href={detailsHref}>
               {itemType === "BOOK" ? (

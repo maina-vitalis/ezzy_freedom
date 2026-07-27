@@ -20,6 +20,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
         disallow: [
           "/dashboard/*",
+          "/reader/*",
           "/users/*",
           "/api/*",
           "/sign-in",
@@ -44,6 +45,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
         disallow: [
           "/dashboard/*",
+          "/reader/*",
           "/users/*",
           "/api/*",
           "/sign-in",

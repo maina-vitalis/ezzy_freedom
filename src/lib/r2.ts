@@ -2,6 +2,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
+  type GetObjectCommandOutput,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -37,6 +38,33 @@ export async function getSignedDownloadUrl(
   const bucket = process.env.R2_BUCKET_NAME!;
   const command = new GetObjectCommand({ Bucket: bucket, Key: r2Key });
   return getSignedUrl(getR2Client(), command, { expiresIn: expiresInSeconds });
+}
+
+/** Short-lived signed URL for the in-app ebook reader (default 5 minutes). */
+export async function getBookAccessUrl(
+  r2Key: string,
+  expiresInSeconds = 300,
+): Promise<{ signedUrl: string; expiresAt: Date }> {
+  const signedUrl = await getSignedDownloadUrl(r2Key, expiresInSeconds);
+  return {
+    signedUrl,
+    expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
+  };
+}
+
+// ─── R2 object proxy (for range-request streaming) ─────────────────────────
+export async function getR2Object(
+  r2Key: string,
+  rangeHeader: string | null,
+): Promise<GetObjectCommandOutput> {
+  const bucket = process.env.R2_BUCKET_NAME!;
+  const command = new GetObjectCommand({
+    Bucket: bucket,
+    Key: r2Key,
+    ...(rangeHeader ? { Range: rangeHeader } : {}),
+  });
+
+  return getR2Client().send(command);
 }
 
 // ─── Generate a signed upload URL (for admin uploads) ─────────────────────────

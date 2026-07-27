@@ -178,11 +178,17 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                   asChild
                 >
                   <Link
-                    href="/dashboard/library"
+                    href={
+                      book.r2Key
+                        ? `/reader/${book.id}`
+                        : "/dashboard/library"
+                    }
                     className="flex items-center justify-center gap-2"
                   >
-                    <Download size={20} />
-                    <span className="font-semibold">Go to Library</span>
+                    <BookOpen size={20} />
+                    <span className="font-semibold">
+                      {book.r2Key ? "Read now" : "Go to Library"}
+                    </span>
                     <ArrowRight size={16} />
                   </Link>
                 </Button>
@@ -425,11 +431,13 @@ async function ProductDetails(props: { params: ProductPageProps }) {
                 className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
               >
                 <Link
-                  href="/dashboard/library"
+                  href={
+                    book.r2Key ? `/reader/${book.id}` : "/dashboard/library"
+                  }
                   className="flex items-center gap-2"
                 >
-                  <Download size={20} />
-                  Open in Library
+                  <BookOpen size={20} />
+                  {book.r2Key ? "Read now" : "Open in Library"}
                   <ArrowRight size={16} />
                 </Link>
               </Button>
