@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 /**
  * GET /api/library/download?itemType=BOOK&itemId=xxx
  *
- * Books and articles require R2 keys — no UploadThing fallback.
+ * Articles only. Books are reader-only (no file download).
  */
 export async function GET(req: NextRequest) {
   try {
@@ -33,39 +33,13 @@ export async function GET(req: NextRequest) {
     }
 
     if (itemType === "BOOK") {
-      const book = await prisma.books.findUnique({
-        where: { id: itemId },
-        select: { r2Key: true, price: true },
-      });
-
-      if (!book) {
-        return NextResponse.json({ error: "Book not found" }, { status: 404 });
-      }
-
-      if (book.price !== 0) {
-        const purchase = await prisma.userPurchase.findFirst({
-          where: { userId, bookId: itemId },
-        });
-        if (!purchase) {
-          return NextResponse.json(
-            { error: "You have not purchased this item" },
-            { status: 403 },
-          );
-        }
-      }
-
-      if (!book.r2Key) {
-        return NextResponse.json(
-          {
-            error:
-              "Download file not available. The admin needs to re-upload this book to Cloudflare R2.",
-          },
-          { status: 404 },
-        );
-      }
-
-      const signedUrl = await getSignedDownloadUrl(book.r2Key, 3600);
-      return NextResponse.json({ url: signedUrl });
+      return NextResponse.json(
+        {
+          error:
+            "Books cannot be downloaded. Open them in your library reader instead.",
+        },
+        { status: 403 },
+      );
     }
 
     const purchase = await prisma.userPurchase.findFirst({

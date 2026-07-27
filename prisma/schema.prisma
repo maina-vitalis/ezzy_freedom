@@ -21,6 +21,8 @@ model User {
   appointments  Appointment[]
   transactions  Transaction[]
   purchases     UserPurchase[]
+  readingProgress ReadingProgress[]
+  bookmarks     Bookmark[]
 
   @@unique([email])
   @@map("user")
@@ -103,6 +105,8 @@ model Books {
   r2Key          String? // Cloudflare R2 object key for secure downloads
   transactions   Transaction[]
   purchases      UserPurchase[]
+  readingProgress ReadingProgress[]
+  bookmarks      Bookmark[]
 }
 
 model Service {
@@ -188,6 +192,33 @@ model UserPurchase {
   @@unique([userId, bookId])
   @@unique([userId, articleId])
   @@map("user_purchases")
+}
+
+model ReadingProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId      String
+  book        Books    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  currentPage Int      @default(1)
+  lastRead    DateTime @updatedAt
+
+  @@unique([userId, bookId])
+  @@map("reading_progress")
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId     String
+  book       Books    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  pageNumber Int
+  label      String?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, bookId, pageNumber])
+  @@map("bookmarks")
 }
 
 enum Role {

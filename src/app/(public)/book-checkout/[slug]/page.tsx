@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   BookOpen,
   Calendar,
-  Download,
   Shield,
   Star,
   User,
@@ -181,8 +180,8 @@ async function CheckOut(props: { params: CheckOutProps }) {
                     </h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <Download className="h-3 w-3 text-primary" />
-                        <span>Instant digital download</span>
+                        <BookOpen className="h-3 w-3 text-primary" />
+                        <span>Instant access in the secure reader</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <BookOpen className="h-3 w-3 text-primary" />

@@ -424,7 +424,7 @@ async function Books() {
                 Instant Access
               </div>
               <div className="text-sm text-muted-foreground">
-                Download immediately after purchase
+                Open in the secure reader after purchase
               </div>
             </div>
           </div>

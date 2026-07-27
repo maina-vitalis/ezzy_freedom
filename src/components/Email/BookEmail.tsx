@@ -14,27 +14,28 @@ import * as React from "react";
 interface BookEmailProps {
   recipientName: string;
   bookTitle: string;
-  downloadLink: string;
+  libraryLink: string;
 }
 
 export const BookEmail = ({
   recipientName,
   bookTitle,
-  downloadLink,
+  libraryLink,
 }: BookEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your Book is Ready for Download</Preview>
+    <Preview>Your book is ready in the library</Preview>
     <Body style={main}>
       <Container style={container}>
         <Text style={title}>Hello {recipientName},</Text>
         <Text style={paragraph}>
           Thank you for your interest! Your book, <strong>{bookTitle}</strong>,
-          is ready for download.
+          is ready in your library. Open it in our secure in-app reader — file
+          downloads are not available for books.
         </Text>
         <Section style={buttonContainer}>
-          <Button style={button} href={downloadLink}>
-            📥 Download Your Book
+          <Button style={button} href={libraryLink}>
+            Open My Library
           </Button>
         </Section>
         <Hr style={hr} />

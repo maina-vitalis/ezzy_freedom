@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 
       // ── Grant library access on successful payment ─────────────────────────
       // Create a UserPurchase record so the user can access their content
-      // via the secure /api/library/download endpoint.
+      // (books in the in-app reader; articles via download).
       if (status === TransactionStatus.COMPLETED) {
         const tx = updateResult.data;
         try {
