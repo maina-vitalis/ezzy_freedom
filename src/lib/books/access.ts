@@ -10,15 +10,25 @@ export class BookAccessError extends Error {
   }
 }
 
+/** Alias for article/book readable content errors. */
+export const ContentAccessError = BookAccessError;
+
+export type ReadableContent = {
+  id: string;
+  title: string;
+  slug: string;
+  r2Key: string;
+  price: number;
+  coverImage: string;
+};
+
 export type BookAccessResult = {
-  book: {
-    id: string;
-    title: string;
-    slug: string;
-    r2Key: string;
-    price: number;
-    coverImage: string;
-  };
+  book: ReadableContent;
+  purchaseId: string | null;
+};
+
+export type ArticleAccessResult = {
+  article: ReadableContent;
   purchaseId: string | null;
 };
 
@@ -70,6 +80,59 @@ export async function assertCanAccessBook(
       r2Key: book.r2Key,
       price: book.price,
       coverImage: book.coverImage,
+    },
+    purchaseId: purchase?.id ?? null,
+  };
+}
+
+/**
+ * Verifies the user may access an article PDF.
+ * Ownership = UserPurchase row, or free article (price === 0).
+ */
+export async function assertCanAccessArticle(
+  userId: string,
+  articleId: string,
+): Promise<ArticleAccessResult> {
+  const article = await prisma.article.findUnique({
+    where: { id: articleId },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      r2Key: true,
+      price: true,
+      coverImage: true,
+    },
+  });
+
+  if (!article) {
+    throw new BookAccessError("Article not found", 404);
+  }
+
+  if (!article.r2Key) {
+    throw new BookAccessError(
+      "This article is not available for reading yet. Please contact support.",
+      404,
+    );
+  }
+
+  const purchase = await prisma.userPurchase.findFirst({
+    where: { userId, articleId },
+    select: { id: true },
+  });
+
+  if (!purchase && article.price !== 0) {
+    throw new BookAccessError("You have not purchased this article", 403);
+  }
+
+  return {
+    article: {
+      id: article.id,
+      title: article.title,
+      slug: article.slug,
+      r2Key: article.r2Key,
+      price: article.price,
+      coverImage: article.coverImage,
     },
     purchaseId: purchase?.id ?? null,
   };

@@ -36,7 +36,7 @@ export async function sendArticle(articleId: string) {
       subject: `Your Requested Article: ${article.title}`,
       react: ArticleEmail({
         articleTitle: article.title,
-        downloadLink: article.downloadUrl,
+        libraryLink: `${process.env.NEXT_PUBLIC_APP_URL ?? "https://ezzfreedomandhope.or.ke"}/dashboard/library`,
         recipientName: user.name,
       }),
     });

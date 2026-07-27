@@ -29,6 +29,7 @@ type ReaderToolbarProps = {
   darkChrome: boolean;
   isFullscreen: boolean;
   isBookmarked: boolean;
+  showBookmarks?: boolean;
   onPrev: () => void;
   onNext: () => void;
   onZoomIn: () => void;
@@ -53,6 +54,7 @@ export default function ReaderToolbar({
   darkChrome,
   isFullscreen,
   isBookmarked,
+  showBookmarks = true,
   onPrev,
   onNext,
   onZoomIn,
@@ -126,18 +128,22 @@ export default function ReaderToolbar({
         <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={onOpenThumbs} aria-label="Thumbnails">
           <BookOpen className="h-4 w-4" />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-full"
-          onClick={onToggleBookmark}
-          aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-        >
-          <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-primary text-primary")} />
-        </Button>
-        <Button variant="ghost" size="sm" className="h-8 rounded-full text-xs" onClick={onOpenBookmarks}>
-          Marks
-        </Button>
+        {showBookmarks && (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 rounded-full"
+              onClick={onToggleBookmark}
+              aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+            >
+              <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-primary text-primary")} />
+            </Button>
+            <Button variant="ghost" size="sm" className="h-8 rounded-full text-xs" onClick={onOpenBookmarks}>
+              Marks
+            </Button>
+          </>
+        )}
         <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={onToggleTheme} aria-label="Toggle theme">
           {darkChrome ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </Button>

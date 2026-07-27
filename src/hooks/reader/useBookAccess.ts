@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+export type ReaderContentType = "book" | "article";
+
 export type WatermarkInfo = {
   name: string;
   email: string;
@@ -32,9 +34,12 @@ type UseBookAccessState = {
 };
 
 /**
- * Fetches entitlement + reader metadata.
+ * Fetches entitlement + reader metadata for a book or article.
  */
-export function useBookAccess(bookId: string): UseBookAccessState {
+export function useBookAccess(
+  contentId: string,
+  contentType: ReaderContentType = "book",
+): UseBookAccessState {
   const [data, setData] = useState<BookAccessPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +51,12 @@ export function useBookAccess(bookId: string): UseBookAccessState {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(`/api/books/${bookId}/access`, {
+      const path =
+        contentType === "article"
+          ? `/api/articles/${contentId}/access`
+          : `/api/books/${contentId}/access`;
+
+      const res = await fetch(path, {
         // Metadata is user-specific; the server marks it `private` and short-lived.
         cache: "default",
       });
@@ -55,7 +65,7 @@ export function useBookAccess(bookId: string): UseBookAccessState {
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw Object.assign(
-          new Error(body.error || "Unable to open ebook"),
+          new Error(body.error || "Unable to open document"),
           { status: res.status },
         );
       }
@@ -69,14 +79,14 @@ export function useBookAccess(bookId: string): UseBookAccessState {
     } catch (err: unknown) {
       if (!mountedRef.current) return null;
       const message =
-        err instanceof Error ? err.message : "Unable to open ebook";
+        err instanceof Error ? err.message : "Unable to open document";
       setError(message);
       setData(null);
       return null;
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [bookId]);
+  }, [contentId, contentType]);
 
   useEffect(() => {
     mountedRef.current = true;

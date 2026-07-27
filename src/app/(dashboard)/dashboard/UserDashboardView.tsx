@@ -50,7 +50,7 @@ export default function UserDashboardView({ user }: UserDashboardViewProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Access your purchased books in the secure reader, plus articles anytime.
+              Access your purchased books and articles in the secure reader.
             </p>
             <Button asChild className="w-full rounded-full">
               <Link href="/dashboard/library">Open Library</Link>

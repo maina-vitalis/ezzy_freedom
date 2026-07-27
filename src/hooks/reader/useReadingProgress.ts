@@ -8,7 +8,7 @@ export function useReadingProgress(bookId: string, currentPage: number) {
 
   const save = useCallback(
     async (page: number) => {
-      if (page < 1 || page === lastSaved.current) return;
+      if (!bookId || page < 1 || page === lastSaved.current) return;
       lastSaved.current = page;
       try {
         await fetch(`/api/books/${bookId}/progress`, {
@@ -24,7 +24,7 @@ export function useReadingProgress(bookId: string, currentPage: number) {
   );
 
   useEffect(() => {
-    if (currentPage < 1) return;
+    if (!bookId || currentPage < 1) return;
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       void save(currentPage);
@@ -33,9 +33,10 @@ export function useReadingProgress(bookId: string, currentPage: number) {
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [currentPage, save]);
+  }, [bookId, currentPage, save]);
 
   useEffect(() => {
+    if (!bookId) return;
     const flush = () => {
       if (currentPage >= 1) void save(currentPage);
     };
@@ -47,5 +48,5 @@ export function useReadingProgress(bookId: string, currentPage: number) {
       window.removeEventListener("beforeunload", flush);
       flush();
     };
-  }, [currentPage, save]);
+  }, [bookId, currentPage, save]);
 }
