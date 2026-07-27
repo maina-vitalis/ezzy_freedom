@@ -14,8 +14,7 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import DownloadButton from "./DownloadButton";
-import LibraryBookActions from "./LibraryBookActions";
+import LibraryReadActions from "./LibraryReadActions";
 
 export const metadata = {
   title: "My Library – EZZ Freedom and Hope",
@@ -67,8 +66,8 @@ async function LibraryPage() {
         </div>
         <h1 className="text-4xl font-bold text-foreground">Your Purchased Content</h1>
         <p className="mx-auto max-w-xl text-muted-foreground">
-          Open books in the <strong>secure reader</strong>. Articles can still be
-          downloaded with a short-lived link.
+          Open books and articles in the <strong>secure in-app reader</strong>.
+          File downloads are not available.
         </p>
       </div>
 
@@ -116,12 +115,12 @@ async function LibraryPage() {
             {bookPurchases.map(({ book }) => (
               <LibraryItemCard
                 key={book!.id}
-                id={book!.id}
                 title={book!.title}
                 coverImage={book!.coverImage}
                 detailsHref={`/book-details/${book!.slug}`}
                 itemType="BOOK"
                 hasR2Key={!!book!.r2Key}
+                readHref={`/reader/${book!.id}`}
               />
             ))}
           </div>
@@ -141,12 +140,12 @@ async function LibraryPage() {
             {articlePurchases.map(({ article }) => (
               <LibraryItemCard
                 key={article!.id}
-                id={article!.id}
                 title={article!.title}
                 coverImage={article!.coverImage}
                 detailsHref={`/article-details/${article!.slug}`}
                 itemType="ARTICLE"
                 hasR2Key={!!article!.r2Key}
+                readHref={`/reader/article/${article!.id}`}
               />
             ))}
           </div>
@@ -157,8 +156,7 @@ async function LibraryPage() {
         <CardContent className="flex items-center gap-4 p-5">
           <Lock className="h-5 w-5 shrink-0 text-primary" />
           <p className="text-sm text-muted-foreground">
-            Books open in our in-app reader only — no file download.
-            Article download links expire after <strong>1 hour</strong>.
+            Books and articles open in our in-app reader only — no file download.
           </p>
         </CardContent>
       </Card>
@@ -167,19 +165,19 @@ async function LibraryPage() {
 }
 
 function LibraryItemCard({
-  id,
   title,
   coverImage,
   detailsHref,
   itemType,
   hasR2Key,
+  readHref,
 }: {
-  id: string;
   title: string;
   coverImage: string;
   detailsHref: string;
   itemType: "BOOK" | "ARTICLE";
   hasR2Key: boolean;
+  readHref: string;
 }) {
   return (
     <Card className="group overflow-hidden border border-border/50 shadow-md transition-shadow hover:shadow-lg">
@@ -201,11 +199,7 @@ function LibraryItemCard({
           {title}
         </h3>
         <div className="flex flex-col gap-2">
-          {itemType === "BOOK" ? (
-            <LibraryBookActions bookId={id} hasR2Key={hasR2Key} />
-          ) : (
-            <DownloadButton itemId={id} itemType={itemType} />
-          )}
+          <LibraryReadActions href={readHref} hasR2Key={hasR2Key} />
           <Button variant="outline" size="sm" className="w-full rounded-full" asChild>
             <Link href={detailsHref}>
               {itemType === "BOOK" ? (

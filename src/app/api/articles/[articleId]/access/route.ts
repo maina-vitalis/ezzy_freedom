@@ -1,20 +1,21 @@
 import { auth } from "@/lib/auth";
-import { assertCanAccessBook, BookAccessError } from "@/lib/books/access";
+import {
+  assertCanAccessArticle,
+  BookAccessError,
+} from "@/lib/books/access";
 import {
   readerCookieName,
   readerTokenCookieOptions,
   signReaderToken,
 } from "@/lib/books/reader-token";
-import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-type Params = Promise<{ bookId: string }>;
+type Params = Promise<{ articleId: string }>;
 
 /**
- * GET /api/books/[bookId]/access
- * Entitlement + reader metadata. Sets a short-lived HttpOnly JWT so
- * subsequent /file Range requests can skip DB lookups on Vercel.
+ * GET /api/articles/[articleId]/access
+ * Entitlement + reader metadata + short-lived reader JWT cookie.
  */
 export async function GET(_req: Request, props: { params: Params }) {
   try {
@@ -23,32 +24,25 @@ export async function GET(_req: Request, props: { params: Params }) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { bookId } = await props.params;
-    const { book, purchaseId } = await assertCanAccessBook(
+    const { articleId } = await props.params;
+    const { article, purchaseId } = await assertCanAccessArticle(
       session.user.id,
-      bookId,
+      articleId,
     );
-
-    const progress = await prisma.readingProgress.findUnique({
-      where: {
-        userId_bookId: { userId: session.user.id, bookId },
-      },
-      select: { currentPage: true, lastRead: true },
-    });
 
     const token = await signReaderToken({
       uid: session.user.id,
-      cid: book.id,
-      kind: "book",
-      r2Key: book.r2Key,
+      cid: article.id,
+      kind: "article",
+      r2Key: article.r2Key,
     });
 
     const res = NextResponse.json({
       book: {
-        id: book.id,
-        title: book.title,
-        slug: book.slug,
-        coverImage: book.coverImage,
+        id: article.id,
+        title: article.title,
+        slug: article.slug,
+        coverImage: article.coverImage,
       },
       watermark: {
         name: session.user.name,
@@ -57,8 +51,8 @@ export async function GET(_req: Request, props: { params: Params }) {
         date: new Date().toISOString().slice(0, 10),
       },
       progress: {
-        currentPage: progress?.currentPage ?? 1,
-        lastRead: progress?.lastRead?.toISOString() ?? null,
+        currentPage: 1,
+        lastRead: null,
       },
     });
 
@@ -70,7 +64,7 @@ export async function GET(_req: Request, props: { params: Params }) {
     if (error instanceof BookAccessError) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
-    console.error("Book access error:", error);
+    console.error("Article access error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

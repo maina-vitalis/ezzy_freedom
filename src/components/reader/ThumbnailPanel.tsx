@@ -24,18 +24,34 @@ function Thumb({
   active: boolean;
   onJump: (page: number) => void;
 }) {
+  const rootRef = useRef<HTMLButtonElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setVisible(true);
+      },
+      { rootMargin: "120px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
     let cancelled = false;
     (async () => {
       try {
         const page = await pdf.getPage(pageNumber);
         if (cancelled || !canvasRef.current) return;
-        const viewport = page.getViewport({ scale: 0.2 });
+        const viewport = page.getViewport({ scale: 0.18 });
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext("2d", { alpha: false });
         if (!ctx) return;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
@@ -48,10 +64,11 @@ function Thumb({
     return () => {
       cancelled = true;
     };
-  }, [pdf, pageNumber]);
+  }, [pdf, pageNumber, visible]);
 
   return (
     <button
+      ref={rootRef}
       type="button"
       onClick={() => onJump(pageNumber)}
       className={`rounded-md border p-1 transition ${
@@ -60,10 +77,12 @@ function Thumb({
           : "border-white/10 hover:border-white/30"
       }`}
     >
-      <canvas
-        ref={canvasRef}
-        className={`mx-auto block max-w-full ${ready ? "opacity-100" : "opacity-30"}`}
-      />
+      <div className="mx-auto aspect-3/4 w-full bg-neutral-800/50">
+        <canvas
+          ref={canvasRef}
+          className={`mx-auto block max-w-full ${ready ? "opacity-100" : "opacity-30"}`}
+        />
+      </div>
       <span className="mt-1 block text-center text-[10px] text-neutral-400">
         {pageNumber}
       </span>
@@ -78,9 +97,9 @@ export default function ThumbnailPanel({
   onJump,
   onClose,
 }: ThumbnailPanelProps) {
-  // Cap thumbs for performance on huge PDFs — render window around current
-  const start = Math.max(1, currentPage - 12);
-  const end = Math.min(numPages, currentPage + 12);
+  // Smaller window; lazy-render via IntersectionObserver inside Thumb.
+  const start = Math.max(1, currentPage - 6);
+  const end = Math.min(numPages, currentPage + 6);
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   return (
@@ -90,7 +109,13 @@ export default function ThumbnailPanel({
           <LayoutGrid className="h-4 w-4 text-primary" />
           Pages
         </h2>
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose} aria-label="Close">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={onClose}
+          aria-label="Close"
+        >
           <X className="h-4 w-4" />
         </Button>
       </div>

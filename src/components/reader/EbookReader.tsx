@@ -5,31 +5,39 @@ import LoadingScreen from "@/components/reader/LoadingScreen";
 import ReaderError from "@/components/reader/ReaderError";
 import ReaderToolbar from "@/components/reader/ReaderToolbar";
 import PdfPage from "@/components/reader/PdfPage";
+import ReaderTouchNav from "@/components/reader/ReaderTouchNav";
 import SearchPanel from "@/components/reader/SearchPanel";
 import ThumbnailPanel from "@/components/reader/ThumbnailPanel";
 import TocPanel from "@/components/reader/TocPanel";
-import { useBookAccess } from "@/hooks/reader/useBookAccess";
+import {
+  useBookAccess,
+  type ReaderContentType,
+} from "@/hooks/reader/useBookAccess";
 import { useBookmarks } from "@/hooks/reader/useBookmarks";
 import { usePdfDocument } from "@/hooks/reader/usePdfDocument";
 import { useReaderControls } from "@/hooks/reader/useReaderControls";
 import { useReadingProgress } from "@/hooks/reader/useReadingProgress";
+import { useReaderPageWidth } from "@/hooks/reader/useReaderPageWidth";
 import { cn } from "@/lib/utils";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 type EbookReaderProps = {
-  bookId: string;
+  contentId: string;
+  contentType?: ReaderContentType;
   initialTitle?: string;
-  bookSlug?: string;
+  contentSlug?: string;
 };
 
 export default function EbookReader({
-  bookId,
+  contentId,
+  contentType = "book",
   initialTitle,
-  bookSlug,
+  contentSlug,
 }: EbookReaderProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const access = useBookAccess(bookId);
-  const bookmarks = useBookmarks(bookId);
+  const access = useBookAccess(contentId, contentType);
+  const isBook = contentType === "book";
+  const bookmarks = useBookmarks(isBook ? contentId : "");
   const {
     currentPage,
     setCurrentPage,
@@ -47,7 +55,11 @@ export default function EbookReader({
     togglePanel,
   } = useReaderControls();
 
-  const fileUrl = access.data ? `/api/books/${bookId}/file` : null;
+  const fileUrl = access.data
+    ? contentType === "article"
+      ? `/api/articles/${contentId}/file`
+      : `/api/books/${contentId}/file`
+    : null;
   const pdfState = usePdfDocument({
     fileUrl,
     onFileAuthExpired: access.refresh,
@@ -68,13 +80,19 @@ export default function EbookReader({
     setCurrentPage(pdfState.numPages);
   }, [pdfState.numPages, currentPage, setCurrentPage]);
 
-  useReadingProgress(bookId, currentPage);
+  useReadingProgress(isBook ? contentId : "", currentPage);
 
-  const pageSize = useMemo(() => {
-    const baseW = fitMode === "width" ? 520 : 420;
-    const w = Math.round(baseW * zoom);
-    return { width: w };
-  }, [fitMode, zoom]);
+  const pageWidth = useReaderPageWidth(zoom, fitMode);
+
+  // Narrow screens: smaller lookahead (current + next only) to save GPU/memory.
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setIsNarrow(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const jumpToPage = useCallback(
     (pageOneBased: number) => {
@@ -88,14 +106,26 @@ export default function EbookReader({
 
   const bufferedPageNumbers = useMemo(() => {
     if (!pdfState.pdf || pdfState.numPages < 1) return [];
-    const desired = [currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
+    const desired = isNarrow
+      ? [currentPage, currentPage + 1]
+      : [currentPage - 1, currentPage, currentPage + 1, currentPage + 2];
     const uniq = Array.from(new Set(desired)).filter(
       (p) => p >= 1 && p <= pdfState.numPages,
     );
-    // Keep a stable order: previous -> current -> next.
     uniq.sort((a, b) => a - b);
     return uniq;
-  }, [currentPage, pdfState.numPages, pdfState.pdf]);
+  }, [currentPage, pdfState.numPages, pdfState.pdf, isNarrow]);
+
+  const goPrev = useCallback(() => {
+    setCurrentPage((p) => Math.max(1, p - 1));
+  }, [setCurrentPage]);
+
+  const goNext = useCallback(() => {
+    setCurrentPage((p) => {
+      const max = pdfState.numPages || p + 1;
+      return Math.min(max, p + 1);
+    });
+  }, [pdfState.numPages, setCurrentPage]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -104,13 +134,10 @@ export default function EbookReader({
 
       if (e.key === "ArrowRight" || e.key === " ") {
         e.preventDefault();
-        setCurrentPage((p) => {
-          const max = pdfState.numPages || Number.POSITIVE_INFINITY;
-          return Math.min(max, p + 1);
-        });
+        goNext();
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        setCurrentPage((p) => Math.max(1, p - 1));
+        goPrev();
       } else if (e.key === "Escape" && panel !== "none") {
         setPanel("none");
       } else if ((e.ctrlKey || e.metaKey) && (e.key === "s" || e.key === "p")) {
@@ -119,24 +146,32 @@ export default function EbookReader({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [panel, setCurrentPage, setPanel, pdfState.numPages]);
+  }, [panel, setPanel, goNext, goPrev]);
 
-  const loading =
-    access.loading || (pdfState.loading && !pdfState.pdf);
+  const loading = access.loading || (pdfState.loading && !pdfState.pdf);
 
   if (access.error && !access.data) {
     return (
       <ReaderError
         status={access.status}
         message={access.error}
-        bookSlug={bookSlug}
+        contentSlug={contentSlug}
+        contentType={contentType}
         onRetry={() => void access.refresh()}
       />
     );
   }
 
   if (loading) {
-    return <LoadingScreen message="Opening your ebook…" />;
+    return (
+      <LoadingScreen
+        message={
+          contentType === "article"
+            ? "Opening your article…"
+            : "Opening your ebook…"
+        }
+      />
+    );
   }
 
   if (pdfState.error) {
@@ -144,7 +179,8 @@ export default function EbookReader({
       <ReaderError
         message={pdfState.error}
         onRetry={() => void access.refresh()}
-        bookSlug={bookSlug}
+        contentSlug={contentSlug}
+        contentType={contentType}
       />
     );
   }
@@ -156,15 +192,20 @@ export default function EbookReader({
   const pdf = pdfState.pdf;
   const watermark = access.data.watermark;
 
-  const title = access.data.book.title || initialTitle || "Ebook";
-  const bookmarked = bookmarks.isBookmarked(currentPage);
+  const title =
+    access.data.book.title ||
+    initialTitle ||
+    (contentType === "article" ? "Article" : "Ebook");
+  const bookmarked = isBook ? bookmarks.isBookmarked(currentPage) : false;
 
   return (
     <div
       ref={rootRef}
       className={cn(
         "flex h-dvh flex-col select-none",
-        darkChrome ? "bg-neutral-950 text-neutral-100" : "bg-neutral-100 text-neutral-900",
+        darkChrome
+          ? "bg-neutral-950 text-neutral-100"
+          : "bg-neutral-100 text-neutral-900",
       )}
       onContextMenu={(e) => e.preventDefault()}
     >
@@ -177,13 +218,9 @@ export default function EbookReader({
         darkChrome={darkChrome}
         isFullscreen={isFullscreen}
         isBookmarked={bookmarked}
-        onPrev={() => setCurrentPage((p) => Math.max(1, p - 1))}
-        onNext={() =>
-          setCurrentPage((p) => {
-            const max = pdfState.numPages || (p + 1);
-            return Math.min(max, p + 1);
-          })
-        }
+        showBookmarks={isBook}
+        onPrev={goPrev}
+        onNext={goNext}
         onZoomIn={zoomIn}
         onZoomOut={zoomOut}
         onToggleFit={() =>
@@ -191,21 +228,30 @@ export default function EbookReader({
         }
         onToggleTheme={() => setDarkChrome((d) => !d)}
         onToggleFullscreen={() => void toggleFullscreen(rootRef.current)}
-        onToggleBookmark={() => void bookmarks.toggleBookmark(currentPage)}
+        onToggleBookmark={() => {
+          if (isBook) void bookmarks.toggleBookmark(currentPage);
+        }}
         onOpenToc={() => togglePanel("toc")}
         onOpenSearch={() => togglePanel("search")}
-        onOpenBookmarks={() => togglePanel("bookmarks")}
+        onOpenBookmarks={() => {
+          if (isBook) togglePanel("bookmarks");
+        }}
         onOpenThumbs={() => togglePanel("thumbs")}
       />
 
       <div className="relative flex min-h-0 flex-1">
-        <div className="flex min-w-0 flex-1 items-center justify-center overflow-hidden p-4 md:p-8">
-          <div className="relative">
+        <ReaderTouchNav
+          canPrev={currentPage > 1}
+          canNext={currentPage < (pdfState.numPages || 1)}
+          onPrev={goPrev}
+          onNext={goNext}
+          darkChrome={darkChrome}
+        >
+          <div className="pointer-events-none relative p-4 md:p-8">
             {bufferedPageNumbers.map((pageNumber) => {
               const isCurrent = pageNumber === currentPage;
               return (
                 <div
-                  // Only mount a small set of pages; offscreen ones are absolutely positioned.
                   key={pageNumber}
                   className={cn(
                     !isCurrent &&
@@ -215,15 +261,16 @@ export default function EbookReader({
                   <PdfPage
                     pdf={pdf}
                     pageNumber={pageNumber}
-                    width={pageSize.width}
+                    width={pageWidth}
                     watermark={watermark}
                     active
+                    priority={isCurrent}
                   />
                 </div>
               );
             })}
           </div>
-        </div>
+        </ReaderTouchNav>
 
         {panel === "toc" && (
           <TocPanel
@@ -240,7 +287,7 @@ export default function EbookReader({
             onClose={() => setPanel("none")}
           />
         )}
-        {panel === "bookmarks" && (
+        {panel === "bookmarks" && isBook && (
           <BookmarkPanel
             bookmarks={bookmarks.bookmarks}
             loading={bookmarks.loading}

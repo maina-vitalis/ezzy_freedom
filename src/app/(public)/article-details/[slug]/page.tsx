@@ -7,6 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { TransactionType } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { format } from "date-fns";
@@ -16,7 +17,6 @@ import {
   BookOpen,
   Calendar,
   CheckCircle,
-  Download,
   FileText,
   Lock,
   MessageCircle,
@@ -97,6 +97,40 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
     );
   }
 
+  const hasPurchased = session?.user?.id
+    ? Boolean(
+        await prisma.userPurchase.findFirst({
+          where: { userId: session.user.id, articleId: article.id },
+          select: { id: true },
+        }),
+      )
+    : false;
+
+  // Free articles: grant library access for logged-in users (no checkout).
+  if (session?.user?.id && article.price === 0 && !hasPurchased) {
+    await prisma.userPurchase.upsert({
+      where: {
+        userId_articleId: {
+          userId: session.user.id,
+          articleId: article.id,
+        },
+      },
+      create: {
+        userId: session.user.id,
+        itemType: TransactionType.ARTICLE,
+        articleId: article.id,
+      },
+      update: {},
+    });
+  }
+
+  const ownsArticle =
+    hasPurchased || Boolean(session?.user?.id && article.price === 0);
+
+  const readerHref = article.r2Key
+    ? `/reader/article/${article.id}`
+    : "/dashboard/library";
+
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
       {/* Breadcrumb Navigation */}
@@ -155,28 +189,35 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               </div>
 
               {/* Access Button */}
-              {session?.session ? (
+              {ownsArticle ? (
                 <Button
                   size="lg"
                   className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
                   asChild
                 >
                   <Link
-                    href={
-                      article.price === 0
-                        ? article.downloadUrl
-                        : `/article-checkout/${article.slug}`
-                    }
+                    href={readerHref}
                     className="flex items-center justify-center gap-2"
                   >
-                    {article.price === 0 ? (
-                      <Download size={20} />
-                    ) : (
-                      <FileText size={20} />
-                    )}
+                    <BookOpen size={20} />
                     <span className="font-semibold">
-                      {article.price === 0 ? "Read Now" : "Purchase Article"}
+                      {article.r2Key ? "Read now" : "Go to Library"}
                     </span>
+                    <ArrowRight size={16} />
+                  </Link>
+                </Button>
+              ) : session?.session ? (
+                <Button
+                  size="lg"
+                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  asChild
+                >
+                  <Link
+                    href={`/article-checkout/${article.slug}`}
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <FileText size={20} />
+                    <span className="font-semibold">Purchase Article</span>
                     <ArrowRight size={16} />
                   </Link>
                 </Button>
@@ -200,7 +241,9 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               )}
 
               <p className="text-center text-xs text-muted-foreground">
-                Expert insights • Professional content • Evidence-based
+                {ownsArticle
+                  ? "You already own this article — open it in the secure reader."
+                  : "Expert insights • Professional content • Evidence-based"}
               </p>
             </CardContent>
           </Card>
@@ -356,15 +399,15 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                 >
                   <AccordionTrigger className="text-left hover:no-underline">
                     <div className="flex items-center gap-2">
-                      <Download className="text-primary" size={20} />
+                      <BookOpen className="text-primary" size={20} />
                       <span className="font-semibold">Access Information</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pb-6 pt-4">
                     <p className="leading-relaxed text-muted-foreground">
                       {article.price === 0
-                        ? "This article is free to access upon login. Simply sign in to your account to read the full content and gain valuable mental health insights."
-                        : "This premium article requires purchase to access the full content. After purchase, you'll receive immediate access to the complete article with expert mental health guidance."}
+                        ? "This article is free to read in our secure in-app reader after you sign in. File downloads are not available."
+                        : "After purchase, open this article in your library's secure in-app reader. File downloads are not available."}
                     </p>
                   </AccordionContent>
                 </AccordionItem>
@@ -433,28 +476,33 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           </div>
 
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {session?.session ? (
+            {ownsArticle ? (
               <Button
                 size="lg"
                 asChild
                 className="rounded-full bg-primary px-8"
               >
                 <Link
-                  href={
-                    article.price === 0
-                      ? article.downloadUrl
-                      : `/article-checkout/${article.slug}`
-                  }
+                  href={readerHref}
                   className="flex items-center gap-2"
                 >
-                  {article.price === 0 ? (
-                    <Download size={20} />
-                  ) : (
-                    <FileText size={20} />
-                  )}
-                  {article.price === 0
-                    ? "Read Article Now"
-                    : "Get This Article"}
+                  <BookOpen size={20} />
+                  {article.r2Key ? "Read Article Now" : "Open in Library"}
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+            ) : session?.session ? (
+              <Button
+                size="lg"
+                asChild
+                className="rounded-full bg-primary px-8"
+              >
+                <Link
+                  href={`/article-checkout/${article.slug}`}
+                  className="flex items-center gap-2"
+                >
+                  <FileText size={20} />
+                  Get This Article
                   <ArrowRight size={16} />
                 </Link>
               </Button>

@@ -1,5 +1,8 @@
 import { auth } from "@/lib/auth";
-import { assertCanAccessBook, BookAccessError } from "@/lib/books/access";
+import {
+  assertCanAccessArticle,
+  BookAccessError,
+} from "@/lib/books/access";
 import {
   readerCookieName,
   verifyReaderToken,
@@ -11,18 +14,16 @@ import {
 } from "@/lib/books/stream-file";
 import { cookies, headers } from "next/headers";
 
-type Params = Promise<{ bookId: string }>;
+type Params = Promise<{ articleId: string }>;
 
 /**
- * GET /api/books/[bookId]/file
- *
- * Range-capable R2 proxy. Prefers short-lived reader JWT (no DB) so PDF.js
- * range bursts stay fast on Vercel serverless.
+ * GET /api/articles/[articleId]/file
+ * Range-capable R2 proxy with reader JWT fast-path for Vercel.
  */
 export const runtime = "nodejs";
 export async function GET(req: Request, props: { params: Params }) {
   try {
-    const { bookId } = await props.params;
+    const { articleId } = await props.params;
 
     const cookieStore = await cookies();
     const token = cookieStore.get(readerCookieName())?.value;
@@ -33,23 +34,25 @@ export async function GET(req: Request, props: { params: Params }) {
 
     if (
       claims &&
-      claims.kind === "book" &&
-      claims.cid === bookId
+      claims.kind === "article" &&
+      claims.cid === articleId
     ) {
       userId = claims.uid;
       r2Key = claims.r2Key;
     } else {
-      // Fallback: full session + entitlement check (cold open / expired token).
       const session = await auth.api.getSession({ headers: await headers() });
       if (!session?.user) {
         return noStoreJson({ error: "Unauthorized" }, { status: 401 });
       }
-      const { book } = await assertCanAccessBook(session.user.id, bookId);
+      const { article } = await assertCanAccessArticle(
+        session.user.id,
+        articleId,
+      );
       userId = session.user.id;
-      r2Key = book.r2Key;
+      r2Key = article.r2Key;
     }
 
-    const limited = checkReaderRateLimit(`${userId}:${bookId}`);
+    const limited = checkReaderRateLimit(`${userId}:${articleId}`);
     if (limited) return limited;
 
     return streamR2PdfResponse(r2Key, req.headers.get("range"));
@@ -57,7 +60,7 @@ export async function GET(req: Request, props: { params: Params }) {
     if (error instanceof BookAccessError) {
       return noStoreJson({ error: error.message }, { status: error.status });
     }
-    console.error("Book file proxy error:", error);
+    console.error("Article file proxy error:", error);
     return noStoreJson(
       { error: "Internal server error" },
       { status: 500 },

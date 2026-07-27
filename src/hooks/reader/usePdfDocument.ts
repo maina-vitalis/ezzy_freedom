@@ -20,8 +20,8 @@ let workerConfigured = false;
 async function getPdfjs() {
   const pdfjs = await import("pdfjs-dist");
   if (!workerConfigured) {
-    // CDN path avoids Next/Turbopack bundling issues with the worker module
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+    // Self-hosted on Vercel via /public — avoids CDN cold start + third-party dependency.
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
     workerConfigured = true;
   }
   return pdfjs;
@@ -50,8 +50,11 @@ export function usePdfDocument({
         const pdfjs = await getPdfjs();
         const task = pdfjs.getDocument({
           url,
-          // Same-origin proxy requires cookies for entitlement checks.
+          // Same-origin proxy requires cookies for entitlement + reader JWT.
           withCredentials: true,
+          // Prefer range fetches through our Vercel proxy.
+          disableRange: false,
+          disableStream: false,
         });
         const doc = await task.promise;
         pdfRef.current = doc;
@@ -63,16 +66,13 @@ export function usePdfDocument({
 
         const isAuthError = /403|401|unauthorized|expired/i.test(message);
         const isRangeError =
-          /416|range|invalid range|RangeError|unexpected number of bytes/i.test(message);
+          /416|range|invalid range|RangeError|unexpected number of bytes/i.test(
+            message,
+          );
 
-        // Session may have expired mid-load (file route enforces entitlement per request).
         if (allowRetry && isAuthError && onFileAuthExpired) {
           await onFileAuthExpired();
-          // `/file` URL is stable; refresh only updates entitlement/session state.
-          // Retry the exact same load once to avoid getting stuck.
-          if (allowRetry) {
-            await load(url, false);
-          }
+          await load(url, false);
           return;
         }
 
@@ -99,8 +99,6 @@ export function usePdfDocument({
 
   useEffect(() => {
     if (!fileUrl) return;
-    // Keep the in-memory PDF across file-auth refreshes; only load once
-    // (or again after destroy / failed load).
     if (pdfRef.current) return;
     void load(fileUrl);
   }, [fileUrl, load]);

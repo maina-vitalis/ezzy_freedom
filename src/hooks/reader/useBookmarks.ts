@@ -11,9 +11,14 @@ export type BookmarkItem = {
 
 export function useBookmarks(bookId: string) {
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(bookId));
 
   const reload = useCallback(async () => {
+    if (!bookId) {
+      setBookmarks([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch(`/api/books/${bookId}/bookmarks`);
@@ -31,6 +36,7 @@ export function useBookmarks(bookId: string) {
 
   const addBookmark = useCallback(
     async (pageNumber: number, label?: string) => {
+      if (!bookId) return;
       const res = await fetch(`/api/books/${bookId}/bookmarks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,6 +49,7 @@ export function useBookmarks(bookId: string) {
 
   const removeBookmark = useCallback(
     async (pageNumber: number) => {
+      if (!bookId) return;
       const res = await fetch(`/api/books/${bookId}/bookmarks`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -60,13 +67,14 @@ export function useBookmarks(bookId: string) {
 
   const toggleBookmark = useCallback(
     async (pageNumber: number) => {
+      if (!bookId) return;
       if (isBookmarked(pageNumber)) {
         await removeBookmark(pageNumber);
       } else {
         await addBookmark(pageNumber);
       }
     },
-    [addBookmark, isBookmarked, removeBookmark],
+    [addBookmark, bookId, isBookmarked, removeBookmark],
   );
 
   return {

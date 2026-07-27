@@ -14,27 +14,28 @@ import * as React from "react";
 interface ArticleEmailProps {
   recipientName: string;
   articleTitle: string;
-  downloadLink: string;
+  libraryLink: string;
 }
 
 export const ArticleEmail = ({
   recipientName,
   articleTitle,
-  downloadLink,
+  libraryLink,
 }: ArticleEmailProps) => (
   <Html>
     <Head />
-    <Preview>Your Article is Ready for Download</Preview>
+    <Preview>Your article is ready in the library</Preview>
     <Body style={main}>
       <Container style={container}>
         <Text style={title}>Hello {recipientName},</Text>
         <Text style={paragraph}>
           Thank you for your interest! Your article,{" "}
-          <strong>{articleTitle}</strong>, is ready for download.
+          <strong>{articleTitle}</strong>, is ready in your library. Open it in
+          our secure in-app reader — file downloads are not available.
         </Text>
         <Section style={buttonContainer}>
-          <Button style={button} href={downloadLink}>
-            📥 Download Your Article
+          <Button style={button} href={libraryLink}>
+            Open My Library
           </Button>
         </Section>
         <Hr style={hr} />
@@ -48,7 +49,6 @@ export const ArticleEmail = ({
 
 export default ArticleEmail;
 
-// Reusing the same styles as BookEmail for consistency
 const main = {
   backgroundColor: "#f4f4f4",
   fontFamily:

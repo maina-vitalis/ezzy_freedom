@@ -4,16 +4,18 @@ import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
 import Link from "next/link";
 
-interface LibraryBookActionsProps {
-  bookId: string;
+interface LibraryReadActionsProps {
+  href: string;
   hasR2Key: boolean;
+  label?: string;
 }
 
-/** Primary library CTA — opens the secure in-app flipbook reader. */
-export default function LibraryBookActions({
-  bookId,
+/** Primary library CTA — opens the secure in-app PDF reader. */
+export default function LibraryReadActions({
+  href,
   hasR2Key,
-}: LibraryBookActionsProps) {
+  label = "Read",
+}: LibraryReadActionsProps) {
   if (!hasR2Key) {
     return (
       <Button disabled size="sm" className="w-full rounded-full">
@@ -25,9 +27,9 @@ export default function LibraryBookActions({
 
   return (
     <Button asChild size="sm" className="w-full rounded-full">
-      <Link href={`/reader/${bookId}`}>
+      <Link href={href}>
         <BookOpen className="mr-2 h-3 w-3" />
-        Read
+        {label}
       </Link>
     </Button>
   );

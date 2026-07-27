@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import type { ReaderContentType } from "@/hooks/reader/useBookAccess";
 import { BookX, Lock, LogIn, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
@@ -8,6 +9,9 @@ type ReaderErrorProps = {
   status?: number | null;
   message: string;
   onRetry?: () => void;
+  contentSlug?: string;
+  contentType?: ReaderContentType;
+  /** @deprecated use contentSlug */
   bookSlug?: string;
 };
 
@@ -15,10 +19,21 @@ export default function ReaderError({
   status,
   message,
   onRetry,
+  contentSlug,
+  contentType = "book",
   bookSlug,
 }: ReaderErrorProps) {
   const isAuth = status === 401;
   const isForbidden = status === 403;
+  const slug = contentSlug ?? bookSlug;
+  const detailsHref =
+    contentType === "article"
+      ? slug
+        ? `/article-details/${slug}`
+        : undefined
+      : slug
+        ? `/book-details/${slug}`
+        : undefined;
 
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center gap-6 bg-neutral-950 px-6 text-center text-neutral-100">
@@ -37,7 +52,7 @@ export default function ReaderError({
             ? "Sign in required"
             : isForbidden
               ? "Purchase required"
-              : "Unable to open ebook"}
+              : "Unable to open document"}
         </h1>
         <p className="text-sm text-neutral-400">{message}</p>
       </div>
@@ -47,9 +62,13 @@ export default function ReaderError({
             <Link href="/sign-in">Sign in</Link>
           </Button>
         )}
-        {isForbidden && bookSlug && (
+        {isForbidden && detailsHref && (
           <Button asChild className="rounded-full">
-            <Link href={`/book-details/${bookSlug}`}>View book details</Link>
+            <Link href={detailsHref}>
+              {contentType === "article"
+                ? "View article details"
+                : "View book details"}
+            </Link>
           </Button>
         )}
         {onRetry && !isAuth && !isForbidden && (
