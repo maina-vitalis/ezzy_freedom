@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TransactionType } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { deleteR2Object } from "@/lib/r2";
 import { BookSchema } from "@/util/validation";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -31,12 +33,35 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
       );
     }
 
-    //delete the book
+    const book = await prisma.books.findUnique({
+      where: { id: bookId },
+      select: { id: true, slug: true, r2Key: true },
+    });
+
+    if (!book) {
+      return NextResponse.json({ message: "Book not found" }, { status: 404 });
+    }
+
     const deletedBook = await prisma.books.delete({
       where: {
         id: bookId,
       },
     });
+
+    // `UserPurchase.bookId` is SetNull, which leaves BOOK rows pointing at nothing.
+    await prisma.userPurchase.deleteMany({
+      where: { itemType: TransactionType.BOOK, bookId: null },
+    });
+
+    // Storage cleanup is best-effort; the book row is already gone.
+    if (book.r2Key) {
+      await deleteR2Object(book.r2Key);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/books");
+    revalidatePath(`/book-details/${book.slug}`);
+    revalidatePath("/dashboard/library");
 
     return NextResponse.json(
       {
@@ -44,10 +69,15 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
         message: "Book deleted successfully",
       },
       {
-        status: 201,
+        status: 200,
       },
     );
   } catch (error: any) {
+    if (error?.code === "P2025") {
+      return NextResponse.json({ message: "Book not found" }, { status: 404 });
+    }
+
+    console.error("Book delete error:", error);
     return NextResponse.json(
       {
         message: error.message || "internal server error",

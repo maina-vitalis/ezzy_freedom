@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/LoadingButton";
 import {
   Table,
   TableBody,
@@ -28,12 +38,13 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  Download,
   SquarePen,
   Eye,
   MoreHorizontal,
@@ -43,6 +54,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Book {
   id: string;
@@ -65,6 +77,26 @@ export default function BooksManagementTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteBook = useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await axios.delete(`/api/books/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Book deleted successfully");
+      setBookToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
+    },
+    onError: (error) => {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(message || "Failed to delete the book");
+    },
+  });
 
   const columns: ColumnDef<Book>[] = [
     {
@@ -163,11 +195,10 @@ export default function BooksManagementTable({
                   Edit Book
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Download className="mr-2 h-4 w-4" />
-                Download File
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onSelect={() => setBookToDelete(book)}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete Book
               </DropdownMenuItem>
@@ -323,6 +354,38 @@ export default function BooksManagementTable({
           </Button>
         </div>
       </div>
+
+      <AlertDialog
+        open={bookToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open && !deleteBook.isPending) setBookToDelete(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this book?</AlertDialogTitle>
+            <AlertDialogDescription>
+              &quot;{bookToDelete?.title}&quot; and its PDF file will be
+              permanently removed, along with every reader&apos;s progress and
+              bookmarks. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteBook.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <LoadingButton
+              variant="destructive"
+              loading={deleteBook.isPending}
+              onClick={() => {
+                if (bookToDelete) deleteBook.mutate(bookToDelete.id);
+              }}
+            >
+              Delete
+            </LoadingButton>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

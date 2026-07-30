@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -65,6 +66,23 @@ export async function getR2Object(
   });
 
   return getR2Client().send(command);
+}
+
+/**
+ * Removes an object from R2. Resolves to `false` instead of throwing so callers
+ * can delete the DB row even when storage cleanup fails.
+ */
+export async function deleteR2Object(r2Key: string): Promise<boolean> {
+  const bucket = process.env.R2_BUCKET_NAME!;
+  try {
+    await getR2Client().send(
+      new DeleteObjectCommand({ Bucket: bucket, Key: r2Key }),
+    );
+    return true;
+  } catch (error) {
+    console.error(`Failed to delete R2 object "${r2Key}":`, error);
+    return false;
+  }
 }
 
 // ─── Generate a signed upload URL (for admin uploads) ─────────────────────────

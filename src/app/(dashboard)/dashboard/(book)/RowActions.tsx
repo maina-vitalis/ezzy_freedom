@@ -39,11 +39,14 @@ export function ActionsDropdown({ id }: ActionsDropdownProps) {
 
     onSuccess: () => {
       toast.success("Deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["getting-books"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
     },
 
     onError: (error) => {
-      toast.error(error.message || "something went wrong");
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(message || "something went wrong");
     },
   });
 
