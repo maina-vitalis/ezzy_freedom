@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import LoadingButton from "@/components/LoadingButton";
 import {
   Table,
   TableBody,
@@ -40,9 +50,12 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Service {
   id: string;
@@ -64,6 +77,26 @@ export default function ServicesManagementTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
+  const queryClient = useQueryClient();
+
+  const deleteService = useMutation({
+    mutationFn: async (id: string) => {
+      const { data } = await axios.delete(`/api/services/${id}`);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Service deleted successfully");
+      setServiceToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
+    },
+    onError: (error) => {
+      const message = axios.isAxiosError(error)
+        ? error.response?.data?.message
+        : null;
+      toast.error(message || "Failed to delete the service");
+    },
+  });
 
   const columns: ColumnDef<Service>[] = [
     {
@@ -150,7 +183,10 @@ export default function ServicesManagementTable({
                   Edit Service
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-destructive">
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onSelect={() => setServiceToDelete(service)}
+              >
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete Service
               </DropdownMenuItem>
@@ -306,6 +342,37 @@ export default function ServicesManagementTable({
           </Button>
         </div>
       </div>
+
+      <AlertDialog
+        open={serviceToDelete !== null}
+        onOpenChange={(open) => {
+          if (!open && !deleteService.isPending) setServiceToDelete(null);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this service?</AlertDialogTitle>
+            <AlertDialogDescription>
+              &quot;{serviceToDelete?.name}&quot; will be permanently removed
+              from the site. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteService.isPending}>
+              Cancel
+            </AlertDialogCancel>
+            <LoadingButton
+              variant="destructive"
+              loading={deleteService.isPending}
+              onClick={() => {
+                if (serviceToDelete) deleteService.mutate(serviceToDelete.id);
+              }}
+            >
+              Delete
+            </LoadingButton>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export function ServiceActionsDropdown({ id }: ActionsDropdownProps) {
 
     onSuccess: () => {
       toast.success("Deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["getting-services"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
     },
 
     onError: (error) => {

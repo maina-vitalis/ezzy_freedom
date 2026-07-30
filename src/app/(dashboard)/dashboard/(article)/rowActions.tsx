@@ -37,7 +37,7 @@ export function ActionsDropdown({ id }: ActionsDropdownProps) {
     },
     onSuccess: () => {
       toast.success("Article deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["getting-articles"] }); // Updated query key
+      queryClient.invalidateQueries({ queryKey: ["dashboard-data"] });
     },
     onError: (error) => {
       toast.error(error.message || "Something went wrong");

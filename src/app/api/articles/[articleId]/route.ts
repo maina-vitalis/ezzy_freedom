@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TransactionType } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { deleteR2Object } from "@/lib/r2";
 import { ArticleSchema } from "@/util/validation"; // Updated schema import
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -31,12 +33,38 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
       );
     }
 
-    // Delete the article
+    const article = await prisma.article.findUnique({
+      where: { id: articleId },
+      select: { id: true, slug: true, r2Key: true },
+    });
+
+    if (!article) {
+      return NextResponse.json(
+        { message: "Article not found" },
+        { status: 404 },
+      );
+    }
+
     const deletedArticle = await prisma.article.delete({
       where: {
         id: articleId,
       },
     });
+
+    // `UserPurchase.articleId` is SetNull, which leaves ARTICLE rows pointing at nothing.
+    await prisma.userPurchase.deleteMany({
+      where: { itemType: TransactionType.ARTICLE, articleId: null },
+    });
+
+    // Storage cleanup is best-effort; the article row is already gone.
+    if (article.r2Key) {
+      await deleteR2Object(article.r2Key);
+    }
+
+    revalidatePath("/");
+    revalidatePath("/articles");
+    revalidatePath(`/article-details/${article.slug}`);
+    revalidatePath("/dashboard/library");
 
     return NextResponse.json(
       {
@@ -44,10 +72,17 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
         message: "Article deleted successfully",
       },
       {
-        status: 201,
+        status: 200,
       },
     );
   } catch (error: any) {
+    if (error?.code === "P2025") {
+      return NextResponse.json(
+        { message: "Article not found" },
+        { status: 404 },
+      );
+    }
+
     console.error("Error deleting article:", error);
     return NextResponse.json(
       {

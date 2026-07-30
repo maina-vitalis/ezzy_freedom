@@ -31,12 +31,15 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
       );
     }
 
-    //delete the book
     const deletedService = await prisma.service.delete({
       where: {
         id: serviceId,
       },
     });
+
+    revalidatePath("/");
+    revalidatePath("/services");
+    revalidatePath(`/service-details/${deletedService.slug}`);
 
     return NextResponse.json(
       {
@@ -44,10 +47,18 @@ export async function DELETE(req: NextRequest, props: { params: Params }) {
         message: "service deleted successfully",
       },
       {
-        status: 201,
+        status: 200,
       },
     );
   } catch (error: any) {
+    if (error?.code === "P2025") {
+      return NextResponse.json(
+        { message: "Service not found" },
+        { status: 404 },
+      );
+    }
+
+    console.error("Service delete error:", error);
     return NextResponse.json(
       {
         message: error.message || "internal server error",
