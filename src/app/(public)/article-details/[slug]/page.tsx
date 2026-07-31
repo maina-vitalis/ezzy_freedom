@@ -28,6 +28,7 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { normalizeImageSrc } from "@/lib/image";
 
 type ArticlePageProps = Promise<{ slug: string }>;
 
@@ -80,7 +81,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-6">
         <div className="space-y-4 text-center">
-          <FileText className="mx-auto text-muted-foreground" size={64} />
+          <FileText className="text-muted-foreground mx-auto" size={64} />
           <h1 className="text-2xl font-bold text-red-500">Article Not Found</h1>
           <p className="text-muted-foreground">
             The article you&apos;re looking for doesn&apos;t exist or has been
@@ -134,7 +135,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
   return (
     <div className="mx-auto max-w-7xl space-y-8 px-4 py-8">
       {/* Breadcrumb Navigation */}
-      <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
+      <nav className="text-muted-foreground flex items-center space-x-2 text-sm">
         <Link href="/" className="hover:text-primary">
           Home
         </Link>
@@ -154,14 +155,14 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           <Card className="overflow-hidden border-0 shadow-2xl">
             <div className="relative aspect-4/5 w-full">
               <Image
-                src={article.coverImage}
+                src={normalizeImageSrc(article.coverImage)}
                 alt={`${article.title} - Mental Health Article`}
                 className="object-cover"
                 fill
                 priority
               />
               {/* Price Badge */}
-              <div className="absolute right-3 top-3">
+              <div className="absolute top-3 right-3">
                 <Badge
                   className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-xs`}
                 >
@@ -169,8 +170,8 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                 </Badge>
               </div>
               {/* Category Badge */}
-              <div className="absolute left-3 top-3">
-                <Badge className="bg-white/90 text-primary shadow-lg backdrop-blur-xs">
+              <div className="absolute top-3 left-3">
+                <Badge className="text-primary bg-white/90 shadow-lg backdrop-blur-xs">
                   <Tag size={12} className="mr-1" />
                   Article
                 </Badge>
@@ -179,20 +180,20 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           </Card>
 
           {/* Quick Access Card */}
-          <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+          <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
             <CardContent className="space-y-4 p-6">
               <div className="space-y-2 text-center">
-                <p className="text-2xl font-bold text-primary">
+                <p className="text-primary text-2xl font-bold">
                   {article.price === 0 ? "Free Read" : `KES ${article.price}`}
                 </p>
-                <p className="text-sm text-muted-foreground">Digital Article</p>
+                <p className="text-muted-foreground text-sm">Digital Article</p>
               </div>
 
               {/* Access Button */}
               {ownsArticle ? (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 w-full transform rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -209,7 +210,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               ) : session?.session ? (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 w-full transform rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -224,7 +225,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               ) : (
                 <Button
                   size="lg"
-                  className="w-full transform rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:scale-105 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                  className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 w-full transform rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                   asChild
                 >
                   <Link
@@ -240,7 +241,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                 </Button>
               )}
 
-              <p className="text-center text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-center text-xs">
                 {ownsArticle
                   ? "You already own this article — open it in the secure reader."
                   : "Expert insights • Professional content • Evidence-based"}
@@ -251,7 +252,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           {/* Article Features */}
           <Card className="border-0 shadow-md">
             <CardContent className="space-y-4 p-6">
-              <h3 className="font-bold text-foreground">Article Features</h3>
+              <h3 className="text-foreground font-bold">Article Features</h3>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm">
                   <CheckCircle className="text-green-500" size={16} />
@@ -287,18 +288,18 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={14} className="fill-current" />
                   ))}
-                  <span className="ml-1 text-sm text-muted-foreground">
+                  <span className="text-muted-foreground ml-1 text-sm">
                     (4.7 • Expert Content)
                   </span>
                 </div>
               </div>
 
-              <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
+              <h1 className="text-foreground text-3xl font-bold md:text-4xl lg:text-5xl">
                 {article.title}
               </h1>
 
               {/* Article Metadata */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex flex-wrap items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <Calendar size={14} />
                   <span>
@@ -315,11 +316,11 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
             </div>
 
             {/* Article Content Preview */}
-            <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+            <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
               <CardContent className="space-y-4 p-6">
                 <h3 className="font-bold">Article Preview</h3>
                 <div
-                  className="prose prose-gray dark:prose-invert max-w-none text-sm leading-relaxed text-muted-foreground"
+                  className="prose prose-gray dark:prose-invert text-muted-foreground max-w-none text-sm leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: article.description }}
                 />
               </CardContent>
@@ -328,19 +329,19 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               <div className="text-center">
-                <div className="text-xl font-bold text-primary">Article</div>
-                <div className="text-xs text-muted-foreground">Type</div>
+                <div className="text-primary text-xl font-bold">Article</div>
+                <div className="text-muted-foreground text-xs">Type</div>
               </div>
 
               <div className="text-center">
-                <div className="text-xl font-bold text-primary">Expert</div>
-                <div className="text-xs text-muted-foreground">Author</div>
+                <div className="text-primary text-xl font-bold">Expert</div>
+                <div className="text-muted-foreground text-xs">Author</div>
               </div>
               <div className="text-center">
-                <div className="text-xl font-bold text-primary">
+                <div className="text-primary text-xl font-bold">
                   {article.price === 0 ? "Free" : "Premium"}
                 </div>
-                <div className="text-xs text-muted-foreground">Access</div>
+                <div className="text-muted-foreground text-xs">Access</div>
               </div>
             </div>
           </div>
@@ -368,9 +369,9 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                       <span className="font-semibold">Publication Details</span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-6 pt-4">
+                  <AccordionContent className="pt-4 pb-6">
                     <div className="space-y-4">
-                      <p className="leading-relaxed text-muted-foreground">
+                      <p className="text-muted-foreground leading-relaxed">
                         This article was published in{" "}
                         {format(new Date(article.publishDate), "MMM yyyy")} as
                         part of our ongoing commitment to providing quality
@@ -403,8 +404,8 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                       <span className="font-semibold">Access Information</span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-6 pt-4">
-                    <p className="leading-relaxed text-muted-foreground">
+                  <AccordionContent className="pt-4 pb-6">
+                    <p className="text-muted-foreground leading-relaxed">
                       {article.price === 0
                         ? "This article is free to read in our secure in-app reader after you sign in. File downloads are not available."
                         : "After purchase, open this article in your library's secure in-app reader. File downloads are not available."}
@@ -421,8 +422,8 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
                       </span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-6 pt-4">
-                    <p className="leading-relaxed text-muted-foreground">
+                  <AccordionContent className="pt-4 pb-6">
+                    <p className="text-muted-foreground leading-relaxed">
                       This article is designed for individuals seeking mental
                       health insights, family members supporting loved ones,
                       mental health advocates, and anyone interested in
@@ -435,10 +436,10 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
           </Card>
 
           {/* Related Content Suggestion */}
-          <Card className="border-primary/20 bg-linear-to-r from-primary/5 to-primary/5">
+          <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-r">
             <CardContent className="space-y-4 p-6">
               <h3 className="font-bold">Continue Your Journey</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Explore more mental health resources and expert guidance to
                 support your wellness journey.
               </p>
@@ -462,13 +463,13 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
       </div>
 
       {/* Bottom Call to Action */}
-      <Card className="border-primary/20 bg-linear-to-r from-primary/10 to-primary/10">
+      <Card className="border-primary/20 from-primary/10 to-primary/10 bg-linear-to-r">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
               Ready to Continue Your Mental Health Journey?
             </h3>
-            <p className="mx-auto max-w-3xl text-muted-foreground">
+            <p className="text-muted-foreground mx-auto max-w-3xl">
               Access this valuable mental health content and explore our
               comprehensive resources designed to support your wellness and
               personal growth.
@@ -480,12 +481,9 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-primary px-8"
+                className="bg-primary rounded-full px-8"
               >
-                <Link
-                  href={readerHref}
-                  className="flex items-center gap-2"
-                >
+                <Link href={readerHref} className="flex items-center gap-2">
                   <BookOpen size={20} />
                   {article.r2Key ? "Read Article Now" : "Open in Library"}
                   <ArrowRight size={16} />
@@ -495,7 +493,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-primary px-8"
+                className="bg-primary rounded-full px-8"
               >
                 <Link
                   href={`/article-checkout/${article.slug}`}
@@ -510,7 +508,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               <Button
                 size="lg"
                 asChild
-                className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+                className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 rounded-full bg-linear-to-r px-8"
               >
                 <Link href={`/sign-in?callbackUrl=${callbackUrl}`}>
                   <Lock size={20} className="mr-2" />
@@ -523,7 +521,7 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
               size="lg"
               variant="outline"
               asChild
-              className="rounded-full border-primary text-primary hover:bg-primary hover:text-white"
+              className="border-primary text-primary hover:bg-primary rounded-full hover:text-white"
             >
               <Link href="/contact">
                 <MessageCircle size={20} className="mr-2" />
@@ -534,26 +532,26 @@ async function ArticleDetails(props: { params: ArticlePageProps }) {
 
           <div className="grid gap-4 text-center md:grid-cols-3">
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Expert Content
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Written by mental health professionals
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Evidence-Based
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Backed by scientific research
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Practical Guidance
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Actionable insights for wellness
               </div>
             </div>

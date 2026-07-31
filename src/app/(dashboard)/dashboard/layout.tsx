@@ -1,5 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@/lib/auth";
+import QueryProvider from "@/util/ReactQueryProvider";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -19,12 +20,14 @@ export default async function DashboardLayout({
   }
 
   return (
-    <SidebarProvider>
-      <DashboardSidebar />
-      <main className="w-full p-4 md:p-6">
-        <SidebarTrigger className="mb-4" />
-        {children}
-      </main>
-    </SidebarProvider>
+    <QueryProvider>
+      <SidebarProvider>
+        <DashboardSidebar />
+        <main className="w-full p-4 md:p-6">
+          <SidebarTrigger className="mb-4" />
+          {children}
+        </main>
+      </SidebarProvider>
+    </QueryProvider>
   );
 }

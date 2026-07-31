@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { ArrowRight, Calendar, Star, Tag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { normalizeImageSrc } from "@/lib/image";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
@@ -21,13 +22,13 @@ interface ArticleComponentProps {
 
 function ArticleComponent({ article }: ArticleComponentProps) {
   return (
-    <Card className="group overflow-hidden border-0 bg-primary/10 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+    <Card className="group bg-primary/10 overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
       <div className="grid gap-0 md:grid-cols-[300px_1fr]">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden md:h-auto">
           <Link href={`/article-details/${article.slug}`}>
             <Image
-              src={article.coverImage}
+              src={normalizeImageSrc(article.coverImage)}
               alt={`${article.title} - Mental Health Article`}
               className="object-cover transition-transform duration-500 group-hover:scale-110"
               fill
@@ -36,7 +37,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
             <div className="absolute inset-0 bg-linear-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
             {/* Price Badge */}
-            <div className="absolute right-3 top-3">
+            <div className="absolute top-3 right-3">
               <Badge
                 className={`${article.price === 0 ? "bg-green-500" : "bg-primary"} rounded-full text-white shadow-lg backdrop-blur-xs`}
               >
@@ -45,10 +46,10 @@ function ArticleComponent({ article }: ArticleComponentProps) {
             </div>
 
             {/* Category Badge */}
-            <div className="absolute left-3 top-3">
+            <div className="absolute top-3 left-3">
               <Badge
                 variant="secondary"
-                className="rounded-full bg-white/90 text-primary backdrop-blur-xs"
+                className="text-primary rounded-full bg-white/90 backdrop-blur-xs"
               >
                 <Tag size={12} className="mr-1" />
                 Article
@@ -63,13 +64,13 @@ function ArticleComponent({ article }: ArticleComponentProps) {
             {/* Header */}
             <div className="space-y-3">
               <Link href={`/article-details/${article.slug}`}>
-                <h3 className="line-clamp-2 text-xl font-bold leading-tight text-foreground transition-colors duration-300 group-hover:text-primary md:text-2xl">
+                <h3 className="text-foreground group-hover:text-primary line-clamp-2 text-xl leading-tight font-bold transition-colors duration-300 md:text-2xl">
                   {article.title}
                 </h3>
               </Link>
 
               {/* Metadata */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <Calendar size={14} />
                   <span>
@@ -84,7 +85,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} size={14} className="fill-current" />
                 ))}
-                <span className="ml-1 text-sm text-muted-foreground">
+                <span className="text-muted-foreground ml-1 text-sm">
                   (4.7)
                 </span>
               </div>
@@ -92,7 +93,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
 
             {/* Description */}
             <div
-              className="line-clamp-3 text-sm leading-relaxed text-muted-foreground"
+              className="text-muted-foreground line-clamp-3 text-sm leading-relaxed"
               dangerouslySetInnerHTML={{ __html: article.description }}
             />
 
@@ -100,13 +101,13 @@ function ArticleComponent({ article }: ArticleComponentProps) {
             <div className="flex flex-wrap gap-2">
               <Badge
                 variant="outline"
-                className="border-primary/30 text-xs text-primary"
+                className="border-primary/30 text-primary text-xs"
               >
                 Mental Health
               </Badge>
               <Badge
                 variant="outline"
-                className="border-blue-600/30 text-xs text-primary"
+                className="text-primary border-blue-600/30 text-xs"
               >
                 Wellness
               </Badge>
@@ -123,7 +124,7 @@ function ArticleComponent({ article }: ArticleComponentProps) {
           <CardFooter className="p-0 pt-4">
             <Button
               asChild
-              className="w-full rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+              className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 w-full rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:shadow-xl"
             >
               <Link
                 href={`/article-details/${article.slug}`}

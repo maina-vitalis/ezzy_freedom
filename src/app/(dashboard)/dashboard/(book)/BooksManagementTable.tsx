@@ -55,6 +55,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import { normalizeImageSrc } from "@/lib/image";
 
 interface Book {
   id: string;
@@ -107,7 +108,7 @@ export default function BooksManagementTable({
         return (
           <div className="relative h-16 w-12 overflow-hidden rounded-md">
             <Image
-              src={book.coverImage}
+              src={normalizeImageSrc(book.coverImage)}
               alt={book.title}
               fill
               className="object-cover"
@@ -124,7 +125,7 @@ export default function BooksManagementTable({
         return (
           <div className="space-y-1">
             <div className="line-clamp-2 font-medium">{book.title}</div>
-            <div className="line-clamp-1 text-sm text-muted-foreground">
+            <div className="text-muted-foreground line-clamp-1 text-sm">
               {book.bookOverview}
             </div>
           </div>
@@ -164,7 +165,7 @@ export default function BooksManagementTable({
       cell: ({ row }) => {
         const highlights = row.getValue("highlights") as string;
         return (
-          <div className="line-clamp-2 max-w-xs text-sm text-muted-foreground">
+          <div className="text-muted-foreground line-clamp-2 max-w-xs text-sm">
             {highlights}
           </div>
         );
@@ -237,7 +238,7 @@ export default function BooksManagementTable({
       {/* Search */}
       <div className="flex items-center gap-2">
         <div className="relative max-w-sm flex-1">
-          <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search books..."
             value={globalFilter ?? ""}
@@ -302,7 +303,7 @@ export default function BooksManagementTable({
 
       {/* Pagination */}
       <div className="flex items-center justify-between space-x-2">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Showing{" "}
           {table.getState().pagination.pageIndex *
             table.getState().pagination.pageSize +

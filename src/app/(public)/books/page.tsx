@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { normalizeImageSrc } from "@/lib/image";
 import prisma from "@/lib/prisma";
 import {
   ArrowRight,
@@ -45,11 +46,11 @@ async function Books() {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-6">
         <div className="space-y-4 text-center">
-          <BookOpen className="mx-auto text-muted-foreground" size={64} />
+          <BookOpen className="text-muted-foreground mx-auto" size={64} />
           <h1 className="text-2xl font-bold md:text-3xl">
             No Books Available Yet
           </h1>
-          <p className="mx-auto max-w-md text-muted-foreground">
+          <p className="text-muted-foreground mx-auto max-w-md">
             Our expert mental health books are being prepared. Check back soon
             for valuable resources on healing and recovery.
           </p>
@@ -65,14 +66,14 @@ async function Books() {
         <div className="space-y-4">
           <div className="mb-2 flex items-center justify-center gap-2">
             <BookOpen className="text-primary" size={28} />
-            <span className="text-sm font-medium uppercase tracking-wide text-primary">
+            <span className="text-primary text-sm font-medium tracking-wide uppercase">
               Mental Health Resources
             </span>
           </div>
-          <h1 className="text-3xl font-bold text-foreground md:text-4xl lg:text-5xl">
+          <h1 className="text-foreground text-3xl font-bold md:text-4xl lg:text-5xl">
             Books & Digital Resources
           </h1>
-          <p className="mx-auto max-w-4xl text-lg leading-relaxed text-muted-foreground">
+          <p className="text-muted-foreground mx-auto max-w-4xl text-lg leading-relaxed">
             Discover our expertly crafted collection of mental health books and
             resources. Each publication is designed to provide guidance, hope,
             and practical wisdom for your healing journey.
@@ -80,7 +81,7 @@ async function Books() {
         </div>
 
         {/* Stats */}
-        <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+        <div className="text-muted-foreground flex items-center justify-center gap-8 text-sm">
           <div className="flex items-center gap-2">
             <Target size={16} />
             <span>{books.length} Expert Books</span>
@@ -98,49 +99,49 @@ async function Books() {
 
       {/* Categories Overview */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
           <CardContent className="space-y-3 p-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
               <Heart className="text-primary" size={24} />
             </div>
             <h3 className="font-bold">Recovery Guides</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Comprehensive guides for addiction recovery and mental wellness
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
           <CardContent className="space-y-3 p-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
               <Users className="text-primary" size={24} />
             </div>
             <h3 className="font-bold">Family Support</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Resources for families supporting loved ones in recovery
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
           <CardContent className="space-y-3 p-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
               <Shield className="text-primary" size={24} />
             </div>
             <h3 className="font-bold">Prevention</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Educational materials for prevention and early intervention
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-primary/20 bg-linear-to-br from-primary/5 to-primary/5">
+        <Card className="border-primary/20 from-primary/5 to-primary/5 bg-linear-to-br">
           <CardContent className="space-y-3 p-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <div className="bg-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-full">
               <Target className="text-primary" size={24} />
             </div>
             <h3 className="font-bold">Personal Growth</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Self-help and personal development for mental wellness
             </p>
           </CardContent>
@@ -152,7 +153,7 @@ async function Books() {
         <div className="space-y-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold md:text-3xl">Free Resources</h2>
-            <p className="mt-2 text-muted-foreground">
+            <p className="text-muted-foreground mt-2">
               Start your journey with our complimentary mental health resources
             </p>
           </div>
@@ -161,19 +162,19 @@ async function Books() {
             {freeBooks.map((book) => (
               <Card
                 key={book.id}
-                className="group overflow-hidden border-0 bg-primary/20 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+                className="group bg-primary/20 overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
               >
                 {/* Book Cover */}
                 <div className="relative h-64 overflow-hidden">
                   <Link href={`/book-details/${book.slug}`}>
                     <Image
-                      src={book.coverImage}
+                      src={normalizeImageSrc(book.coverImage)}
                       alt={`${book.title} - Free Mental Health Resource`}
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       fill
                     />
                     {/* Free Badge */}
-                    <div className="absolute right-3 top-3">
+                    <div className="absolute top-3 right-3">
                       <Badge className="rounded-full bg-green-500 text-white shadow-lg backdrop-blur-xs">
                         FREE
                       </Badge>
@@ -183,7 +184,7 @@ async function Books() {
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
                       <Button
                         size="sm"
-                        className="rounded-full bg-white/90 px-6 py-2 text-primary shadow-lg hover:bg-white"
+                        className="text-primary rounded-full bg-white/90 px-6 py-2 shadow-lg hover:bg-white"
                         asChild
                       >
                         <Link
@@ -202,12 +203,12 @@ async function Books() {
                 <CardContent className="space-y-4 p-6">
                   <div className="space-y-3">
                     <Link href={`/book-details/${book.slug}`}>
-                      <h3 className="line-clamp-2 text-lg font-bold leading-tight transition-colors duration-300 group-hover:text-primary">
+                      <h3 className="group-hover:text-primary line-clamp-2 text-lg leading-tight font-bold transition-colors duration-300">
                         {book.title}
                       </h3>
                     </Link>
 
-                    <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                    <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
                       {book.bookOverview}
                     </p>
 
@@ -216,7 +217,7 @@ async function Books() {
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} size={14} className="fill-current" />
                       ))}
-                      <span className="ml-1 text-xs text-muted-foreground">
+                      <span className="text-muted-foreground ml-1 text-xs">
                         (4.8)
                       </span>
                     </div>
@@ -250,7 +251,7 @@ async function Books() {
             <h2 className="text-2xl font-bold md:text-3xl">
               Premium Collection
             </h2>
-            <p className="mt-2 text-muted-foreground">
+            <p className="text-muted-foreground mt-2">
               In-depth resources with comprehensive mental health guidance
             </p>
           </div>
@@ -259,26 +260,26 @@ async function Books() {
             {paidBooks.map((book) => (
               <Card
                 key={book.id}
-                className="group overflow-hidden border-0 bg-primary/20 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+                className="group bg-primary/20 overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
               >
                 {/* Book Cover */}
                 <div className="relative h-64 overflow-hidden">
                   <Link href={`/book-details/${book.slug}`}>
                     <Image
-                      src={book.coverImage}
+                      src={normalizeImageSrc(book.coverImage)}
                       alt={`${book.title} - Premium Mental Health Resource`}
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       fill
                     />
                     {/* Price Badge */}
-                    <div className="absolute right-3 top-3">
-                      <Badge className="rounded-full bg-primary text-white shadow-lg backdrop-blur-xs">
+                    <div className="absolute top-3 right-3">
+                      <Badge className="bg-primary rounded-full text-white shadow-lg backdrop-blur-xs">
                         KES {book.price}
                       </Badge>
                     </div>
 
                     {/* Premium Badge */}
-                    <div className="absolute left-3 top-3">
+                    <div className="absolute top-3 left-3">
                       <Badge className="rounded-full bg-yellow-500 text-white shadow-lg backdrop-blur-xs">
                         <Award size={12} className="mr-1" />
                         Premium
@@ -289,7 +290,7 @@ async function Books() {
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
                       <Button
                         size="sm"
-                        className="rounded-full bg-white/90 px-6 py-2 text-primary shadow-lg hover:bg-white"
+                        className="text-primary rounded-full bg-white/90 px-6 py-2 shadow-lg hover:bg-white"
                         asChild
                       >
                         <Link
@@ -308,17 +309,17 @@ async function Books() {
                 <CardContent className="space-y-4 p-6">
                   <div className="space-y-3">
                     <Link href={`/book-details/${book.slug}`}>
-                      <h3 className="line-clamp-2 text-lg font-bold leading-tight transition-colors duration-300 group-hover:text-primary">
+                      <h3 className="group-hover:text-primary line-clamp-2 text-lg leading-tight font-bold transition-colors duration-300">
                         {book.title}
                       </h3>
                     </Link>
 
-                    <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+                    <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
                       {book.bookOverview}
                     </p>
 
                     {/* Features */}
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="text-muted-foreground flex items-center gap-4 text-xs">
                       <div className="flex items-center gap-1">
                         <CircleCheck size={12} />
                         <span>Expert Written</span>
@@ -334,7 +335,7 @@ async function Books() {
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} size={14} className="fill-current" />
                       ))}
-                      <span className="ml-1 text-xs text-muted-foreground">
+                      <span className="text-muted-foreground ml-1 text-xs">
                         (4.9)
                       </span>
                     </div>
@@ -343,7 +344,7 @@ async function Books() {
                   {/* Action Button */}
                   <Button
                     asChild
-                    className="w-full rounded-full bg-linear-to-r from-primary to-primary/70 text-white shadow-lg transition-all duration-300 hover:from-primary/80 hover:to-primary/60 hover:shadow-xl"
+                    className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 w-full rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:shadow-xl"
                   >
                     <Link
                       href={`/book-details/${book.slug}`}
@@ -362,13 +363,13 @@ async function Books() {
       )}
 
       {/* Call to Action Section */}
-      <Card className="border-primary/20 bg-linear-to-r from-primary/10 to-primary/10">
+      <Card className="border-primary/20 from-primary/10 to-primary/10 bg-linear-to-r">
         <CardContent className="space-y-6 p-8 text-center">
           <div className="space-y-4">
             <h3 className="text-2xl font-bold md:text-3xl">
               Start Your Mental Health Journey Today
             </h3>
-            <p className="mx-auto max-w-3xl text-muted-foreground">
+            <p className="text-muted-foreground mx-auto max-w-3xl">
               Explore our comprehensive collection of mental health resources
               designed to support your healing, growth, and recovery. From free
               introductory guides to in-depth premium resources, find the
@@ -380,7 +381,7 @@ async function Books() {
             <Button
               size="lg"
               asChild
-              className="rounded-full bg-linear-to-r from-primary to-primary/70 px-8 hover:from-primary/80 hover:to-primary/60"
+              className="from-primary to-primary/70 hover:from-primary/80 hover:to-primary/60 rounded-full bg-linear-to-r px-8"
             >
               <Link href="/contact" className="flex items-center gap-2">
                 <Heart size={20} />
@@ -393,7 +394,7 @@ async function Books() {
               size="lg"
               variant="outline"
               asChild
-              className="rounded-full border-primary text-primary hover:bg-primary hover:text-white"
+              className="border-primary text-primary hover:bg-primary rounded-full hover:text-white"
             >
               <Link href="/services" className="flex items-center gap-2">
                 <Users size={20} />
@@ -404,26 +405,26 @@ async function Books() {
 
           <div className="grid gap-4 text-center md:grid-cols-3">
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Expert Authors
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Licensed mental health professionals
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Evidence-Based
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Research-backed content and methods
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-xl font-bold text-primary">
+              <div className="text-primary text-xl font-bold">
                 Instant Access
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-sm">
                 Open in the secure reader after purchase
               </div>
             </div>
