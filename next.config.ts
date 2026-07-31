@@ -17,6 +17,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "cdn.ezzyfreedomandhope.org",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "**.r2.dev",
         pathname: "/**",
       },

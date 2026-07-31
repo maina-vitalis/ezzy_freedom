@@ -21,8 +21,8 @@ async function MainNav() {
   });
 
   return (
-    <nav className="sticky top-0 z-50 bg-card shadow-xs">
-      <div className="mx-auto flex max-w-[1300px] items-center justify-between px-3">
+    <nav className="bg-card sticky top-0 z-50 shadow-xs">
+      <div className="mx-auto flex max-w-325 items-center justify-between px-3">
         <div className="flex items-center gap-10 py-1">
           <Link href={"/"}>
             <Image
@@ -36,35 +36,35 @@ async function MainNav() {
           <NavigationMenu className="hidden gap-5 md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                <Link href="/about-us" legacyBehavior passHref>
+                <Link href="/about-us" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     About us
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/books" legacyBehavior passHref>
+                <Link href="/books" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Books
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/articles" legacyBehavior passHref>
+                <Link href="/articles" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Articles
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/services" legacyBehavior passHref>
+                <Link href="/services" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Services
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="/contact" legacyBehavior passHref>
+                <Link href="/contact" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Contact us
                   </NavigationMenuLink>
