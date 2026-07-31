@@ -58,8 +58,8 @@ async function CheckOut(props: { params: CheckOutProps }) {
             removed.
           </p>
         </div>
-                  <Image
-                    src={normalizeImageSrc(book.coverImage)}
+        <Button
+          size="lg"
           asChild
           className="rounded-full bg-primary hover:bg-primary/90"
         >
