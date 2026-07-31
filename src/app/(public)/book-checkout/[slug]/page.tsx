@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { normalizeImageSrc } from "@/lib/image";
 import {
   ArrowLeft,
   BookOpen,
@@ -57,8 +58,8 @@ async function CheckOut(props: { params: CheckOutProps }) {
             removed.
           </p>
         </div>
-        <Button
-          size="lg"
+                  <Image
+                    src={normalizeImageSrc(book.coverImage)}
           asChild
           className="rounded-full bg-primary hover:bg-primary/90"
         >
@@ -128,7 +129,7 @@ async function CheckOut(props: { params: CheckOutProps }) {
                   <div className="flex gap-4">
                     <div className="relative h-32 w-24 shrink-0 overflow-hidden rounded-lg shadow-lg">
                       <Image
-                        src={book.coverImage}
+                        src={normalizeImageSrc(book.coverImage)}
                         alt={book.title}
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"

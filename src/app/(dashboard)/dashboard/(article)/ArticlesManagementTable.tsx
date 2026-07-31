@@ -57,6 +57,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
+import { normalizeImageSrc } from "@/lib/image";
 
 interface Article {
   id: string;
@@ -109,7 +110,7 @@ export default function ArticlesManagementTable({
         return (
           <div className="relative h-16 w-12 overflow-hidden rounded-md">
             <Image
-              src={article.coverImage}
+              src={normalizeImageSrc(article.coverImage)}
               alt={article.title}
               fill
               className="object-cover"
@@ -126,7 +127,7 @@ export default function ArticlesManagementTable({
         return (
           <div className="space-y-1">
             <div className="line-clamp-2 font-medium">{article.title}</div>
-            <div className="line-clamp-1 text-sm text-muted-foreground">
+            <div className="text-muted-foreground line-clamp-1 text-sm">
               {article.description}
             </div>
           </div>
@@ -140,7 +141,7 @@ export default function ArticlesManagementTable({
         const date = row.getValue("publishDate") as string;
         return (
           <div className="flex items-center gap-2 text-sm">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <Calendar className="text-muted-foreground h-4 w-4" />
             <span>{format(new Date(date), "MMM dd, yyyy")}</span>
           </div>
         );
@@ -239,7 +240,7 @@ export default function ArticlesManagementTable({
       {/* Search */}
       <div className="flex items-center gap-2">
         <div className="relative max-w-sm flex-1">
-          <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search articles..."
             value={globalFilter ?? ""}
@@ -304,7 +305,7 @@ export default function ArticlesManagementTable({
 
       {/* Pagination */}
       <div className="flex items-center justify-between space-x-2">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           Showing{" "}
           {table.getState().pagination.pageIndex *
             table.getState().pagination.pageSize +

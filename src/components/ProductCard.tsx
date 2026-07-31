@@ -2,6 +2,7 @@ import { Books } from "@/generated/prisma/client";
 import { ArrowRight, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { normalizeImageSrc } from "@/lib/image";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -13,12 +14,12 @@ interface ProductCardProps {
 
 function ProductCard({ book }: ProductCardProps) {
   return (
-    <Card className="group overflow-hidden border-0 bg-background shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+    <Card className="group bg-background overflow-hidden border-0 shadow-lg transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
       <div className="relative overflow-hidden">
         <Link href={`/book-details/${book.slug}`}>
           <AspectRatio ratio={16 / 10} className="relative">
             <Image
-              src={book.coverImage}
+              src={normalizeImageSrc(book.coverImage)}
               alt={book.title}
               fill
               className="object-cover transition-all duration-500 group-hover:scale-110"
@@ -46,7 +47,7 @@ function ProductCard({ book }: ProductCardProps) {
         </Link>
 
         {/* Price Badge */}
-        <div className="absolute right-3 top-3">
+        <div className="absolute top-3 right-3">
           <Badge className="bg-primary/90 text-white shadow-lg backdrop-blur-xs">
             {book.price} KES
           </Badge>
@@ -55,10 +56,10 @@ function ProductCard({ book }: ProductCardProps) {
 
       <CardContent className="space-y-3 p-6">
         <div className="space-y-2">
-          <h3 className="line-clamp-2 text-lg font-bold leading-tight transition-colors duration-300 group-hover:text-primary">
+          <h3 className="group-hover:text-primary line-clamp-2 text-lg leading-tight font-bold transition-colors duration-300">
             {book.title}
           </h3>
-          <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground">
+          <p className="text-muted-foreground line-clamp-3 text-sm leading-relaxed">
             {book.bookOverview}
           </p>
         </div>
@@ -67,14 +68,14 @@ function ProductCard({ book }: ProductCardProps) {
           {[...Array(5)].map((_, i) => (
             <Star key={i} size={14} className="fill-current" />
           ))}
-          <span className="ml-1 text-xs text-muted-foreground">(4.8)</span>
+          <span className="text-muted-foreground ml-1 text-xs">(4.8)</span>
         </div>
       </CardContent>
 
       <CardFooter className="space-y-3 p-6 pt-0">
         <Button
           asChild
-          className="w-full rounded-full bg-linear-to-r from-primary/30 to-primary/5 text-white shadow-lg transition-all duration-300 hover:shadow-xl"
+          className="from-primary/30 to-primary/5 w-full rounded-full bg-linear-to-r text-white shadow-lg transition-all duration-300 hover:shadow-xl"
         >
           <Link
             href={`/book-details/${book.slug}`}

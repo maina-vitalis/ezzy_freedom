@@ -30,6 +30,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 type ProductPageProps = Promise<{ slug: string }>;
+import { normalizeImageSrc } from "@/lib/image";
 
 export async function generateMetadata(props: { params: ProductPageProps }) {
   const { slug } = await props.params;
@@ -65,8 +66,8 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   });
 
   //callback url
-  const callbackUrl = encodeURIComponent(`/book-details/${slug}` || "/");
-
+            <Image
+              src={normalizeImageSrc(book.coverImage)}
   const hasPurchased =
     session?.user?.id && book
       ? Boolean(
@@ -140,7 +141,7 @@ async function ProductDetails(props: { params: ProductPageProps }) {
           <Card className="overflow-hidden border-0 shadow-2xl">
             <div className="relative aspect-3/4 w-full">
               <Image
-                src={book.coverImage}
+                src={normalizeImageSrc(book.coverImage)}
                 alt={book.title}
                 className="object-cover"
                 fill

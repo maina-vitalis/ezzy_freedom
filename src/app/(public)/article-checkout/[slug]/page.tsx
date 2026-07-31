@@ -17,6 +17,7 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { normalizeImageSrc } from "@/lib/image";
 
 type CheckOutProps = Promise<{ slug: string }>;
 
@@ -49,14 +50,14 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
   if (!article) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-6">
-        <div className="rounded-full bg-destructive/10 p-4">
-          <FileText className="h-8 w-8 text-destructive" />
+        <div className="bg-destructive/10 rounded-full p-4">
+          <FileText className="text-destructive h-8 w-8" />
         </div>
         <div className="space-y-2 text-center">
-          <h2 className="text-2xl font-bold text-foreground">
+          <h2 className="text-foreground text-2xl font-bold">
             Article Not Found
           </h2>
-          <p className="max-w-md text-muted-foreground">
+          <p className="text-muted-foreground max-w-md">
             The article you&apos;re looking for doesn&apos;t exist or may have
             been removed.
           </p>
@@ -64,7 +65,7 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
         <Button
           size="lg"
           asChild
-          className="rounded-full bg-primary hover:bg-primary/90"
+          className="bg-primary hover:bg-primary/90 rounded-full"
         >
           <Link href="/articles" className="flex items-center gap-2">
             <ArrowLeft className="h-4 w-4" />
@@ -76,14 +77,14 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-background via-background to-primary/5">
+    <div className="from-background via-background to-primary/5 min-h-screen bg-linear-to-br">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 space-y-4">
           <Button
             variant="ghost"
             asChild
-            className="group -ml-4 text-muted-foreground hover:text-primary"
+            className="group text-muted-foreground hover:text-primary -ml-4"
           >
             <Link href="/articles" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
@@ -92,14 +93,14 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
           </Button>
 
           <div className="space-y-2 text-center">
-            <div className="flex items-center justify-center gap-2 text-primary">
+            <div className="text-primary flex items-center justify-center gap-2">
               <Shield className="h-5 w-5" />
               <span className="text-sm font-medium">Secure Checkout</span>
             </div>
-            <h1 className="text-3xl font-bold text-foreground sm:text-4xl">
+            <h1 className="text-foreground text-3xl font-bold sm:text-4xl">
               Complete Your Purchase
             </h1>
-            <p className="mx-auto max-w-2xl text-muted-foreground">
+            <p className="text-muted-foreground mx-auto max-w-2xl">
               You&apos;re just one step away from accessing your digital
               article. Complete the payment to get instant access.
             </p>
@@ -110,10 +111,10 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Article Details Card */}
-            <Card className="overflow-hidden border-0 bg-card/50 shadow-xl backdrop-blur-xs">
-              <CardHeader className="border-b border-border/50 bg-primary/5 pb-4">
+            <Card className="bg-card/50 overflow-hidden border-0 shadow-xl backdrop-blur-xs">
+              <CardHeader className="border-border/50 bg-primary/5 border-b pb-4">
                 <CardTitle className="flex items-center gap-2 text-xl">
-                  <FileText className="h-5 w-5 text-primary" />
+                  <FileText className="text-primary h-5 w-5" />
                   Article Details
                 </CardTitle>
               </CardHeader>
@@ -124,7 +125,7 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                   <div className="flex gap-4">
                     <div className="relative h-32 w-24 shrink-0 overflow-hidden rounded-lg shadow-lg">
                       <Image
-                        src={article.coverImage}
+                        src={normalizeImageSrc(article.coverImage)}
                         alt={article.title}
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"
@@ -133,10 +134,10 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
 
                     <div className="flex-1 space-y-3">
                       <div>
-                        <h3 className="line-clamp-2 text-xl font-semibold text-foreground">
+                        <h3 className="text-foreground line-clamp-2 text-xl font-semibold">
                           {article.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-muted-foreground text-sm">
                           By EZZ Freedom & Hope
                         </p>
                       </div>
@@ -150,7 +151,7 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                             />
                           ))}
                         </div>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-muted-foreground text-xs">
                           Digital Article
                         </span>
                       </div>
@@ -160,11 +161,11 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                   {/* Article Description */}
                   {article.description && (
                     <div className="space-y-2">
-                      <h4 className="text-sm font-medium text-foreground">
+                      <h4 className="text-foreground text-sm font-medium">
                         Description
                       </h4>
                       <div
-                        className="prose prose-sm line-clamp-4 max-w-none text-muted-foreground dark:prose-invert"
+                        className="prose prose-sm text-muted-foreground dark:prose-invert line-clamp-4 max-w-none"
                         dangerouslySetInnerHTML={{
                           __html: article.description,
                         }}
@@ -173,30 +174,30 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                   )}
 
                   {/* Purchase Details */}
-                  <div className="space-y-3 rounded-lg bg-primary/5 p-4">
-                    <h4 className="text-sm font-medium text-primary">
+                  <div className="bg-primary/5 space-y-3 rounded-lg p-4">
+                    <h4 className="text-primary text-sm font-medium">
                       What You&apos;ll Get
                     </h4>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
-                        <BookOpen className="h-3 w-3 text-primary" />
+                        <BookOpen className="text-primary h-3 w-3" />
                         <span>Instant access in the secure reader</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <FileText className="h-3 w-3 text-primary" />
+                        <FileText className="text-primary h-3 w-3" />
                         <span>PDF format for all devices</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Shield className="h-3 w-3 text-primary" />
+                        <Shield className="text-primary h-3 w-3" />
                         <span>Lifetime access guarantee</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Price Summary */}
-                  <div className="space-y-3 rounded-lg border border-primary/20 bg-background p-4">
+                  <div className="border-primary/20 bg-background space-y-3 rounded-lg border p-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-muted-foreground text-sm">
                         Article Price:
                       </span>
                       <span className="text-sm font-medium">
@@ -204,14 +205,14 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-muted-foreground text-sm">
                         Processing Fee:
                       </span>
                       <span className="text-sm font-medium">Free</span>
                     </div>
-                    <div className="border-t border-border/50 pt-3">
+                    <div className="border-border/50 border-t pt-3">
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">
+                        <span className="text-foreground font-semibold">
                           Total Amount:
                         </span>
                         <div className="flex items-center gap-2">
@@ -227,7 +228,7 @@ async function ArticleCheckOut(props: { params: CheckOutProps }) {
                   </div>
 
                   {/* Publication Info */}
-                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-4 text-xs">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       <span>
