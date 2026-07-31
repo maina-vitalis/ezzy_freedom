@@ -66,8 +66,8 @@ async function ProductDetails(props: { params: ProductPageProps }) {
   });
 
   //callback url
-  const callbackUrl = encodeURIComponent(`/book-details/${slug}` || "/");
-
+            <Image
+              src={normalizeImageSrc(book.coverImage)}
   const hasPurchased =
     session?.user?.id && book
       ? Boolean(
