@@ -50,6 +50,13 @@ function Mobile() {
           <Separator />
 
           <SheetClose className="w-64 text-start" asChild>
+            <Link href={"/blog"} className="w-full">
+              Blog
+            </Link>
+          </SheetClose>
+          <Separator />
+
+          <SheetClose className="w-64 text-start" asChild>
             <Link href={"/contact"} className="w-full">
               Contact
             </Link>

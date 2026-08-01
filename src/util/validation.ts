@@ -94,6 +94,33 @@ export const ArticleSchema = z.object({
 });
 export type ArticleType = z.infer<typeof ArticleSchema>;
 
+export const BlogPostSchema = z.object({
+  title: requiredString.max(160, "Title is too long"),
+  slug: z.string().trim().max(180).optional(),
+  excerpt: requiredString.max(320, "Excerpt should be under 320 characters"),
+  content: requiredString,
+  heroImage: requiredString,
+  category: requiredString.max(80),
+  tags: z.string(),
+  authorName: requiredString.max(100),
+  status: z.enum(["DRAFT", "PUBLISHED"]),
+  publishedAt: z.date().nullable().optional(),
+  metaTitle: z.string().trim().max(70).optional(),
+  metaDescription: z.string().trim().max(170).optional(),
+});
+
+export type BlogPostType = z.infer<typeof BlogPostSchema>;
+
+export const blogCategories = [
+  "Mental Health",
+  "Wellness",
+  "Recovery",
+  "Faith & Hope",
+  "Relationships",
+  "Youth",
+  "Insights",
+] as const;
+
 // Appointment validation schemas
 export const AppointmentBookingSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long"),

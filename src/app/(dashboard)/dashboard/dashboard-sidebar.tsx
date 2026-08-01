@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Library,
   NotebookPen,
+  PenLine,
   User,
 } from "lucide-react";
 
@@ -62,6 +63,11 @@ export async function DashboardSidebar() {
       title: "Transactions",
       url: "/dashboard/transactions",
       icon: CreditCard,
+    },
+    {
+      title: "Blog posts",
+      url: "/dashboard/blog",
+      icon: PenLine,
     },
     {
       title: "Add Book",

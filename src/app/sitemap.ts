@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Fetch books, services, and articles concurrently
-    const [books, services, articles] = await Promise.all([
+    const [books, services, articles, blogPosts] = await Promise.all([
       prisma.books.findMany({
         select: { slug: true },
       }),
@@ -17,6 +17,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
       prisma.article.findMany({
         select: { slug: true },
+      }),
+      prisma.blogPost.findMany({
+        where: { status: "PUBLISHED" },
+        select: { slug: true, updatedAt: true },
       }),
     ]);
 
@@ -42,6 +46,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       },
       {
         url: `${baseURL}/articles`,
+        lastModified: currentDate,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      },
+      {
+        url: `${baseURL}/blog`,
         lastModified: currentDate,
         changeFrequency: "weekly",
         priority: 0.8,
@@ -90,12 +100,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
+    const blogEntries: MetadataRoute.Sitemap = blogPosts.map(
+      ({ slug, updatedAt }) => ({
+        url: `${baseURL}/blog/${slug}`,
+        lastModified: updatedAt.toISOString(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      }),
+    );
+
     // Combine all entries
     return [
       ...staticPages,
       ...serviceEntries,
       ...bookEntries,
       ...articleEntries,
+      ...blogEntries,
     ];
   } catch (error) {
     console.error("Error generating sitemap:", error);

@@ -57,6 +57,13 @@ async function MainNav() {
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
+                <Link href="/blog" passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Blog
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
                 <Link href="/services" passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Services

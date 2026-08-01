@@ -9,6 +9,8 @@ const ALLOWED_FOLDERS = new Set([
   "articles/pdfs",
   "articles/covers",
   "services/images",
+  "blogs/heroes",
+  "blogs/content",
 ]);
 
 /**

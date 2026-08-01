@@ -135,6 +135,28 @@ model Article {
   purchases    UserPurchase[]
 }
 
+/// Editorial blog posts (free HTML content) — separate from paid Article products.
+model BlogPost {
+  id              String     @id @default(cuid())
+  title           String
+  slug            String     @unique
+  excerpt         String
+  content         String
+  heroImage       String
+  category        String
+  tags            String[]   @default([])
+  authorName      String     @default("Clr. Ezra Karanja")
+  status          BlogStatus @default(DRAFT)
+  publishedAt     DateTime?
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@index([status, publishedAt])
+  @@map("blog_posts")
+}
+
 model Transaction {
   id     String @id @default(cuid())
   userId String
@@ -255,4 +277,9 @@ enum TransactionStatus {
   FAILED
   CANCELLED
   REFUNDED
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
 }
