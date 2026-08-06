@@ -1,7 +1,7 @@
 "use client";
 
 import { Editor } from "@tinymce/tinymce-react";
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { toast } from "sonner";
 
 type TinyMCEProps = {
@@ -46,7 +46,7 @@ async function uploadImageToR2(file: File): Promise<string> {
   return presign.publicUrl as string;
 }
 
-export default function TinyMCE({
+function TinyMCEEditor({
   value,
   onChange,
   height = 300,
@@ -83,7 +83,12 @@ export default function TinyMCE({
         onInit={(_evt, editor: any) => {
           editorRef.current = editor;
         }}
-        value={value}
+        // ✅ Use initialValue instead of value.
+        // `value` makes TinyMCE a fully-controlled input — React re-renders
+        // push the value back into the editor on every keystroke, which
+        // destroys the cursor position. `initialValue` seeds the content
+        // once on mount and then lets TinyMCE own its own internal state.
+        initialValue={value}
         onEditorChange={onChange}
         init={{
           height,
@@ -125,3 +130,7 @@ export default function TinyMCE({
     </div>
   );
 }
+
+// Wrap in memo so the editor is not re-mounted when the parent form
+// re-renders (e.g. on validation state changes).
+export default memo(TinyMCEEditor);
